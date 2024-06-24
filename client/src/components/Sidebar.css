@@ -1,0 +1,68 @@
+/* General styling for input fields */
+input[type=""],
+input[type="text"],
+input[type="username"],
+input[type="email"],
+input[type="password"] {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 200px;
+  font-size: 1.2rem;
+  transition: border-color 0.3s;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  padding: 10px 20px; /* Adjust padding values as needed */
+  width: 230px;
+
+
+}
+
+.sidebar {
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  background-color: #333;
+  color: #fff;
+  overflow-y: auto;
+  transition: width 0.3s ease;
+}
+
+.sidebar.open {
+  width: 250px;
+}
+
+.sidebar.closed {
+  width: 60px;
+}
+
+.sidebar .toggle-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #555;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.sidebar .toggle-button:hover {
+  background-color: #777;
+}
+
+.sidebar .menu {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+}
+
+.sidebar .menu li {
+  padding: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.sidebar .menu li:hover {
+  background-color: #555;
+}

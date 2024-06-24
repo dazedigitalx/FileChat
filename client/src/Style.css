@@ -1,0 +1,63 @@
+/* GlobalStyles.css */
+
+/* Import the font (example using Google Fonts) */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+/* Apply the font globally */
+html, body {
+  font-family: 'Roboto', sans-serif; /* Replace with the desired font family */
+}
+
+/* General styling for buttons */
+button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #4CAF50;
+  color: white;
+  font-size: 1.2rem;
+  border-radius: 200px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+/* General styling for input fields */
+input[type=""],
+input[type="text"],
+input[type="username"],
+input[type="email"],
+input[type="password"] {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 200px;
+  font-size: 1.2rem;
+  transition: border-color 0.3s;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  padding: 10px 20px; /* Adjust padding values as needed */
+
+
+}
+
+input[type="text"]:focus,
+input[type="username"]:focus,
+
+input[type="email"]:focus,
+input[type="password"]:focus {
+  outline: none;
+  border-color: #4CAF50;
+}
+
+
+
+/* Styling for general layout */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Additional styles can be added as per your application's needs */

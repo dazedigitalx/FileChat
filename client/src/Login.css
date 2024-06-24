@@ -1,0 +1,78 @@
+/* client/src/Login.css */
+
+
+
+
+button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #4CAF50;
+  color: white;
+  font-size: 1.2rem;
+  border-radius: 200px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+
+
+.card {
+  display: flex;
+  width: 600px;
+  margin: 50px auto;
+  border: 1px solid #ccc;
+  border-radius: 100px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.card-image {
+  flex: 1;
+  background-image: url('./images/login_board.jpg'); /* Update with your image path */
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 0; /* Remove padding from the image */
+  margin: 0; /* Remove margin from the image */
+}
+
+.card-welcome {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.register-button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.register-button:hover {
+  background-color: #0056b3;
+}
+
+
+.card-welcome h1 {
+  color: white;
+  font-size: 2em;
+  margin: 0;
+}
+
+.card-content {
+  flex: 1;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: transparent;
+}
+

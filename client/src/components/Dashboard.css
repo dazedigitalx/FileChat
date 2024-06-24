@@ -1,0 +1,56 @@
+.dashboard {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 60px; /* Collapsed width */
+  background-color: #333;
+  color: #fff;
+  transition: width 0.3s ease; /* Transition for sidebar width */
+}
+
+.sidebar.expanded {
+  width: 250px; /* Expanded width */
+}
+
+.sidebar .toggle-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #555;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.sidebar .toggle-button:hover {
+  background-color: #777;
+}
+
+.dashboard-content {
+  flex: 1; /* Take remaining space */
+  padding: 00px;
+  transition: margin-left 0.3s ease; /* Transition for main content margin */
+}
+
+.dashboard-content.expanded {
+  margin-left: 250px; /* Adjust margin when sidebar is expanded */
+}
+
+.dashboard-header {
+  padding: 0px;
+  background-color: #f0f0f0;
+  border-bottom: 1px solid #ccc;
+}
+
+.dashboard-main {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-main.contracted {
+  margin-left: 60px; /* Contract main content when sidebar expands */
+}

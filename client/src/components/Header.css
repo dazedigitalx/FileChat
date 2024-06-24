@@ -1,0 +1,88 @@
+/* Global styles */
+
+/* target all buttons */
+button {
+    font-size: 1.2em;
+    border-radius: 200px;
+  }
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0; /* Example background color */
+}
+
+/* Header styling */
+.header {
+    background-color: #0084ff; /* Header background color */
+    color: #fff; /* Header text color */
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Box shadow for header */
+}
+
+.header h1 {
+    font-size: 24px;
+}
+
+.UserProfile {
+    display: flex;
+    align-items: center;
+}
+
+.UserProfile img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.UserProfile .username {
+    font-weight: bold;
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+}
+
+.nav ul {
+    list-style-type: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.nav ul li {
+    margin-right: 10px;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.nav-link:hover {
+    background-color: #0056b3; /* Darker background color on hover */
+}
+
+/* Example of active link */
+.nav-link.active {
+    background-color: #0056b3;
+}
+
+/* Example of auth active link */
+.nav-link.auth-active {
+    background-color: #28a745;
+}
+
