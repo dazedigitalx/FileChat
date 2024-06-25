@@ -113,6 +113,36 @@ const Channels = ({ onChannelSelect = () => {}, onCreateChannel = () => {} }) =>
         onChannelSelect(channel); // Notify parent component
     };
 
+    const handleDeleteChannel = async (channelId) => {
+        try {
+            let token = user?.token || localStorage.getItem('accessToken');
+
+            if (!token) {
+                throw new Error('Token not available.');
+            }
+
+            const response = await fetch(`http://localhost:5000/api/channels/${channelId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+
+            if (!response.ok) {
+                if (response.status === 401) {
+                    throw new Error('Unauthorized: Please login again.');
+                }
+                throw new Error(`Failed to delete channel: ${response.statusText}`);
+            }
+
+            // Remove the deleted channel from state
+            setChannels(channels.filter(c => c._id !== channelId));
+        } catch (error) {
+            console.error('Error deleting channel:', error);
+            setError(`Error deleting channel: ${error.message}`);
+        }
+    };
+
     if (loading) {
         return <div>Loading channels...</div>;
     }
@@ -126,8 +156,11 @@ const Channels = ({ onChannelSelect = () => {}, onCreateChannel = () => {} }) =>
             <h2>Your Channels</h2>
             <ul>
                 {channels.map(channel => (
-                    <li key={channel._id} onClick={() => handleChannelClick(channel)}>
-                        {channel.name} - {channel.description}
+                    <li key={channel._id}>
+                        <span onClick={() => handleChannelClick(channel)}>
+                            {channel.name} - {channel.description}
+                        </span>
+                        <button onClick={() => handleDeleteChannel(channel._id)}>x</button>
                     </li>
                 ))}
             </ul>

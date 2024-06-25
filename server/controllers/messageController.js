@@ -13,26 +13,27 @@ exports.getChannelMessages = async (req, res) => {
     }
 };
 
-// POST a new message to a channel
-exports.createMessage = async (req, res) => {
-    const { channelId, content } = req.body;
-    const userId = req.user._id;
 
-    if (!channelId || !content) {
-        return res.status(400).json({ error: 'Channel ID and content are required' });
-    }
+// // POST a new message to a channel
+// exports.createMessage = async (req, res) => {
+//     const { channelId, content } = req.body;
+//     const userId = req.user._id;
 
-    try {
-        const newMessage = new Message({
-            channel_id: channelId,
-            user_id: userId,
-            content,
-        });
+//     if (!channelId || !content) {
+//         return res.status(400).json({ error: 'Channel ID and content are required' });
+//     }
 
-        await newMessage.save();
-        res.status(201).json(newMessage);
-    } catch (error) {
-        console.error('Error creating message:', error);
-        res.status(500).json({ error: 'Error creating message' });
-    }
-};
+//     try {
+//         const newMessage = new Message({
+//             channel_id: channelId,
+//             user_id: userId,
+//             content,
+//         });
+
+//         await newMessage.save();
+//         res.status(201).json(newMessage);
+//     } catch (error) {
+//         console.error('Error creating message:', error);
+//         res.status(500).json({ error: 'Error creating message' });
+//     }
+// };

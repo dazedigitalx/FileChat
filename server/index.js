@@ -6,7 +6,7 @@ const { connectDB } = require('./db'); // Import connectDB function
 // Import routers
 const userRouter = require('./routes/userRouter');
 const channelRouter = require('./routes/channelRouter');
-// const messageRouter = require('./routes/messageRouter');
+const messageRouter = require('./routes/messageRouter');
 // const fileRouter = require('./routes/fileRouter');
 
 // Load environment variables
@@ -34,7 +34,7 @@ connectDB()
 // Mount routers
 app.use('/api/users', userRouter);
 app.use('/api/channels', channelRouter);
-// app.use('/api/messages', messageRouter);
+app.use('/api/messages', messageRouter);
 // app.use('/api/files', fileRouter);
 
 // Error handling middleware

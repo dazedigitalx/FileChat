@@ -9,13 +9,19 @@ const { authMiddleware } = require('../middlewares/authMiddleware'); // Ensure t
 // POST a new channel
 router.post('/', authMiddleware, ChannelController.createChannel);
 
+// get getUserChannels
+router.get('', authMiddleware, ChannelController.getUserChannels);
+
+// DELETE a channel by ID
+router.delete('/:channelId', authMiddleware, ChannelController.deleteChannel);
+
+// // GET a specific channel by ID
+router.get('/:channelId', ChannelController.getChannelById);
+
 
 // GET all channels
 // router.get('/', authMiddleware, ChannelController.getAllChannels);
 
-// get getUserChannels
-
-router.get('', authMiddleware, ChannelController.getUserChannels);
 
 // // GET a specific channel by ID
 // router.get('/:channelId', ChannelController.getChannelById);
@@ -23,7 +29,5 @@ router.get('', authMiddleware, ChannelController.getUserChannels);
 // // PUT update an existing channel
 // router.put('/:channelId', authMiddleware, ChannelController.updateChannel);
 
-// DELETE a channel by ID
-router.delete('/:channelId', authMiddleware, ChannelController.deleteChannel);
 
 module.exports = router;

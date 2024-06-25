@@ -3,6 +3,54 @@
 const Channel = require('../models/Channel'); // Adjust as per your actual model name
 
 
+
+// GET a channel by ID
+exports.getChannelById = async (req, res) => {
+    const channelId = req.params.channelId;
+
+    try {
+        // Find channel by ID
+        const channel = await Channel.findById(channelId);
+
+        if (!channel) {
+            return res.status(404).json({ error: 'Channel not found' });
+        }
+
+        res.json(channel);
+    } catch (error) {
+        console.error('Error fetching channel by ID:', error);
+        res.status(500).json({ error: 'Error fetching channel' });
+    }
+};
+
+
+
+// DELETE a channel by ID
+exports.deleteChannel = async (req, res) => {
+    const channelId = req.params.channelId;
+
+    try {
+        // Check if the channel exists
+        const channel = await Channel.findById(channelId);
+        if (!channel) {
+            return res.status(404).json({ error: 'Channel not found' });
+        }
+
+        // Check if the authenticated user is the creator of the channel
+        if (channel.creator_id.toString() !== req.user.id) {
+            return res.status(403).json({ error: 'Unauthorized: You are not the creator of this channel' });
+        }
+
+        // Delete the channel
+        await Channel.findByIdAndDelete(channelId);
+
+        res.status(200).json({ message: 'Channel deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting channel:', error);
+        res.status(500).json({ error: 'Error deleting channel' });
+    }
+};
+
 // GET channels created by the authenticated user
 exports.getUserChannels = async (req, res) => {
     try {
