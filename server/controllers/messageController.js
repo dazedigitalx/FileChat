@@ -2,6 +2,7 @@
 
 const Message = require('../models/Message');
 
+
 // GET all messages for a specific channel
 exports.getChannelMessages = async (req, res) => {
     try {
@@ -19,11 +20,9 @@ exports.getChannelMessages = async (req, res) => {
     }
 };
 
-
-
 exports.sendMessage = async (req, res) => {
     const { channelId } = req.params;
-    const { content, user_id } = req.body;
+    const { content, user_id } = req.body; // Ensure correct key name for user_id
 
     try {
         // Validate request body
@@ -33,10 +32,11 @@ exports.sendMessage = async (req, res) => {
 
         // Create new message object
         const newMessage = new Message({
-            channel_id: channelId,
+            id: generateUniqueMessageId(), // Function to generate a unique ID for message
+            channel_id: parseInt(channelId), // Ensure channelId is parsed to Number if needed
+            user_id: parseInt(user_id), // Ensure user_id is parsed to Number
             content,
-            user_id,
-            timestamp: new Date() // Assuming you have a timestamp field in your Message model
+            created_at: new Date() // Set created_at to current date/time
         });
 
         // Save the message to the database
@@ -56,41 +56,9 @@ exports.sendMessage = async (req, res) => {
     }
 };
 
-
-
-
-
-
-// exports.sendMessage = async (req, res) => {
-//     const { channelId } = req.params;
-//     const { content, user_id } = req.body;
-
-//     try {
-//         // Validate request body
-//         if (!content || !user_id) {
-//             return res.status(400).json({ error: 'Message content and user ID are required.' });
-//         }
-
-//         // Create new message object
-//         const newMessage = new Message({
-//             channel_id: channelId,
-//             content,
-//             user_id
-//         });
-
-//         // Save the message to the database
-//         await newMessage.save();
-
-//         // Respond with the newly created message
-//         res.status(201).json(newMessage);
-//     } catch (error) {
-//         // Check if the error is a validation error
-//         if (error.name === 'ValidationError') {
-//             console.error('Validation Error:', error);
-//             return res.status(400).json({ error: error.message });
-//         }
-
-//         console.error('Error sending message:', error);
-//         res.status(500).json({ error: 'Failed to send message. Please try again later.' });
-//     }
-// };
+// Function to generate a unique ID for the message
+function generateUniqueMessageId() {
+    // Logic to generate a unique ID, could be based on a counter or UUID
+    // Example: return Math.floor(Math.random() * 1000);
+    return Math.floor(Math.random() * 1000); // Replace with your actual ID generation logic
+}

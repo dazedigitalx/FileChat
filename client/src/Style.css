@@ -18,9 +18,14 @@
   --button-border-radius: 5px;
   --button-padding: 10px 15px;
   --button-hover-color: #0067cc; /* Adjust button hover color */
-  --main-font-size: 19px; /* Adjust main font size */
+  --main-font-size: 22px; /* Adjust main font size */
   --button-border-radius: 200px;
   --border-radius: 200px;
+
+    --width: 50vw; /* 50% of the viewport width */
+    --height: 75vh; /* 75% of the viewport height */
+
+  }
 
   div {
     border-radius: 20px;
@@ -30,7 +35,7 @@
   border-radius: 20px;
 }
 
-}
+
 
 body {
   font-family: var(--primary-font);
@@ -40,6 +45,7 @@ body {
 
 h2,
 label,
+ul,
 input,
 button {
   font-family: var(--primary-font);
@@ -116,3 +122,26 @@ button[type="submit"]:hover {
   padding: o;
 
 }
+
+
+/* Mobile Styles (Media Query) */
+@media (max-width: 768px) {
+  .main-content, sidebar {
+    flex-direction: column; /* Stack elements vertically */
+    
+  }
+
+  .sidebar-open{
+    width: 10%; /* Ensure full width on mobile */
+  }
+
+  .sidebar-closed {
+   transform: translateY(-50%); /* Offset vertically to account for element height */
+    width: 10%; /* Ensure full width on mobile */
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    padding: 1rem; /* Adjust padding for smaller screens */
+  }
+}
+
+
+
