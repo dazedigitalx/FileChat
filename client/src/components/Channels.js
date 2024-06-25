@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../AuthContext'; // Assuming your AuthContext is correctly imported
-import Chat from './Chat'; // Import your Chat component
+import { useAuth } from '../AuthContext';
 
-const Channels = ({ onChannelSelect = () => {}, onCreateChannel = () => {} }) => {
-    const { user } = useAuth(); // Accessing user from AuthContext
+const Channels = ({ onChannelSelect = () => {}, onCreateChannel = () => {}, activeChannel }) => {
+    const { user } = useAuth();
     const [channels, setChannels] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [newChannelName, setNewChannelName] = useState('');
     const [newChannelDescription, setNewChannelDescription] = useState('');
-    const [selectedChannel, setSelectedChannel] = useState(null); // State to store the selected channel
 
     useEffect(() => {
-        if (!user) return; // Only fetch data if the user is authenticated
+        if (!user) return;
 
         const fetchUserChannels = async () => {
             setLoading(true);
@@ -40,10 +38,10 @@ const Channels = ({ onChannelSelect = () => {}, onCreateChannel = () => {} }) =>
                 }
 
                 const data = await response.json();
-                setChannels(data); // Set channels directly from API response
+                setChannels(data);
             } catch (error) {
                 setError(`Error fetching channels: ${error.message}`);
-                console.error('Error fetching channels:', error); // Log detailed error information
+                console.error('Error fetching channels:', error);
             } finally {
                 setLoading(false);
             }
@@ -64,12 +62,10 @@ const Channels = ({ onChannelSelect = () => {}, onCreateChannel = () => {} }) =>
                 throw new Error('Token not available.');
             }
 
-            // Basic validation
             if (!newChannelName || !newChannelDescription) {
                 throw new Error('Channel Name and Description are required.');
             }
 
-            // Make API request to create channel
             const response = await fetch('http://localhost:5000/api/channels/', {
                 method: 'POST',
                 headers: {
@@ -79,7 +75,7 @@ const Channels = ({ onChannelSelect = () => {}, onCreateChannel = () => {} }) =>
                 body: JSON.stringify({
                     name: newChannelName,
                     description: newChannelDescription,
-                    creator_id: user.id // Ensure user.id is available and correct
+                    creator_id: user.id
                 }),
             });
 
@@ -92,28 +88,22 @@ const Channels = ({ onChannelSelect = () => {}, onCreateChannel = () => {} }) =>
 
             const newChannel = await response.json();
 
-            // Update channels state with the new channel
             setChannels([...channels, newChannel]);
-
-            // Notify parent about the new channel
             onCreateChannel(newChannel);
-
-            // Clear input fields after successful creation
             setNewChannelName('');
             setNewChannelDescription('');
 
-            console.log('Created Channel:', newChannel._id, 'User ID:', user.id); // Log new channel ID and user ID
+            console.log('Created Channel:', newChannel._id, 'User ID:', user.id);
         } catch (error) {
             setError(`Error creating channel: ${error.message}`);
-            console.error('Error creating channel:', error); // Log detailed error information
+            console.error('Error creating channel:', error);
         } finally {
             setLoading(false);
         }
     };
 
     const handleChannelClick = (channel) => {
-        setSelectedChannel(channel); // Set the selected channel
-        onChannelSelect(channel); // Notify parent component
+        onChannelSelect(channel);
     };
 
     const handleDeleteChannel = async (channelId) => {
@@ -138,13 +128,7 @@ const Channels = ({ onChannelSelect = () => {}, onCreateChannel = () => {} }) =>
                 throw new Error(`Failed to delete channel: ${response.statusText}`);
             }
 
-            // Remove the deleted channel from state
             setChannels(channels.filter(c => c._id !== channelId));
-
-            // If the deleted channel was selected, unset the selectedChannel state
-            if (selectedChannel && selectedChannel._id === channelId) {
-                setSelectedChannel(null);
-            }
         } catch (error) {
             console.error('Error deleting channel:', error);
             setError(`Error deleting channel: ${error.message}`);
@@ -164,19 +148,18 @@ const Channels = ({ onChannelSelect = () => {}, onCreateChannel = () => {} }) =>
             <h2>Your Channels</h2>
             <ul>
                 {channels.map(channel => (
-                    <li key={channel._id}>
-                        <span onClick={() => handleChannelClick(channel)}>
+                    <li
+                        key={channel._id}
+                        className={activeChannel && activeChannel._id === channel._id ? 'active' : ''}
+                        onClick={() => handleChannelClick(channel)}
+                    >
+                        <span>
                             {channel.name} - {channel.description}
                         </span>
                         <button onClick={() => handleDeleteChannel(channel._id)}>x</button>
                     </li>
                 ))}
             </ul>
-
-
-            {selectedChannel && (
-                <Chat channel={selectedChannel} />
-            )}
 
             <h3>Create New Channel</h3>
             <form onSubmit={handleCreateChannel}>

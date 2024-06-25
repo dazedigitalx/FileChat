@@ -1,3 +1,4 @@
+// channelRouter.js 
 const express = require('express');
 const router = express.Router();
 const ChannelController = require('../controllers/channelController'); // Import your channel controller

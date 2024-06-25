@@ -18,8 +18,17 @@
   --button-border-radius: 5px;
   --button-padding: 10px 15px;
   --button-hover-color: #0067cc; /* Adjust button hover color */
-  --main-font-size: 16px; /* Adjust main font size */
+  --main-font-size: 19px; /* Adjust main font size */
   --button-border-radius: 200px;
+  --border-radius: 200px;
+
+  div {
+    border-radius: 20px;
+  }
+
+.element, .element  {
+  border-radius: 20px;
+}
 
 }
 
@@ -51,6 +60,18 @@ input[type="text"] { /* Style all input fields */
 
 }
 
+button[type=""] {
+  background-color: var(--button-background-color);
+  color: var(--button-color);
+  padding: var(--button-padding);
+  border: var(--button-border);
+  border-radius: var(--button-border-radius);
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  width: 100%;
+
+}
+
 button[type="submit"] {
   background-color: var(--button-background-color);
   color: var(--button-color);
@@ -73,4 +94,25 @@ button[type="submit"]:hover {
   color: red; /* Adjust error message color */
   font-size: var(--main-font-size);
   margin-bottom: 10px;
+}
+
+.main-content {
+  margin-left: 300px; /* Adjust margin when sidebar is expanded */
+  padding: o;
+  border: 10px solid black;
+
+}
+
+.main-content.expanded {
+  margin-left: 300px; /* Adjust margin when sidebar is expanded */
+  padding: o;
+
+}
+
+
+.main-content.contracted {
+  margin-left: 200px; /* Contract main content when sidebar expands */
+  transition: margin-left 0.3s ease; /* Transition for main content margin */
+  padding: o;
+
 }

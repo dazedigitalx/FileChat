@@ -8,7 +8,7 @@
     position: relative;
 }
 
-.background-image {
+.backgroundImage {
     position: absolute;
     top: 0;
     left: 0;
@@ -31,18 +31,3 @@
     margin-top: 20px;
 }
 
-.button {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #007bff; /* Button background color */
-    color: #ffffff; /* Button text color */
-    text-decoration: none;
-    border-radius: 5px;
-    margin-right: 10px;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
-}
-
-.button:hover {
-    background-color: #0056b3; /* Darker shade on hover */
-}

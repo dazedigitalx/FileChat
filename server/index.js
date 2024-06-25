@@ -58,3 +58,6 @@ const startServer = async () => {
 };
 
 startServer();
+
+module.exports = app; // Export the app for testing purposes if needed
+

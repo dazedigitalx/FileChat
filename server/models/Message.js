@@ -1,27 +1,29 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+// Message.js
 
-const MessageSchema = new Schema({
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
+
+const messageSchema = new Schema({
     channel_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Channel', // Assuming you have a Channel model
-        required: true,
-    },
-    user_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User', // Assuming you have a User model
-        required: true,
+        type: Schema.Types.ObjectId,
+        ref: 'Channel',
+        required: true
     },
     content: {
         type: String,
-        required: true,
+        required: true
     },
-    created_at: {
+    user_id: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
+    timestamp: {
         type: Date,
-        default: Date.now,
-    },
+        default: Date.now
+    }
 });
 
-const Message = mongoose.model('Message', MessageSchema);
+const Message = mongoose.model('Message', messageSchema);
 
 module.exports = Message;

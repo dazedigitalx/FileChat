@@ -8,11 +8,10 @@ const Sidebar = ({ isOpen, toggleSidebar, channels, onChannelSelect }) => {
     return (
         <div className={`sidebar ${isOpen ? 'open' : 'closed'}`}>
             <button className="toggle-button" onClick={toggleSidebar}>
-                {isOpen ? 'Collapse' : 'Expand'}
+                {isOpen ? 'Collapse' : '='}
             </button>
             <ul className="menu">
-                <li></li>
-                <Channels channels={channels} onChannelSelect={onChannelSelect} />
+                <li>menu</li>
             </ul>
         </div>
     );

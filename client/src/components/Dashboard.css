@@ -1,20 +1,15 @@
 .dashboard {
   display: flex;
   height: 100vh;
-}
 
-
-.dashboard-content {
-  flex: 1; /* Take remaining space */
-  padding: 00px;
-  transition: margin-left 0.3s ease; /* Transition for main content margin */
 }
 
 
 .dashboard-header {
   padding: 0px;
   background-color: #f0f0f0;
-  border-bottom: 1px solid #ccc;
+  border-radius: 20px;
+
 }
 
 .dashboard-main {
@@ -24,13 +19,23 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+.dashboard-content {
+  flex: 1; /* Take remaining space */
+  padding: 0px;
+  transition: margin-left 0.3s ease; /* Transition for main content margin */
+  margin-left: 110px; /* Contract main content when sidebar expands */
+  border: 10px solid rgb(236, 236, 236);
+
+
+}
+
 .dashboard-content.expanded {
   margin-left: 300px; /* Adjust margin when sidebar is expanded */
 }
 
 
-.dashboard-main.contracted {
-  margin-left: 120px; /* Contract main content when sidebar expands */
+.dashboard-content.contracted {
+  margin-left: 200px; /* Contract main content when sidebar expands */
   transition: margin-left 0.3s ease; /* Transition for main content margin */
 
 }

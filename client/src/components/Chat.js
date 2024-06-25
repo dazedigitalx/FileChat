@@ -12,13 +12,13 @@ const Chat = ({ channel }) => {
             setError(null);
 
             try {
-                let token = localStorage.getItem('accessToken'); // Assuming token is stored in localStorage
+                const token = localStorage.getItem('accessToken'); // Assuming token is stored in localStorage
 
                 if (!token) {
                     throw new Error('Token not available.');
                 }
 
-                const response = await fetch(`http://localhost:5000/api/messages/channels/${channel._id}/messages`, {
+                const response = await fetch(`http://localhost:5000/api/messages/channels/${channel._id}/`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json',
@@ -53,7 +53,7 @@ const Chat = ({ channel }) => {
         setError(null);
 
         try {
-            let token = localStorage.getItem('accessToken'); // Assuming token is stored in localStorage
+            const token = localStorage.getItem('accessToken'); // Assuming token is stored in localStorage
 
             if (!token) {
                 throw new Error('Token not available.');
@@ -80,6 +80,8 @@ const Chat = ({ channel }) => {
                 let errorMessage = `Failed to send message: ${response.statusText}`;
                 if (response.status === 401) {
                     errorMessage = 'Unauthorized: Please login again.';
+                } else if (response.status === 404) {
+                    errorMessage = 'Endpoint not found: Check the URL and method.';
                 } else if (response.status === 500) {
                     errorMessage = 'Internal Server Error: Please try again later.';
                 }
@@ -94,7 +96,7 @@ const Chat = ({ channel }) => {
             // Clear input field after successful sending
             setNewMessage('');
 
-            console.log('Sent Message:', newMessageData.id); // Log new message ID
+            console.log('Sent Message:', newMessageData._id); // Log new message ID
         } catch (error) {
             setError(`Error sending message: ${error.message}`);
             console.error('Error sending message:', error); // Log detailed error information
@@ -117,7 +119,7 @@ const Chat = ({ channel }) => {
             <ul>
                 {Array.isArray(messages) && messages.map(message => (
                     <li key={message._id}>
-                        {message.content} - {message.user_id}
+                        {message.content} - {message.user_id.username}
                     </li>
                 ))}
             </ul>
