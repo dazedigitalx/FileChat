@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 
 const Signup = () => {
@@ -40,46 +40,52 @@ const Signup = () => {
     };
 
     return (
-        <div className="card">
-            <div className="card-image">
-                <div className="card-welcome">
-                    <h1>Sign Up</h1>
+        <div className="signup-page">
+            <div className="hero-image"></div>
+            <div className="signup-form-container">
+                <div className="signup-box">
+                    <h2>Sign Up</h2>
+                    {error && <p className="error-message">{error}</p>}
+                    <form onSubmit={handleSignup}>
+                        <input
+                            type="text"
+                            placeholder="Username"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            required
+                        />
+                        <input
+                            type="email"
+                            placeholder="Email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                        <input
+                            type="password"
+                            placeholder="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+                        <input
+                            type="password"
+                            placeholder="Confirm Password"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            required
+                        />
+                        <button type="submit">Sign Up</button>
+                    </form>
+                    <div className="login-link">
+                    <span><br></br></span>
+
+                        <span>Already have an account?</span>
+                        <span><br></br></span>
+
+                        <Link to="/login" className="login-button">Login</Link>
+                    </div>
                 </div>
-            </div>
-            <div className="card-content">
-                <h2>Sign Up</h2>
-                {error && <p className="error-message">{error}</p>}
-                <form onSubmit={handleSignup}>
-                    <input
-                        type="text"
-                        placeholder="Username"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        required
-                    />
-                    <input
-                        type="email"
-                        placeholder="Email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                    />
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                    <input
-                        type="password"
-                        placeholder="Confirm Password"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        required
-                    />
-                    <button type="submit">Sign Up</button>
-                </form>
             </div>
         </div>
     );

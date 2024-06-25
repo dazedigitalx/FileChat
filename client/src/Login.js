@@ -6,14 +6,28 @@ import './Style.css';
 
 const Login = () => {
     const navigate = useNavigate();
-    const { setUser } = useAuth(); // Destructure setUser function from useAuth
+    const { setUser } = useAuth();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [step, setStep] = useState(1);
     const [error, setError] = useState('');
     const [message, setMessage] = useState('');
 
-    const handleLogin = async (e) => {
+    const handleEmailSubmit = (e) => {
         e.preventDefault();
+        if (email) {
+            setStep(2);
+        }
+    };
+
+    const handlePasswordSubmit = (e) => {
+        e.preventDefault();
+        if (password) {
+            handleLogin();
+        }
+    };
+
+    const handleLogin = async () => {
         console.log('Login form submitted');
         console.log('Email:', email);
         console.log('Password:', password);
@@ -28,67 +42,69 @@ const Login = () => {
             const responseData = await response.json();
             console.log('Response data:', responseData);
 
-            if (response.ok) { // Checking for response.ok for HTTP 200-299 status
+            if (response.ok) {
                 const { token, id, username, email } = responseData;
 
                 console.log('Login successful:', 'User logged in successfully');
                 console.log('User data:', { id, username, email });
 
-                // Update user context with setUser function
                 setUser({ id, username, email, token });
 
-                // Save the token to localStorage
                 localStorage.setItem('accessToken', token);
 
-                // Display success message and clear error
                 setMessage('User logged in successfully');
                 setError('');
 
-                // Redirect to dashboard after successful login
                 navigate('/dashboard');
             } else {
-                // If login fails, show error message
                 setError(`Failed to login: ${responseData.message}`);
                 console.error('Login failed:', responseData.message);
             }
         } catch (error) {
-            // Handle network errors or other exceptions
             console.error('Login error:', error);
             setError(`Error logging in. Please try again later. Details: ${error.message}`);
         }
     };
 
     return (
-        <div className="card">
-            <div className="card-image">
-                <div className="card-welcome">
-                    <h1>Login</h1>
-                    <Link to="/signup" className="register-button">Register</Link>
+        <div className="login-page">
+            <div className="login-hero-image"></div>
+            <div className="login-form-container">
+                <div className="login-box">
+                    <h2>Login</h2>
+                    {error && <p className="error-message">{error}</p>}
+                    {message && <p className="success-message">{message}</p>}
+                    {step === 1 && (
+                        <form onSubmit={handleEmailSubmit}>
+                            <input
+                                type="email"
+                                placeholder="Email"
+                                id="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                            />
+                            <button type="submit">Next</button>
+                        </form>
+                    )}
+                    {step === 2 && (
+                        <form onSubmit={handlePasswordSubmit}>
+                            <input
+                                type="password"
+                                placeholder="Password"
+                                id="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                            <button type="submit">Login</button>
+                        </form>
+                    )}
+                    <div className="register-link">
+                        <span>Don't have an account?</span>
+                        <Link to="/signup" className="register-button">Register</Link>
+                    </div>
                 </div>
-            </div>
-            <div className="card-content">
-                <h2>Login</h2>
-                {error && <p className="error-message">{error}</p>}
-                {message && <p className="success-message">{message}</p>}
-                <form onSubmit={handleLogin}>
-                    <input
-                        type="email"
-                        placeholder="Email"
-                        id="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                    />
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        id="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                    <button type="submit">Login</button>
-                </form>
             </div>
         </div>
     );

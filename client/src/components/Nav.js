@@ -2,6 +2,8 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
 import './Nav.css';
+import './Style.css';
+
 
 const Nav = () => {
     const { user, logout } = useAuth();

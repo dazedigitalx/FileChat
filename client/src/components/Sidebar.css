@@ -1,21 +1,4 @@
 /* General styling for input fields */
-input[type=""],
-input[type="text"],
-input[type="username"],
-input[type="email"],
-input[type="password"] {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 200px;
-  font-size: 1.2rem;
-  transition: border-color 0.3s;
-  margin-bottom: 5px;
-  margin-top: 5px;
-  padding: 10px 20px; /* Adjust padding values as needed */
-  width: 230px;
-
-
-}
 
 .sidebar {
   height: 100%;
@@ -23,10 +6,11 @@ input[type="password"] {
   top: 0;
   left: 0;
   bottom: 0;
-  background-color: #333;
-  color: #fff;
+  background-color: #ffffff;
+  color: #000000;
   overflow-y: auto;
   transition: width 0.3s ease;
+  padding: 20px;
 }
 
 .sidebar.open {
@@ -45,6 +29,7 @@ input[type="password"] {
   border: none;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  border-radius: var(--field-border-radius);
 }
 
 .sidebar .toggle-button:hover {
@@ -65,4 +50,8 @@ input[type="password"] {
 
 .sidebar .menu li:hover {
   background-color: #555;
+  color: #fff;
 }
+
+
+

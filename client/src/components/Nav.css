@@ -4,17 +4,7 @@
 }
 
 /* Root variables for colors */
-:root {
-  --primary-color: #333; /* Adjust primary color */
-  --hover-color: #ddd; /* Adjust hover background color */
-  --active-color: #04AA6D; /* Adjust active link color */
-  --auth-active-color: #28a745; /* Authenticated active link color */
-  --text-color: #fff; /* Default text color */
-  --hover-text-color: #000; /* Text color on hover */
-  --padding: 10px;
-  --font-size: 1.2em;
-  --border-radius: 200px;
-}
+/*  */
 
 /* Styling for navigation */
 .nav .nav-link {

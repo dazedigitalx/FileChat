@@ -4,6 +4,8 @@ import Header from './Header';
 import Sidebar from './Sidebar';
 import Chat from './Chat'; // Import Chat component
 import './Dashboard.css'; // Ensure correct import path for CSS
+import './Style.css'; // Ensure correct import path for CSS
+
 
 const Dashboard = () => {
     const { user } = useAuth(); // Accessing user from AuthContext

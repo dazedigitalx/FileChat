@@ -4,60 +4,73 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
 /* Apply the font globally */
-html, body {
-  font-family: 'Roboto', sans-serif; /* Replace with the desired font family */
+
+
+:root {
+  --primary-font: 'Roboto', sans-serif; /* Replace with your desired font family */
+  --field-background-color: #f0f0f0;
+  --field-border-color: #ccc;
+  --field-border-radius: 200px;
+  --field-padding: 10px;
+  --button-background-color: #007bff; /* Adjust button color */
+  --button-color: white;
+  --button-border: none;
+  --button-border-radius: 5px;
+  --button-padding: 10px 15px;
+  --button-hover-color: #0067cc; /* Adjust button hover color */
+  --main-font-size: 16px; /* Adjust main font size */
+  --button-border-radius: 200px;
+
 }
 
-/* General styling for buttons */
+body {
+  font-family: var(--primary-font);
+}
+
+
+
+h2,
+label,
+input,
 button {
-  padding: 10px 20px;
-  border: none;
-  background-color: #4CAF50;
-  color: white;
-  font-size: 1.2rem;
-  border-radius: 200px;
-  cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
+  font-family: var(--primary-font);
+  font-size: var(--main-font-size);
 }
 
-button:hover {
-  background-color: #45a049;
-}
-
-/* General styling for input fields */
-input[type=""],
-input[type="text"],
-input[type="username"],
 input[type="email"],
-input[type="password"] {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 200px;
-  font-size: 1.2rem;
-  transition: border-color 0.3s;
+input[type="password"],
+input[type="text"] { /* Style all input fields */
+  width: 100%;
+  padding: var(--field-padding);
+  border: 1px solid var(--field-border-color);
+  border-radius: var(--field-border-radius);
+  background-color: var(--field-background-color);
+  box-sizing: border-box;
   margin-bottom: 5px;
-  margin-top: 5px;
-  padding: 10px 20px; /* Adjust padding values as needed */
-
+  border-radius: 200px;
 
 }
 
-input[type="text"]:focus,
-input[type="username"]:focus,
+button[type="submit"] {
+  background-color: var(--button-background-color);
+  color: var(--button-color);
+  padding: var(--button-padding);
+  border: var(--button-border);
+  border-radius: var(--button-border-radius);
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  width: 100%;
 
-input[type="email"]:focus,
-input[type="password"]:focus {
-  outline: none;
-  border-color: #4CAF50;
 }
 
-
-
-/* Styling for general layout */
-.container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
+button[type="submit"]:hover {
+  background-color: var(--button-hover-color);
 }
 
-/* Additional styles can be added as per your application's needs */
+.error-message,
+.success-message {
+  /* Style error and success messages */
+  color: red; /* Adjust error message color */
+  font-size: var(--main-font-size);
+  margin-bottom: 10px;
+}

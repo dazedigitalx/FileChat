@@ -1,51 +1,95 @@
-/* client/src/Login.css */
+body, html {
+  /* height: 100%;
+  margin: 0;
+  font-family: Arial, sans-serif; */
+}
+
+.login-page  {
+  display: flex;
+  height: 100vh;
+
+}
+
+.login-hero-image {
+  flex: 1;
+  background: url('./images/login_board.jpg') center;
+  background-size: cover;
+}
+
+.signup-hero-image {
+  flex: 1;
+  background: url('./images/marcelo-cidrack-WJb_4qwOxcI-unsplash.jpg') no-repeat center center;
+  background-size: cover;
+}
 
 
+.login-form-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f0f0;
+}
+
+.login-box {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.login-box h2 {
+  margin-bottom: 1rem;
+}
+
+.login-box form {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-box input {
+  /* margin-bottom: 1rem; */
+  /* padding: 0.75rem; */
+  /* border: 1px solid #ccc; */
+  /* border-radius: 4px; */
+}
 
 button {
-  padding: 10px 20px;
+  /* padding: 10px 20px;
   border: none;
   background-color: #4CAF50;
   color: white;
   font-size: 1.2rem;
   border-radius: 200px;
   cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
+  transition: background-color 0.3s, color 0.3s; */
 }
 
-
-
-.card {
-  display: flex;
-  width: 600px;
-  margin: 50px auto;
-  border: 1px solid #ccc;
-  border-radius: 100px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+button:hover {
+  /* background-color: #45a049; */
 }
 
-.card-image {
-  flex: 1;
-  background-image: url('./images/login_board.jpg'); /* Update with your image path */
-  background-size: cover;
-  background-position: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  padding: 0; /* Remove padding from the image */
-  margin: 0; /* Remove margin from the image */
+.error-message, .success-message {
+  margin-bottom: 1rem;
+  color: red;
 }
 
-.card-welcome {
+.success-message {
+  color: green;
+}
+
+.register-link {
+  margin-top: 1rem;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
 }
 
 .register-button {
-  background-color: #007bff;
+  /* background-color: #007bff;
   color: #fff;
   padding: 5px 10px;
   border: none;
@@ -53,25 +97,61 @@ button {
   text-decoration: none;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  margin-top: 0.5rem; */
 }
 
 .register-button:hover {
-  background-color: #0056b3;
+  /* background-color: #0056b3; */
 }
 
 
-.card-welcome h1 {
-  color: white;
-  font-size: 2em;
-  margin: 0;
+
+/* ////////////////////////
+
+ */
+
+.signup-page {
+  display: flex;
+  height: 100vh;
 }
 
-.card-content {
+.hero-image {
   flex: 1;
-  padding: 40px;
+  background: url('./images/register_jr-korpa-YXQew2KZjzY-unsplash.jpg') no-repeat center center;
+  background-size: cover;
+}
+
+.signup-form-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f0f0;
+}
+
+.signup-box {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.signup-box h2 {
+  margin-bottom: 1rem;
+}
+
+.signup-box form {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  background-color: transparent;
+}
+
+.signup-box input {
+  /* margin-bottom: 1rem;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px; */
 }
 

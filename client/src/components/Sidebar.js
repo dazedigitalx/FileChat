@@ -1,6 +1,8 @@
 import React from 'react';
-import './Sidebar.css'; // Adjust styles as needed
 import Channels from './Channels'; // Import Channels component
+import './Sidebar.css'; // Adjust styles as needed
+import './Style.css'; // Adjust styles as needed
+
 
 const Sidebar = ({ isOpen, toggleSidebar, channels, onChannelSelect }) => {
     return (
