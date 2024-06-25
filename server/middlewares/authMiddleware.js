@@ -1,12 +1,17 @@
-// middlewares/authMiddleware.js
-
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 
 dotenv.config();
 
+// Middleware function to check if user is authenticated
+const checkAuthenticated = (req, res, next) => {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    res.status(401).json({ error: 'Unauthorized' });
+};
 
-
+// Middleware function to verify JWT token
 const authMiddleware = (req, res, next) => {
     const authHeader = req.header('Authorization');
 
@@ -25,9 +30,8 @@ const authMiddleware = (req, res, next) => {
         req.user = decoded; // Ensure `decoded` contains `{ id, username, email }`
 
         // Logging for debugging purposes
-//         console.log('Token:', token);
-//         console.log('Decoded:', decoded);
-// /
+        // console.log('Token:', token);
+        // console.log('Decoded:', decoded);
 
         next();
     } catch (error) {
@@ -36,4 +40,4 @@ const authMiddleware = (req, res, next) => {
     }
 };
 
-module.exports = authMiddleware;
+module.exports = { checkAuthenticated, authMiddleware };

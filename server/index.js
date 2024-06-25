@@ -1,4 +1,3 @@
-// index.js or your main server file
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
@@ -7,11 +6,10 @@ const { connectDB } = require('./db'); // Import connectDB function
 // Import routers and middleware
 const userRouter = require('./routes/userRouter');
 const channelRouter = require('./routes/channelRouter');
-// const messageRouter = require('./routes/messageRouter');
+const messageRouter = require('./routes/messageRouter');
 // const fileRouter = require('./routes/fileRouter');
 
-
-const authMiddleware = require('./middlewares/authMiddleware');
+// const authMiddleware = require('./middlewares/authMiddleware');
 
 // Load environment variables
 dotenv.config();
@@ -26,19 +24,20 @@ app.use(cors({
 }));
 
 // Connect to MongoDB
-connectDB().then(() => {
-    console.log('MongoDB connected on connectDB');
-}).catch((error) => {
-    console.error('MongoDB connection error:', error);
-    process.exit(1);
-});
+connectDB()
+    .then(() => {
+        console.log('MongoDB connected');
+    })
+    .catch((error) => {
+        console.error('MongoDB connection error:', error);
+        process.exit(1);
+    });
 
-// Mount routers
+// Mount routers with authMiddleware
 app.use('/api/users', userRouter);
-app.use('/api/channels', authMiddleware, channelRouter);
-// app.use('/api/messages', authMiddleware, messageRouter);
+app.use('/api/channels', channelRouter);
+app.use('/api/messages', messageRouter);
 // app.use('/api/files', authMiddleware, fileRouter);
-
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -48,12 +47,16 @@ app.use((err, req, res, next) => {
 
 // Start server
 const startServer = async () => {
-    await connectDB(); // Connect to MongoDB
-    app.listen(process.env.PORT || 5000, () => {
-        console.log(`Server running on port ${process.env.PORT || 5000}`);
-
-
-    });
+    try {
+        await connectDB(); // Connect to MongoDB
+        const port = process.env.PORT || 5000;
+        app.listen(port, () => {
+            console.log(`Server running on port ${port}`);
+        });
+    } catch (error) {
+        console.error('Error starting server:', error);
+        process.exit(1);
+    }
 };
 
 startServer();

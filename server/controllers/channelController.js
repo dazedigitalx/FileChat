@@ -1,61 +1,79 @@
 // channelController.js
 
-const Channel = require('../models/Channels');
-// const Message = require('../models/Message'); // Adjust this according to your message model
+const Channel = require('../models/Channels'); // Import your Channel model
 
-// Example function to create a new channel
-const createChannel = async (req, res) => {
+// Example controller functions
+
+// GET all channels
+exports.getAllChannels = async (req, res) => {
     try {
-        const { name, description, creator_id } = req.body;
+        const channels = await Channel.find();
+        res.status(200).json(channels);
+    } catch (error) {
+        console.error('Error fetching channels:', error);
+        res.status(500).json({ error: 'Error fetching channels' });
+    }
+};
 
-        // Validate input
-        if (!name || !description || !creator_id) {
-            return res.status(400).json({ error: 'Channel Name, Description, and Creator ID are required' });
+// GET a specific channel by ID
+exports.getChannelById = async (req, res) => {
+    const channelId = req.params.channelId;
+    try {
+        const channel = await Channel.findById(channelId);
+        if (!channel) {
+            return res.status(404).json({ error: 'Channel not found' });
         }
+        res.status(200).json(channel);
+    } catch (error) {
+        console.error('Error fetching channel by ID:', error);
+        res.status(500).json({ error: 'Error fetching channel' });
+    }
+};
 
-        // Create new channel
-        const newChannel = new Channel({ name, description, creator_id });
+// POST a new channel
+exports.createChannel = async (req, res) => {
+    const { name, description } = req.body;
+    try {
+        const newChannel = new Channel({ name, description });
         await newChannel.save();
-
-        // Respond with the created channel
         res.status(201).json(newChannel);
     } catch (error) {
         console.error('Error creating channel:', error);
-        res.status(500).json({ error: 'Failed to create channel' });
+        res.status(500).json({ error: 'Error creating channel' });
     }
 };
 
-// Function to get messages for a specific channel
-const getChannelMessages = async (req, res) => {
+// PUT update an existing channel
+exports.updateChannel = async (req, res) => {
+    const channelId = req.params.channelId;
+    const { name, description } = req.body;
     try {
-        const channelId = req.params.channelId; // Assuming channel ID is passed in the URL params
-        const messages = await Message.find({ channel_id: channelId });
-
-        res.status(200).json(messages);
+        const updatedChannel = await Channel.findByIdAndUpdate(
+            channelId,
+            { name, description },
+            { new: true }
+        );
+        if (!updatedChannel) {
+            return res.status(404).json({ error: 'Channel not found' });
+        }
+        res.status(200).json(updatedChannel);
     } catch (error) {
-        console.error('Error fetching channel messages:', error);
-        res.status(500).json({ error: 'Failed to fetch channel messages' });
+        console.error('Error updating channel:', error);
+        res.status(500).json({ error: 'Error updating channel' });
     }
 };
 
-// Function to get all channels for a specific user
-const getUserChannels = async (req, res) => {
+// DELETE a channel by ID
+exports.deleteChannel = async (req, res) => {
+    const channelId = req.params.channelId;
     try {
-        const userId = req.user.id; // Assuming user ID is available in request object (from middleware)
-        const channels = await Channel.find({ creator_id: userId });
-
-        res.status(200).json(channels);
+        const deletedChannel = await Channel.findByIdAndDelete(channelId);
+        if (!deletedChannel) {
+            return res.status(404).json({ error: 'Channel not found' });
+        }
+        res.status(200).json({ message: 'Channel deleted successfully' });
     } catch (error) {
-        console.error('Error fetching user channels:', error);
-        res.status(500).json({ error: 'Failed to fetch user channels' });
+        console.error('Error deleting channel:', error);
+        res.status(500).json({ error: 'Error deleting channel' });
     }
-};
-
-
-
-module.exports = {
-    createChannel,
-    getUserChannels,
-    getChannelMessages
-    // Other controller functions here
 };
