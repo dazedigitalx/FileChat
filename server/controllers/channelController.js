@@ -1,8 +1,28 @@
 // channelController.js
 
-const Channel = require('../models/Channels'); // Import your Channel model
+const Channel = require('../models/Channel'); // Adjust as per your actual model name
 
-// Example controller functions
+
+// GET channels created by the authenticated user
+exports.getUserChannels = async (req, res) => {
+    try {
+        if (!req.user || !req.user.id) {
+            return res.status(401).json({ error: 'User not authenticated' });
+        }
+
+        const creator_id = req.user.id;
+
+        // Query channels where creator_id matches the authenticated user's ID
+        const channels = await Channel.find({ creator_id });
+
+        res.status(200).json(channels);
+    } catch (error) {
+        console.error('Error fetching user channels:', error);
+        res.status(500).json({ error: 'Error fetching user channels' });
+    }
+};
+
+
 
 // GET all channels
 exports.getAllChannels = async (req, res) => {
@@ -15,65 +35,23 @@ exports.getAllChannels = async (req, res) => {
     }
 };
 
-// GET a specific channel by ID
-exports.getChannelById = async (req, res) => {
-    const channelId = req.params.channelId;
-    try {
-        const channel = await Channel.findById(channelId);
-        if (!channel) {
-            return res.status(404).json({ error: 'Channel not found' });
-        }
-        res.status(200).json(channel);
-    } catch (error) {
-        console.error('Error fetching channel by ID:', error);
-        res.status(500).json({ error: 'Error fetching channel' });
-    }
-};
 
 // POST a new channel
 exports.createChannel = async (req, res) => {
-    const { name, description } = req.body;
     try {
-        const newChannel = new Channel({ name, description });
+        if (!req.user || !req.user.id) {
+            return res.status(401).json({ error: 'User not authenticated' });
+        }
+
+        const { id: creator_id } = req.user;
+        const { name, description } = req.body;
+
+        const newChannel = new Channel({ name, description, creator_id });
         await newChannel.save();
+
         res.status(201).json(newChannel);
     } catch (error) {
         console.error('Error creating channel:', error);
         res.status(500).json({ error: 'Error creating channel' });
-    }
-};
-
-// PUT update an existing channel
-exports.updateChannel = async (req, res) => {
-    const channelId = req.params.channelId;
-    const { name, description } = req.body;
-    try {
-        const updatedChannel = await Channel.findByIdAndUpdate(
-            channelId,
-            { name, description },
-            { new: true }
-        );
-        if (!updatedChannel) {
-            return res.status(404).json({ error: 'Channel not found' });
-        }
-        res.status(200).json(updatedChannel);
-    } catch (error) {
-        console.error('Error updating channel:', error);
-        res.status(500).json({ error: 'Error updating channel' });
-    }
-};
-
-// DELETE a channel by ID
-exports.deleteChannel = async (req, res) => {
-    const channelId = req.params.channelId;
-    try {
-        const deletedChannel = await Channel.findByIdAndDelete(channelId);
-        if (!deletedChannel) {
-            return res.status(404).json({ error: 'Channel not found' });
-        }
-        res.status(200).json({ message: 'Channel deleted successfully' });
-    } catch (error) {
-        console.error('Error deleting channel:', error);
-        res.status(500).json({ error: 'Error deleting channel' });
     }
 };

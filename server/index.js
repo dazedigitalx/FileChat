@@ -3,13 +3,11 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const { connectDB } = require('./db'); // Import connectDB function
 
-// Import routers and middleware
+// Import routers
 const userRouter = require('./routes/userRouter');
 const channelRouter = require('./routes/channelRouter');
-const messageRouter = require('./routes/messageRouter');
+// const messageRouter = require('./routes/messageRouter');
 // const fileRouter = require('./routes/fileRouter');
-
-// const authMiddleware = require('./middlewares/authMiddleware');
 
 // Load environment variables
 dotenv.config();
@@ -33,11 +31,11 @@ connectDB()
         process.exit(1);
     });
 
-// Mount routers with authMiddleware
+// Mount routers
 app.use('/api/users', userRouter);
 app.use('/api/channels', channelRouter);
-app.use('/api/messages', messageRouter);
-// app.use('/api/files', authMiddleware, fileRouter);
+// app.use('/api/messages', messageRouter);
+// app.use('/api/files', fileRouter);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
