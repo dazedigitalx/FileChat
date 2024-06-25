@@ -9,8 +9,5 @@ router.post('/', authMiddleware, channelController.createChannel);
 // Get all channels for the authenticated user
 router.get('/', authMiddleware, channelController.getUserChannels);
 
-// Get messages for a specific channel
-router.get('/:channelId/messages', authMiddleware, channelController.getChannelMessages);
-
 
 module.exports = router;

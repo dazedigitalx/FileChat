@@ -5,6 +5,8 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
+
+
 const authMiddleware = (req, res, next) => {
     const authHeader = req.header('Authorization');
 
