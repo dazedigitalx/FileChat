@@ -1,33 +1,55 @@
-.home-container {
+.signup-page {
+    display: flex;
+    min-height: 100vh;
+    /* Background gradient using linear-gradient for optional Unsplash blue */
+    background: linear-gradient(to bottom, #3B82F6 0%, #cc00ff 100%);
+  }
+  
+  .background-gradient {
+    /* Adjust styles for the background gradient here */
+    flex: 1; /* Take up full space behind content */
+  }
+  
+  .signup-form-container {
+    flex: 1; /* Stack content on top of background */
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh; /* Full viewport height */
-    background-color: #f0f0f0; /* Fallback color */
-    overflow: hidden;
-    position: relative;
-}
-
-.backgroundImage {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url('./images/login_board.jpg'); /* Update with your image path */
-    background-size: cover;
-    background-position: center;
-    filter: brightness(0.5); /* Adjust brightness as needed */
-    z-index: -1; /* Behind other content */
-}
-
-.content {
-    text-align: center;
-    z-index: 1; /* Above background image */
-    color: #ffffff; /* Text color */
-}
-
-.button-container {
-    margin-top: 20px;
-}
-
+    padding: 2rem; /* Add some padding for better layout */
+  }
+  
+  .signup-box {
+    background-color: white;
+    padding: 2rem; /* Adjust padding if needed */
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    max-width: 100%; /* Adjust max-width as needed */
+  }
+  
+  .error-message {
+    color: red;
+  }
+  
+  .signup-box form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem; /* Add space between form elements */
+  }
+  
+  .signup-box form input {
+    padding: 0.75rem 1rem; /* Adjust padding for input fields */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .signup-box form button {
+    /* Style button here (consider using a button library for consistency) */
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    background-color: #3B82F6; /* Example button color */
+    color: white;
+    cursor: pointer;
+  }
+  

@@ -1,50 +1,37 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom'; // Import Link
-import './Home.css';
-import './Style.css';
+import React from 'react';
+import { Link } from 'react-router-dom'; // Import Link for navigation
+import './Style.css'; // Import the CSS file
+import './Signup.css'; // Import the CSS file
 
 
-const Home = () => {
-  const [isLoading, setIsLoading] = useState(true); // Flag for loading state
-  const [error, setError] = useState(null); // State for potential errors
-  const [imageUrl, setImageUrl] = useState(null); // State for image URL
-
-  useEffect(() => {
-    const fetchImage = async () => {
-      try {
-        const url = await getImageUrl();
-        setImageUrl(url);
-      } catch (error) {
-        console.error('Error fetching image:', error);
-        setError('Failed to load image. Please try again later.'); // User-friendly error message
-      } finally {
-        setIsLoading(false); // Set loading state to false after fetching (success or failure)
-      }
-    };
-
-    fetchImage();
-  }, []); // Empty dependency array to fetch only on component mount
-
+const Signup = () => {
   return (
-    <div className="home-container" style={{ backgroundImage: `url(${imageUrl})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
-      {isLoading && <div className="loading-indicator">Loading...</div>} {/* Optional loading indicator */}
-      {error && <div className="error-message">{error}</div>} {/* Optional error message */}
-      <div className="content">
-        <h1>Welcome to Our App</h1>
-        <p>Discover amazing features and join our community!</p>
-        <div className="button-container">
-          <Link to="/login" className="submit">
+    <div className="signup-page">
+      {/* Full-width background with optional gradient */}
+      <div className="background-gradient"></div>
+
+      <div className="signup-form-container">
+        {/* Centered signup card with white background and rounded corners */}
+        <div className="signup-box">
+          <h2>Welcome</h2>
+
+          <div className="button-container">
+            <Link to="/login" className="button">
             <button type="submit">Login</button>
-          </Link>
-          <span></span>
-          <br />
-          <Link to="/signup" className="submit">
-            <button type="submit">Signup</button>
-          </Link>
+<span><br></br></span><span></span>
+<span><br></br></span><span></span>
+
+            </Link>
+            <span className="spacer"></span>  {/* Add a spacer for better separation */}
+            <Link to="/signup" className="button">
+            <button type="submit">Sign Up</button>
+
+            </Link>
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default Home;
+export default Signup;

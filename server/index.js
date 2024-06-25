@@ -14,6 +14,20 @@ dotenv.config();
 
 const app = express();
 
+const allowedOrigins = ['https://file-chat-client.vercel.app', 'http://localhost:3000']; // Add your client origin(s) here
+
+app.use(cors({
+    origin: function(origin, callback) {
+      // Check if the origin is allowed
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    }
+  }));
+  
+
 // Middleware setup
 app.use(express.json());
 app.use(cors({
