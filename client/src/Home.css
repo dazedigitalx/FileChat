@@ -1,0 +1,48 @@
+.home-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+    background-color: #f0f0f0; /* Fallback color */
+    overflow: hidden;
+    position: relative;
+}
+
+.background-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('./images/login_board.jpg'); /* Update with your image path */
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.5); /* Adjust brightness as needed */
+    z-index: -1; /* Behind other content */
+}
+
+.content {
+    text-align: center;
+    z-index: 1; /* Above background image */
+    color: #ffffff; /* Text color */
+}
+
+.button-container {
+    margin-top: 20px;
+}
+
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff; /* Button background color */
+    color: #ffffff; /* Button text color */
+    text-decoration: none;
+    border-radius: 5px;
+    margin-right: 10px;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+}

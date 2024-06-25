@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../AuthContext'; // Assuming your AuthContext is correctly imported
+import Chat from './Chat'; // Import your Chat component
 
 const Channels = ({ onChannelSelect = () => {}, onCreateChannel = () => {} }) => {
     const { user } = useAuth(); // Accessing user from AuthContext
@@ -8,6 +9,7 @@ const Channels = ({ onChannelSelect = () => {}, onCreateChannel = () => {} }) =>
     const [error, setError] = useState(null);
     const [newChannelName, setNewChannelName] = useState('');
     const [newChannelDescription, setNewChannelDescription] = useState('');
+    const [selectedChannel, setSelectedChannel] = useState(null); // State to store the selected channel
 
     useEffect(() => {
         if (!user) return; // Only fetch data if the user is authenticated
@@ -76,7 +78,7 @@ const Channels = ({ onChannelSelect = () => {}, onCreateChannel = () => {} }) =>
                 },
                 body: JSON.stringify({
                     name: newChannelName,
-                    description: newChannelDescription, // Corrected order and comma
+                    description: newChannelDescription,
                     creator_id: user.id // Ensure user.id is available and correct
                 }),
             });
@@ -110,6 +112,7 @@ const Channels = ({ onChannelSelect = () => {}, onCreateChannel = () => {} }) =>
     };
 
     const handleChannelClick = (channel) => {
+        setSelectedChannel(channel); // Set the selected channel
         onChannelSelect(channel); // Notify parent component
     };
 
@@ -137,6 +140,11 @@ const Channels = ({ onChannelSelect = () => {}, onCreateChannel = () => {} }) =>
 
             // Remove the deleted channel from state
             setChannels(channels.filter(c => c._id !== channelId));
+
+            // If the deleted channel was selected, unset the selectedChannel state
+            if (selectedChannel && selectedChannel._id === channelId) {
+                setSelectedChannel(null);
+            }
         } catch (error) {
             console.error('Error deleting channel:', error);
             setError(`Error deleting channel: ${error.message}`);
@@ -164,6 +172,11 @@ const Channels = ({ onChannelSelect = () => {}, onCreateChannel = () => {} }) =>
                     </li>
                 ))}
             </ul>
+
+
+            {selectedChannel && (
+                <Chat channel={selectedChannel} />
+            )}
 
             <h3>Create New Channel</h3>
             <form onSubmit={handleCreateChannel}>

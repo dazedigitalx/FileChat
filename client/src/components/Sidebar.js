@@ -9,7 +9,7 @@ const Sidebar = ({ isOpen, toggleSidebar, channels, onChannelSelect }) => {
                 {isOpen ? 'Collapse' : 'Expand'}
             </button>
             <ul className="menu">
-                <li>Menu Item 3</li>
+                <li></li>
                 <Channels channels={channels} onChannelSelect={onChannelSelect} />
             </ul>
         </div>

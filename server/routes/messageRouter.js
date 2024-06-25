@@ -5,7 +5,7 @@ const messageController = require('../controllers/messageController');
 const router = express.Router();
 
 // GET all messages for a channel getChannelMessages
-router.get('/channel/:channelId', authMiddleware, messageController.getChannelMessages);
+router.get('/channels/:channelId/messages', authMiddleware, messageController.getChannelMessages);
 
 // // POST a new message to a channel
 // router.post('/', checkAuthenticated, messageController.createMessage);
