@@ -14,36 +14,32 @@ dotenv.config();
 
 const app = express();
 
+// Configure CORS middleware
 const allowedOrigins = ['https://file-chat-client.vercel.app', 'http://localhost:3000']; // Add your client origin(s) here
-
 app.use(cors({
-    origin: function(origin, callback) {
-      // Check if the origin is allowed
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
+  origin: function(origin, callback) {
+    // Check if the origin is allowed
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
     }
-  }));
-  
+  },
+  credentials: true // Enable credentials if needed
+}));
 
 // Middleware setup
 app.use(express.json());
-app.use(cors({
-    origin: process.env.FRONTEND_ORIGIN,
-    credentials: true
-}));
 
 // Connect to MongoDB
 connectDB()
-    .then(() => {
-        console.log('MongoDB connected');
-    })
-    .catch((error) => {
-        console.error('MongoDB connection error:', error);
-        process.exit(1);
-    });
+  .then(() => {
+    console.log('MongoDB connected');
+  })
+  .catch((error) => {
+    console.error('MongoDB connection error:', error);
+    process.exit(1);
+  });
 
 // Mount routers
 app.use('/api/users', userRouter);
@@ -53,25 +49,30 @@ app.use('/api/messages', messageRouter);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
+  if (err.name === 'UnauthorizedError') {
+    // UnauthorizedError from CORS
+    res.status(401).json({ error: 'Unauthorized' });
+  } else {
+    // General server error
     console.error(err.stack);
     res.status(500).send('Internal Server Error');
+  }
 });
 
 // Start server
 const startServer = async () => {
-    try {
-        await connectDB(); // Connect to MongoDB
-        const port = process.env.PORT || 5000;
-        app.listen(port, () => {
-            console.log(`Server running on port ${port}`);
-        });
-    } catch (error) {
-        console.error('Error starting server:', error);
-        process.exit(1);
-    }
+  try {
+    await connectDB(); // Connect to MongoDB
+    const port = process.env.PORT || 5000;
+    app.listen(port, () => {
+      console.log(`Server running on port ${port}`);
+    });
+  } catch (error) {
+    console.error('Error starting server:', error);
+    process.exit(1);
+  }
 };
 
 startServer();
 
 module.exports = app; // Export the app for testing purposes if needed
-
