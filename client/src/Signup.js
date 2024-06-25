@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-// import './Signup.css';
 
 const Signup = () => {
     const navigate = useNavigate();
@@ -27,8 +26,9 @@ const Signup = () => {
                 password,
             });
 
-            if (response.status === 200) {
-                // Successful signup, navigate to login page
+            if (response.status === 201) {
+                // Successful signup
+                console.log('Signup successful:', response.data.message);
                 navigate('/login');
             } else {
                 setError(response.data.message || 'Failed to sign up.');

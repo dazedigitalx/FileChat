@@ -8,7 +8,6 @@ const Login = () => {
     const navigate = useNavigate();
     const { setUser } = useAuth(); // Destructure setUser function from useAuth
     const [email, setEmail] = useState('');
-    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [message, setMessage] = useState('');
@@ -17,20 +16,19 @@ const Login = () => {
         e.preventDefault();
         console.log('Login form submitted');
         console.log('Email:', email);
-        console.log('Username:', username);
         console.log('Password:', password);
 
         try {
             const response = await fetch('http://localhost:5000/api/users/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password, username }),
+                body: JSON.stringify({ email, password }),
             });
 
             const responseData = await response.json();
             console.log('Response data:', responseData);
 
-            if (response.status === 200) {
+            if (response.ok) { // Checking for response.ok for HTTP 200-299 status
                 const { token, id, username, email } = responseData;
 
                 console.log('Login successful:', 'User logged in successfully');
@@ -73,14 +71,6 @@ const Login = () => {
                 {error && <p className="error-message">{error}</p>}
                 {message && <p className="success-message">{message}</p>}
                 <form onSubmit={handleLogin}>
-                    <input
-                        type="text"
-                        placeholder="Username"
-                        id="username"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        required
-                    />
                     <input
                         type="email"
                         placeholder="Email"

@@ -12,6 +12,5 @@ router.get('/', authMiddleware, channelController.getUserChannels);
 // Get messages for a specific channel
 router.get('/:channelId/messages', authMiddleware, channelController.getChannelMessages);
 
-// Add a message to a channel
 
 module.exports = router;

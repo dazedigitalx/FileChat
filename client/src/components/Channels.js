@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../AuthContext'; // Assuming your AuthContext is correctly imported
 
-const Channels = ({ onChannelSelect, onCreateChannel }) => {
+const Channels = ({ onChannelSelect = () => {}, onCreateChannel = () => {} }) => {
     const { user } = useAuth(); // Accessing user from AuthContext
     const [channels, setChannels] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -10,6 +10,8 @@ const Channels = ({ onChannelSelect, onCreateChannel }) => {
     const [newChannelDescription, setNewChannelDescription] = useState('');
 
     useEffect(() => {
+        if (!user) return; // Only fetch data if the user is authenticated
+
         const fetchUserChannels = async () => {
             setLoading(true);
             setError(null);
@@ -36,9 +38,7 @@ const Channels = ({ onChannelSelect, onCreateChannel }) => {
                 }
 
                 const data = await response.json();
-                // Filter channels to only include those belonging to the authenticated user
-                const userChannels = data.filter(channel => channel.creator_id === user.id);
-                setChannels(userChannels);
+                setChannels(data); // Set channels directly from API response
             } catch (error) {
                 setError(`Error fetching channels: ${error.message}`);
                 console.error('Error fetching channels:', error); // Log detailed error information
@@ -48,7 +48,7 @@ const Channels = ({ onChannelSelect, onCreateChannel }) => {
         };
 
         fetchUserChannels();
-    }, [user]); // Fetch channels whenever user changes
+    }, [user]);
 
     const handleCreateChannel = async (e) => {
         e.preventDefault();
@@ -76,8 +76,8 @@ const Channels = ({ onChannelSelect, onCreateChannel }) => {
                 },
                 body: JSON.stringify({
                     name: newChannelName,
-                    description: newChannelDescription,
-                    creator_id: user.id
+                    description: newChannelDescription, // Corrected order and comma
+                    creator_id: user.id // Ensure user.id is available and correct
                 }),
             });
 
@@ -100,7 +100,7 @@ const Channels = ({ onChannelSelect, onCreateChannel }) => {
             setNewChannelName('');
             setNewChannelDescription('');
 
-            console.log('Created Channel:', newChannel.id, 'User ID:', user.id); // Log new channel ID and user ID
+            console.log('Created Channel:', newChannel._id, 'User ID:', user.id); // Log new channel ID and user ID
         } catch (error) {
             setError(`Error creating channel: ${error.message}`);
             console.error('Error creating channel:', error); // Log detailed error information
@@ -126,7 +126,7 @@ const Channels = ({ onChannelSelect, onCreateChannel }) => {
             <h2>Your Channels</h2>
             <ul>
                 {channels.map(channel => (
-                    <li key={channel.id} onClick={() => handleChannelClick(channel)}>
+                    <li key={channel._id} onClick={() => handleChannelClick(channel)}>
                         {channel.name} - {channel.description}
                     </li>
                 ))}
