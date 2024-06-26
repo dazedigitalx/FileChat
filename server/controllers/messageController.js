@@ -1,28 +1,28 @@
-//messageController.js
+// messageController.js
 
 const Message = require('../models/Message');
 
-
-// GET all messages for a specific channel
+// Get messages for a specific channel
 exports.getChannelMessages = async (req, res) => {
+    const { channelId } = req.params;
+
     try {
-        const { channelId } = req.params;
+        if (!channelId) {
+            return res.status(400).json({ error: 'Channel ID is required.' });
+        }
 
-        // Fetch messages for the specified channel
-        const messages = await Message.find({ channel_id: channelId }).populate('user_id');
-
-
-        
+        const messages = await Message.find({ channel_id: parseInt(channelId) }).populate('user_id');
         res.status(200).json(messages);
     } catch (error) {
-        console.error('Error retrieving channel messages:', error);
-        res.status(500).json({ error: 'Failed to retrieve messages. Please try again later.' });
+        console.error('Error fetching channel messages:', error);
+        res.status(500).json({ error: 'Error fetching channel messages' });
     }
 };
 
+// Send message to channel
 exports.sendMessage = async (req, res) => {
     const { channelId } = req.params;
-    const { content, user_id } = req.body; // Ensure correct key name for user_id
+    const { content, user_id } = req.body;
 
     try {
         // Validate request body
@@ -32,11 +32,11 @@ exports.sendMessage = async (req, res) => {
 
         // Create new message object
         const newMessage = new Message({
-            id: generateUniqueMessageId(), // Function to generate a unique ID for message
-            channel_id: parseInt(channelId), // Ensure channelId is parsed to Number if needed
-            user_id: parseInt(user_id), // Ensure user_id is parsed to Number
+            message_id: generateUniqueMessageId(),
+            channel_id: parseInt(channelId),
+            user_id: parseInt(user_id),
             content,
-            created_at: new Date() // Set created_at to current date/time
+            created_at: new Date() // Ensure created_at is set to the current date/time
         });
 
         // Save the message to the database
@@ -56,9 +56,7 @@ exports.sendMessage = async (req, res) => {
     }
 };
 
-// Function to generate a unique ID for the message
+// Function to generate a unique message ID
 function generateUniqueMessageId() {
-    // Logic to generate a unique ID, could be based on a counter or UUID
-    // Example: return Math.floor(Math.random() * 1000);
-    return Math.floor(Math.random() * 1000); // Replace with your actual ID generation logic
+    return Math.floor(Math.random() * 1000000); // Simple example; replace with your actual ID generation logic
 }

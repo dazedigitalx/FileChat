@@ -84,22 +84,22 @@ exports.getAllChannels = async (req, res) => {
 };
 
 
-// POST a new channel
-exports.createChannel = async (req, res) => {
-    try {
-        if (!req.user || !req.user.id) {
-            return res.status(401).json({ error: 'User not authenticated' });
+    // POST a new channel
+    exports.createChannel = async (req, res) => {
+        try {
+            if (!req.user || !req.user.id) {
+                return res.status(401).json({ error: 'User not authenticated' });
+            }
+
+            const { id: creator_id } = req.user;
+            const { name, description } = req.body;
+
+            const newChannel = new Channel({ name, description, creator_id });
+            await newChannel.save();
+
+            res.status(201).json(newChannel);
+        } catch (error) {
+            console.error('Error creating channel:', error);
+            res.status(500).json({ error: 'Error creating channel' });
         }
-
-        const { id: creator_id } = req.user;
-        const { name, description } = req.body;
-
-        const newChannel = new Channel({ name, description, creator_id });
-        await newChannel.save();
-
-        res.status(201).json(newChannel);
-    } catch (error) {
-        console.error('Error creating channel:', error);
-        res.status(500).json({ error: 'Error creating channel' });
-    }
-};
+    };
