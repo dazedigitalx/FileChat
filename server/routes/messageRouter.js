@@ -9,7 +9,6 @@ const { authMiddleware } = require('../middlewares/authMiddleware'); // Ensure t
 router.get('/channels/:channelId/', authMiddleware, messageController.getChannelMessages);
 
 // POST a new message to a channel
-// POST a new message to a channel
 router.post('/channels/:channelId/send', authMiddleware, messageController.sendMessage);
 
 

@@ -1,42 +1,25 @@
 // messageController.js
 
-const Message = require('../models/Message');
+const Message = require('../models/Message'); // Import your Message model
+const mongoose = require('mongoose');
 
-// Get messages for a specific channel
-exports.getChannelMessages = async (req, res) => {
-    const { channelId } = req.params;
-
-    try {
-        if (!channelId) {
-            return res.status(400).json({ error: 'Channel ID is required.' });
-        }
-
-        const messages = await Message.find({ channel_id: parseInt(channelId) }).populate('user_id');
-        res.status(200).json(messages);
-    } catch (error) {
-        console.error('Error fetching channel messages:', error);
-        res.status(500).json({ error: 'Error fetching channel messages' });
-    }
-};
-
-// Send message to channel
+// Function to create a new message
 exports.sendMessage = async (req, res) => {
-    const { channelId } = req.params;
-    const { content, user_id } = req.body;
+    const { channel_id, content, user_id } = req.body;
 
     try {
         // Validate request body
-        if (!content || !user_id) {
-            return res.status(400).json({ error: 'Message content and user ID are required.' });
+        if (!channel_id || !content || !user_id) {
+            return res.status(400).json({ error: 'Channel ID, content, and user ID are required.' });
         }
 
         // Create new message object
         const newMessage = new Message({
-            message_id: generateUniqueMessageId(),
-            channel_id: parseInt(channelId),
-            user_id: parseInt(user_id),
+            channel_id,
+            user_id,
             content,
-            created_at: new Date() // Ensure created_at is set to the current date/time
+            // message_id will be auto-generated if using ObjectId type
+            timestamp: new Date() // Set the timestamp to current date/time
         });
 
         // Save the message to the database
@@ -45,18 +28,40 @@ exports.sendMessage = async (req, res) => {
         // Respond with the newly created message
         res.status(201).json(newMessage);
     } catch (error) {
-        // Check if the error is a validation error
-        if (error.name === 'ValidationError') {
-            console.error('Validation Error:', error);
-            return res.status(400).json({ error: error.message });
+        // Handle duplicate key error (E11000)
+        if (error instanceof mongoose.Error && error.code === 11000) {
+            console.error('Duplicate key error:', error);
+            return res.status(409).json({ error: 'Duplicate key error. This message already exists.' });
         }
 
-        console.error('Error sending message:', error);
-        res.status(500).json({ error: 'Failed to send message. Please try again later.' });
+        // Handle other errors
+        console.error('Error creating message:', error);
+        res.status(500).json({ error: 'Failed to create message. Please try again later.' });
     }
 };
 
-// Function to generate a unique message ID
-function generateUniqueMessageId() {
-    return Math.floor(Math.random() * 1000000); // Simple example; replace with your actual ID generation logic
-}
+
+
+
+
+
+// Get messages for a specific channel
+exports.getChannelMessages = async (req, res) => {
+    const { channelId } = req.params;
+
+    try {
+        // Validate channelId
+        if (!channelId) {
+            return res.status(400).json({ error: 'Channel ID is required.' });
+        }
+
+        // Fetch messages from the database where channel_id matches the provided channelId
+        const messages = await Message.find({ channel_id: parseInt(channelId) }).populate('user_id');
+
+        // Respond with the fetched messages
+        res.status(200).json(messages);
+    } catch (error) {
+        console.error('Error fetching channel messages:', error);
+        res.status(500).json({ error: 'Error fetching channel messages' });
+    }
+};

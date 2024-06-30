@@ -85,21 +85,32 @@ exports.getAllChannels = async (req, res) => {
 
 
     // POST a new channel
-    exports.createChannel = async (req, res) => {
-        try {
-            if (!req.user || !req.user.id) {
-                return res.status(401).json({ error: 'User not authenticated' });
-            }
-
-            const { id: creator_id } = req.user;
-            const { name, description } = req.body;
-
-            const newChannel = new Channel({ name, description, creator_id });
-            await newChannel.save();
-
-            res.status(201).json(newChannel);
-        } catch (error) {
-            console.error('Error creating channel:', error);
-            res.status(500).json({ error: 'Error creating channel' });
+   // POST a new channel
+exports.createChannel = async (req, res) => {
+    try {
+        if (!req.user || !req.user.id) {
+            return res.status(401).json({ error: 'User not authenticated' });
         }
-    };
+
+        const { id: creator_id } = req.user;
+        const { name, description } = req.body;
+
+        // Create a new channel instance
+        const newChannel = new Channel({ name, description, creator_id });
+
+        // Save the channel to the database
+        await newChannel.save();
+
+        res.status(201).json(newChannel);
+    } catch (error) {
+        // Handle duplicate key errors (E11000)
+        if (error.code === 11000 && error.keyPattern && error.keyValue) {
+            console.error('Duplicate key error:', error);
+            return res.status(409).json({ error: 'Channel with this name already exists.' });
+        }
+
+        // Handle other errors
+        console.error('Error creating channel:', error);
+        res.status(500).json({ error: 'Error creating channel' });
+    }
+};

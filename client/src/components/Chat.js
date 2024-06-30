@@ -47,63 +47,70 @@ const Chat = ({ channel }) => {
         }
     }, [channel]);
 
-    const handleSendMessage = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-        setError(null);
+ const handleSendMessage = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
 
-        try {
-            const token = localStorage.getItem('accessToken'); // Assuming token is stored in localStorage
+    try {
+        const token = localStorage.getItem('accessToken'); // Assuming token is stored in localStorage
 
-            if (!token) {
-                throw new Error('Token not available.');
-            }
-
-            // Basic validation
-            if (!newMessage.trim()) {
-                throw new Error('Message content is required.');
-            }
-
-            const response = await fetch(`http://localhost:5000/api/messages/channels/${channel._id}/send`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    content: newMessage,
-                    user_id: channel.creator_id // Assuming channel creator ID is used as user_id
-                }),
-            });
-
-            if (!response.ok) {
-                let errorMessage = `Failed to send message: ${response.statusText}`;
-                if (response.status === 401) {
-                    errorMessage = 'Unauthorized: Please login again.';
-                } else if (response.status === 404) {
-                    errorMessage = 'Endpoint not found: Check the URL and method.';
-                } else if (response.status === 500) {
-                    errorMessage = 'Internal Server Error: Please try again later.';
-                }
-                throw new Error(errorMessage);
-            }
-
-            const newMessageData = await response.json();
-
-            // Update messages state with the new message
-            setMessages([...messages, newMessageData]);
-
-            // Clear input field after successful sending
-            setNewMessage('');
-
-            console.log('Sent Message:', newMessageData._id); // Log new message ID
-        } catch (error) {
-            setError(`Error sending message: ${error.message}`);
-            console.error('Error sending message:', error); // Log detailed error information
-        } finally {
-            setLoading(false);
+        if (!token) {
+            throw new Error('Token not available.');
         }
-    };
+
+        // Basic validation
+        if (!newMessage.trim()) {
+            throw new Error('Message content is required.');
+        }
+
+        const messagePayload = {
+            channel_id: channel._id,
+            content: newMessage,
+            user_id: channel.creator_id // Assuming channel creator ID is used as user_id
+        };
+
+        console.log('Sending message payload:', messagePayload);
+
+        const response = await fetch(`http://localhost:5000/api/messages/channels/${channel._id}/send`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(messagePayload),
+        });
+
+        if (!response.ok) {
+            let errorMessage = `Failed to send message: ${response.statusText}`;
+            if (response.status === 401) {
+                errorMessage = 'Unauthorized: Please login again.';
+            } else if (response.status === 404) {
+                errorMessage = 'Endpoint not found: Check the URL and method.';
+            } else if (response.status === 500) {
+                errorMessage = 'Internal Server Error: Please try again later.';
+            }
+            throw new Error(errorMessage);
+        }
+
+        const newMessageData = await response.json();
+
+        // Update messages state with the new message
+        setMessages([...messages, newMessageData]);
+
+        // Clear input field after successful sending
+        setNewMessage('');
+
+        console.log('Sent Message:', newMessageData._id); // Log new message ID
+    } catch (error) {
+        setError(`Error sending message: ${error.message}`);
+        console.error('Error sending message:', error); // Log detailed error information
+    } finally {
+        setLoading(false);
+    }
+};
+
+    
 
     if (loading) {
         return <div>Loading messages...</div>;
@@ -117,11 +124,20 @@ const Chat = ({ channel }) => {
         <div>
             <h2>Chat for {channel.name}</h2>
             <ul>
-                {Array.isArray(messages) && messages.map(message => (
-                    <li key={message._id}>
-                        {message.content} - {message.user_id.username}
-                    </li>
-                ))}
+                {messages && messages.length > 0 ? (
+                    messages.map((message, index) => (
+                        <div key={index}>
+                            {message.user && message.user.username ? (
+                                <span>{message.user.username}</span>
+                            ) : (
+                                <span>Unknown User</span>
+                            )}
+                            <p>{message.content}</p>
+                        </div>
+                    ))
+                ) : (
+                    <p>No messages available</p>
+                )}
             </ul>
 
             <h3>Send Message</h3>
