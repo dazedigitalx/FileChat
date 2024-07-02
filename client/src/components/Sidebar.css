@@ -1,39 +1,38 @@
 /* General styling for input fields */
-
 .sidebar {
   height: 100%;
   position: fixed;
   top: 0;
   left: 0;
   bottom: 0;
-  background-color: #ffffff;
-  color: #000000;
+  background-color: var(--sidebar-bg-color, #ffffff);
+  color: var(--sidebar-text-color, #000000);
   overflow-y: auto;
   transition: width 0.3s ease;
   padding: 20px;
 }
 
 .sidebar.open {
-  width: 250px;
+  width: var(--sidebar-width-open, 250px);
 }
 
 .sidebar.closed {
-  width: 60px;
+  width: var(--sidebar-width-closed, 60px);
 }
 
 .sidebar .toggle-button {
   width: 100%;
   padding: 10px;
-  background-color: #555;
-  color: #fff;
+  background-color: var(--button-bg-color, #555);
+  color: var(--button-text-color, #fff);
   border: none;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  border-radius: var(--field-border-radius);
+  border-radius: var(--field-border-radius, 0);
 }
 
 .sidebar .toggle-button:hover {
-  background-color: #777;
+  background-color: var(--button-hover-bg-color, #777);
 }
 
 .sidebar .menu {
@@ -42,16 +41,21 @@
   margin: 10px 0;
 }
 
+.sidebar .active {
+  padding-left: 20px;
+}
+
 .sidebar .menu li {
+  padding: 0;
+
   padding: 8px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  border-radius: var(--button-border-radius);
+  
 }
 
 .sidebar .menu li:hover {
-  background-color: #555;
-  color: #fff;
+  background-color: var(--menu-item-hover-bg-color, #555);
+  color: var(--menu-item-hover-text-color, #fff);
 }
-
-
-

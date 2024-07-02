@@ -1,6 +1,5 @@
-// Chat.js
-
 import React, { useState, useEffect } from 'react';
+import './Chat.css'; // Import the external CSS file
 
 const Chat = ({ channel }) => {
     const [messages, setMessages] = useState([]);
@@ -147,28 +146,34 @@ const Chat = ({ channel }) => {
             setError(`Error deleting message: ${error.message}`);
         }
     };
-    
-    
-    
-    
 
     if (loading) {
-        return <div>Loading messages...</div>;
+        return <div className="chat-container">Loading messages...</div>;
     }
 
     if (error) {
-        return <div>Error: {error}</div>;
+        return <div className="chat-container">Error: {error}</div>;
     }
 
     return (
-        <div>
+        <div className="chat-container">
             <h2>Chat for {channel.name}</h2>
-            <ul>
+            <ul className="message-list">
                 {messages.length > 0 ? (
                     messages.map((message) => (
-                        <li key={message._id}>
-                            <p>{message.content}</p>
-                            <button onClick={() => handleDeleteMessage(message._id)}>Delete</button>
+                        <li key={message._id} className="message-item">
+                            <div className="message-details">
+                                <p className="message-content">{message.content}</p>
+                                <div className="message-metadata">
+                                    <p>{`Sent by ${message.sender_name} on ${new Date(message.createdAt).toLocaleString()}`}</p>
+                                    <button
+                                        className="delete-button"
+                                        onClick={() => handleDeleteMessage(message._id)}
+                                    >
+                                        x
+                                    </button>
+                                </div>
+                            </div>
                         </li>
                     ))
                 ) : (
@@ -177,7 +182,7 @@ const Chat = ({ channel }) => {
             </ul>
 
             <h3>Send Message</h3>
-            <form onSubmit={handleSendMessage}>
+            <form className="send-message-form" onSubmit={handleSendMessage}>
                 <input
                     type="text"
                     value={newMessage}

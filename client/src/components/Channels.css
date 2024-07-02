@@ -1,0 +1,26 @@
+/* Channels.css */
+
+/* Container for each channel item */
+.channel-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin-bottom: 5px;
+}
+
+/* Style for the channel name and description */
+.channel-info {
+    flex: 1; /* Take up remaining space */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Style for the delete button container */
+.delete-button-container {
+    margin-left: auto; /* Pushes delete button to the right */
+    padding-left: 10px; /* Adds space between channel info and delete button */
+}
+

@@ -3,7 +3,7 @@ import { useAuth } from '../AuthContext';
 import Header from './Header';
 import Sidebar from './Sidebar';
 import Chat from './Chat';
-import './Dashboard.css';
+import './Dashboard.css'; // Import the CSS file for styling
 
 const Dashboard = () => {
     const { user } = useAuth();

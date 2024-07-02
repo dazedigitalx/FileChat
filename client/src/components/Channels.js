@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../AuthContext';
+// import '../Style.css'; // Import the external CSS file
+import './Channels.css'; // Import the external CSS file
+
 
 const Channels = ({ onChannelSelect = () => {}, onCreateChannel = () => {}, activeChannel }) => {
     const { user } = useAuth();
@@ -145,18 +148,16 @@ const Channels = ({ onChannelSelect = () => {}, onCreateChannel = () => {}, acti
 
     return (
         <div>
-            <h2>Your Channels</h2>
+            <h2>Channels</h2>
             <ul>
                 {channels.map(channel => (
-                    <li
-                        key={channel._id}
-                        className={activeChannel && activeChannel._id === channel._id ? 'active' : ''}
-                        onClick={() => handleChannelClick(channel)}
-                    >
-                        <span>
-                            {channel.name} - {channel.description}
-                        </span>
-                        <button onClick={() => handleDeleteChannel(channel._id)}>x</button>
+                    <li key={channel._id} className={activeChannel && activeChannel._id === channel._id ? 'active' : ''}>
+                        <div className="channel-info" onClick={() => handleChannelClick(channel)}>
+                            <span>{channel.name} - {channel.description}</span>
+                        </div>
+                        <div className="delete-button-container">
+                            <button onClick={() => handleDeleteChannel(channel._id)}>x</button>
+                        </div>
                     </li>
                 ))}
             </ul>
