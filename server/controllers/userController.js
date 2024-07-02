@@ -79,6 +79,7 @@ exports.getMe = async (req, res) => {
     try {
         const user = req.user;
         res.status(200).json(user);
+
     } catch (error) {
         console.error('Error fetching current user:', error);
         res.status(500).json({ message: 'Failed to fetch current user' });

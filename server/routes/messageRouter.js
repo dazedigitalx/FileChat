@@ -11,5 +11,13 @@ router.get('/channels/:channelId/', authMiddleware, messageController.getChannel
 // POST a new message to a channel
 router.post('/channels/:channelId/send', authMiddleware, messageController.sendMessage);
 
+// DELETE a message by ID
+// router.delete('/messages/:messageId', authMiddleware, messageController.deleteMessage);
+router.delete('/:messageId', messageController.deleteMessage);
+
+// Get  a message by ID
+
+router.get('/:messageId', authMiddleware, messageController.getMessageById);
+
 
 module.exports = router;

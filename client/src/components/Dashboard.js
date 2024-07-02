@@ -3,12 +3,11 @@ import { useAuth } from '../AuthContext';
 import Header from './Header';
 import Sidebar from './Sidebar';
 import Chat from './Chat';
-import Channels from './Channels';
 import './Dashboard.css';
 
 const Dashboard = () => {
     const { user } = useAuth();
-    const [isSidebarOpen, setSidebarOpen] = useState(false);
+    const [isSidebarOpen, setSidebarOpen] = useState(true);
     const [activeChannel, setActiveChannel] = useState(null);
 
     const toggleSidebar = () => {
@@ -22,12 +21,12 @@ const Dashboard = () => {
     return (
         <div className="dashboard">
             <Sidebar
-                isOpen={isSidebarOpen}
+                isSidebarOpen={isSidebarOpen}
                 toggleSidebar={toggleSidebar}
+                onChannelSelect={handleChannelSelect} // Pass handleChannelSelect to Sidebar
             />
             <div className={`dashboard-content ${isSidebarOpen ? 'expanded' : ''}`}>
                 <Header />
-                <Channels onChannelSelect={handleChannelSelect} activeChannel={activeChannel} />
                 {activeChannel && <Chat channel={activeChannel} />}
             </div>
         </div>

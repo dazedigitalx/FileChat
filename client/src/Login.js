@@ -45,7 +45,7 @@ const Login = () => {
             if (response.ok) {
                 const { token, id, email, username } = responseData;
 
-                console.log('Login successful:', 'User logged in successfully');
+                // console.log('Login successful:', 'User logged in successfully');
                 console.log('User data:', { id, email, username });
 
                 setUser({ id, email, username, token });

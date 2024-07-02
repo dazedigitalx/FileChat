@@ -1,3 +1,5 @@
+// Chat.js
+
 import React, { useState, useEffect } from 'react';
 
 const Chat = ({ channel }) => {
@@ -12,12 +14,11 @@ const Chat = ({ channel }) => {
             setError(null);
 
             try {
-                const token = localStorage.getItem('accessToken'); // Assuming token is stored in localStorage
+                const token = localStorage.getItem('accessToken');
 
                 if (!token) {
                     throw new Error('Token not available.');
                 }
-                // console.log('Fetching messages for channel:', channel._id);
 
                 const response = await fetch(`http://localhost:5000/api/messages/channels/${channel._id}/`, {
                     headers: {
@@ -25,8 +26,6 @@ const Chat = ({ channel }) => {
                         'Content-Type': 'application/json',
                     },
                 });
-
-                // console.log('Fetch response:', response);
 
                 if (!response.ok) {
                     if (response.status === 401) {
@@ -36,12 +35,10 @@ const Chat = ({ channel }) => {
                 }
 
                 const data = await response.json();
-                // console.log('Fetched messages:', data);
-
                 setMessages(data); // Assuming data is an array of messages
             } catch (error) {
                 setError(`Error fetching messages: ${error.message}`);
-                console.error('Error fetching messages:', error); // Log detailed error information
+                console.error('Error fetching messages:', error);
             } finally {
                 setLoading(false);
             }
@@ -58,13 +55,12 @@ const Chat = ({ channel }) => {
         setError(null);
 
         try {
-            const token = localStorage.getItem('accessToken'); // Assuming token is stored in localStorage
+            const token = localStorage.getItem('accessToken');
 
             if (!token) {
                 throw new Error('Token not available.');
             }
 
-            // Basic validation
             if (!newMessage.trim()) {
                 throw new Error('Message content is required.');
             }
@@ -72,10 +68,8 @@ const Chat = ({ channel }) => {
             const messagePayload = {
                 channel_id: channel._id,
                 content: newMessage,
-                user_id: channel.creator_id // Assuming channel creator ID is used as user_id
+                user_id: channel.creator_id
             };
-
-            console.log('Sending message payload:', messagePayload);
 
             const response = await fetch(`http://localhost:5000/api/messages/channels/${channel._id}/send`, {
                 method: 'POST',
@@ -85,8 +79,6 @@ const Chat = ({ channel }) => {
                 },
                 body: JSON.stringify(messagePayload),
             });
-
-            console.log('Server response:', response);
 
             if (!response.ok) {
                 let errorMessage = `Failed to send message: ${response.statusText}`;
@@ -101,21 +93,64 @@ const Chat = ({ channel }) => {
             }
 
             const newMessageData = await response.json();
-
-            // Update messages state with the new message
             setMessages([...messages, newMessageData]);
-
-            // Clear input field after successful sending
             setNewMessage('');
 
-            console.log('Sent Message:', newMessageData._id); // Log new message ID
+            console.log('Sent Message ID:', newMessageData._id);
         } catch (error) {
             setError(`Error sending message: ${error.message}`);
-            console.error('Error sending message:', error); // Log detailed error information
+            console.error('Error sending message:', error);
         } finally {
             setLoading(false);
         }
     };
+
+    const handleDeleteMessage = async (messageId) => {
+        try {
+            console.log('Deleting Message ID:', messageId);
+    
+            const token = localStorage.getItem('accessToken');
+    
+            if (!token) {
+                throw new Error('Token not available.');
+            }
+    
+            const response = await fetch(`http://localhost:5000/api/messages/${messageId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+    
+            if (!response.ok) {
+                let errorMessage = `Failed to delete message: ${response.statusText}`;
+                if (response.status === 400) {
+                    const errorData = await response.json(); // Assuming server returns JSON error details
+                    errorMessage = `Bad Request: ${errorData.error}`;
+                } else if (response.status === 401) {
+                    errorMessage = 'Unauthorized: Please login again.';
+                } else if (response.status === 404) {
+                    errorMessage = 'Message not found.';
+                } else if (response.status === 500) {
+                    errorMessage = 'Internal Server Error: Please try again later.';
+                }
+                throw new Error(errorMessage);
+            }
+    
+            console.log('Deleted Message ID:', messageId);
+    
+            // Update UI to remove the deleted message from state
+            setMessages(messages.filter(message => message._id !== messageId));
+        } catch (error) {
+            console.error('Error deleting message:', error);
+            setError(`Error deleting message: ${error.message}`);
+        }
+    };
+    
+    
+    
+    
 
     if (loading) {
         return <div>Loading messages...</div>;
@@ -129,16 +164,12 @@ const Chat = ({ channel }) => {
         <div>
             <h2>Chat for {channel.name}</h2>
             <ul>
-                {messages && messages.length > 0 ? (
-                    messages.map((message, index) => (
-                        <div key={index}>
-                            {message.user && message.user.username ? (
-                                <span>{message.user.username}</span>
-                            ) : (
-                                <span>Unknown User</span>
-                            )}
+                {messages.length > 0 ? (
+                    messages.map((message) => (
+                        <li key={message._id}>
                             <p>{message.content}</p>
-                        </div>
+                            <button onClick={() => handleDeleteMessage(message._id)}>Delete</button>
+                        </li>
                     ))
                 ) : (
                     <p>No messages available</p>
