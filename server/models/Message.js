@@ -1,19 +1,22 @@
 // // models/Message.js
 
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const messageSchema = new mongoose.Schema({
+
+const messageSchema = new Schema({
     message_id: {
         type: mongoose.Schema.Types.ObjectId,
         default: () => new mongoose.Types.ObjectId(),
         required: true,
     },
     channel_id: {
-        type: Number,
+        type: mongoose.Schema.Types.ObjectId,
+        default: () => new mongoose.Types.ObjectId(),
         required: true,
     },
     user_id: {
-        type: Number,
+        type: mongoose.Schema.Types.ObjectId, // Ensure this matches the type of your user ID
         required: true,
     },
     content: {
@@ -30,6 +33,7 @@ const messageSchema = new mongoose.Schema({
 const Message = mongoose.model('Message', messageSchema);
 
 module.exports = Message;
+
 
 
 

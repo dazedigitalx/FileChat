@@ -43,12 +43,12 @@ const Login = () => {
             console.log('Response data:', responseData);
 
             if (response.ok) {
-                const { token, id, username, email } = responseData;
+                const { token, id, email, username } = responseData;
 
                 console.log('Login successful:', 'User logged in successfully');
-                console.log('User data:', { id, username, email });
+                console.log('User data:', { id, email, username });
 
-                setUser({ id, username, email, token });
+                setUser({ id, email, username, token });
 
                 localStorage.setItem('accessToken', token);
 

@@ -1,67 +1,58 @@
-// messageController.js
-
 const Message = require('../models/Message'); // Import your Message model
 const mongoose = require('mongoose');
 
-// Function to create a new message
-exports.sendMessage = async (req, res) => {
-    const { channel_id, content, user_id } = req.body;
-
+exports.sendMessage = async (req, res, next) => {
     try {
-        // Validate request body
-        if (!channel_id || !content || !user_id) {
-            return res.status(400).json({ error: 'Channel ID, content, and user ID are required.' });
+        const { channel_id: channelId, content, user_id } = req.body;
+
+        // Validate or process the channelId, content, and user_id here as needed
+        if (!channelId || !content || !user_id) {
+            console.error('Error sending message: Missing required fields', req.body);
+            return res.status(400).json({ error: 'Missing required fields' });
         }
 
-        // Create new message object
         const newMessage = new Message({
-            channel_id,
-            user_id,
-            content,
-            // message_id will be auto-generated if using ObjectId type
-            timestamp: new Date() // Set the timestamp to current date/time
+            channel_id: channelId,
+            content: content,
+            user_id: user_id
+            // Other fields initialization as needed
         });
 
-        // Save the message to the database
+        // Save the message to MongoDB
         await newMessage.save();
 
-        // Respond with the newly created message
-        res.status(201).json(newMessage);
+        res.status(201).json(newMessage); // Respond with the saved message
+        
     } catch (error) {
-        // Handle duplicate key error (E11000)
-        if (error instanceof mongoose.Error && error.code === 11000) {
-            console.error('Duplicate key error:', error);
-            return res.status(409).json({ error: 'Duplicate key error. This message already exists.' });
-        }
-
-        // Handle other errors
-        console.error('Error creating message:', error);
-        res.status(500).json({ error: 'Failed to create message. Please try again later.' });
+        console.error('Error sending message:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 };
-
-
-
-
-
 
 // Get messages for a specific channel
 exports.getChannelMessages = async (req, res) => {
     const { channelId } = req.params;
+    console.log('Fetching messages for channel:', channelId);
 
     try {
-        // Validate channelId
-        if (!channelId) {
-            return res.status(400).json({ error: 'Channel ID is required.' });
+        if (!mongoose.Types.ObjectId.isValid(channelId)) {
+            console.error('Invalid channel ID:', channelId);
+            return res.status(400).json({ error: 'Invalid channel ID.' });
         }
 
         // Fetch messages from the database where channel_id matches the provided channelId
-        const messages = await Message.find({ channel_id: parseInt(channelId) }).populate('user_id');
+        const messages = await Message.find({ channel_id: channelId }).populate('user_id');
+
+        if (!messages.length) {
+            console.warn('No messages found for channel:', channelId);
+        }
 
         // Respond with the fetched messages
+        console.log('Fetched messages:', messages);
         res.status(200).json(messages);
     } catch (error) {
         console.error('Error fetching channel messages:', error);
+        
         res.status(500).json({ error: 'Error fetching channel messages' });
     }
 };
