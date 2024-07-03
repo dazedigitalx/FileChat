@@ -31,6 +31,10 @@ app.use(cors({
 // Middleware setup
 app.use(express.json());
 
+
+// Allow requests from any origin
+app.use(cors());
+
 // Connect to MongoDB
 connectDB()
   .then(() => {
@@ -47,17 +51,17 @@ app.use('/api/channels', channelRouter);
 app.use('/api/messages', messageRouter);
 // app.use('/api/files', fileRouter);
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-  if (err.name === 'UnauthorizedError') {
-    // UnauthorizedError from CORS
-    res.status(401).json({ error: 'Unauthorized' });
-  } else {
-    // General server error
-    console.error(err.stack);
-    res.status(500).send('Internal Server Error');
-  }
-});
+// // Error handling middleware
+// app.use((err, req, res, next) => {
+//   if (err.name === 'UnauthorizedError') {
+//     // UnauthorizedError from CORS
+//     res.status(401).json({ error: 'Unauthorized' });
+//   } else {
+//     // General server error
+//     console.error(err.stack);
+//     res.status(500).send('Internal Server Error');
+//   }
+// });
 
 // Start server
 const startServer = async () => {
