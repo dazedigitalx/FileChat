@@ -5,6 +5,8 @@ import { AuthProvider } from './AuthContext';
 import PrivateRoute from './PrivateRoute';
 import Dashboard from './components/Dashboard';
 import Profile from './components/Profile';
+// import dotenv from 'dotenv';
+
 
 import Login from './Login';
 import Signup from './Signup';
@@ -12,6 +14,7 @@ import Home from './Home';
 // import './App.css';
 // import './Style.css';
 
+// dotenv.config();
 
 const App = () => {
   return (

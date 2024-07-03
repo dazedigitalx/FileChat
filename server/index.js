@@ -15,10 +15,11 @@ dotenv.config();
 const app = express();
 
 // Configure CORS middleware
-const allowedOrigins = ['https://file-chat-client.vercel.app', 'http://localhost:3000']; // Add your client origin(s) here
+const allowedOrigins = process.env.CLIENT_ORIGIN.split(',');
+
+
 app.use(cors({
   origin: function(origin, callback) {
-    // Check if the origin is allowed
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
@@ -30,10 +31,6 @@ app.use(cors({
 
 // Middleware setup
 app.use(express.json());
-
-
-// Allow requests from any origin
-app.use(cors());
 
 // Connect to MongoDB
 connectDB()
@@ -51,32 +48,26 @@ app.use('/api/channels', channelRouter);
 app.use('/api/messages', messageRouter);
 // app.use('/api/files', fileRouter);
 
-// // Error handling middleware
-// app.use((err, req, res, next) => {
-//   if (err.name === 'UnauthorizedError') {
-//     // UnauthorizedError from CORS
-//     res.status(401).json({ error: 'Unauthorized' });
-//   } else {
-//     // General server error
-//     console.error(err.stack);
-//     res.status(500).send('Internal Server Error');
-//   }
-// });
-
-// Start server
-const startServer = async () => {
-  try {
-    await connectDB(); // Connect to MongoDB
-    const port = process.env.PORT || 5000;
-    app.listen(port, () => {
-      console.log(`Server running on port ${port}`);
-    });
-  } catch (error) {
-    console.error('Error starting server:', error);
-    process.exit(1);
+// Error handling middleware
+app.use((err, req, res, next) => {
+  if (err.name === 'UnauthorizedError') {
+    res.status(401).json({ error: 'Unauthorized' });
+  } else {
+    console.error(err.stack);
+    res.status(500).send('Internal Server Error');
   }
-};
+});
 
-startServer();
+
+// index.js or App.js
+// console.log('Environment Variables:', process.env);
+console.log('API URL:', process.env.REACT_APP_API_URL);
+
+
+
+const port = process.env.PORT || 5000;
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});
 
 module.exports = app; // Export the app for testing purposes if needed

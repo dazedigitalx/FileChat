@@ -28,33 +28,33 @@ const Login = () => {
     };
 
     const handleLogin = async () => {
+        console.log('All environment variables:', process.env);
+        console.log('API URL:', process.env.REACT_APP_API_URL);
         console.log('Login form submitted');
         console.log('Email:', email);
         console.log('Password:', password);
 
+
         try {
-            const response = await fetch('http://localhost:5000/api/users/login', {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users/login`, {
+            // const response = await fetch(`http://localhost:5000/api/users/login`, {
+
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password }),
-            });
-
+              });
+                  
             const responseData = await response.json();
             console.log('Response data:', responseData);
-
+    
             if (response.ok) {
                 const { token, id, email, username } = responseData;
-
-                // console.log('Login successful:', 'User logged in successfully');
                 console.log('User data:', { id, email, username });
-
                 setUser({ id, email, username, token });
-
                 localStorage.setItem('accessToken', token);
-
                 setMessage('User logged in successfully');
                 setError('');
-
+    
                 navigate('/dashboard');
             } else {
                 setError(`Failed to login: ${responseData.message}`);
@@ -65,7 +65,8 @@ const Login = () => {
             setError(`Error logging in. Please try again later. Details: ${error.message}`);
         }
     };
-
+    
+    
     return (
         <div className="login-page">
             <div className="login-hero-image"></div>

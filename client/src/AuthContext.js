@@ -1,5 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import Cookies from 'js-cookie';
+import React, { useEffect, useState, createContext, useContext } from 'react';
 
 const AuthContext = createContext();
 
@@ -8,9 +7,14 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
+    useEffect(() => {
+        console.log('All environment variables:', process.env);
+        console.log('API URL:', process.env.REACT_APP_API_URL);
+    }, []);
+
     const fetchCurrentUser = async (token) => {
         try {
-            const response = await fetch('http://localhost:5000/api/users/me', {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users/me`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -18,7 +22,6 @@ export const AuthProvider = ({ children }) => {
 
             if (response.ok) {
                 const userData = await response.json();
-                console.log('Fetched user data:', userData); // Log user data
                 setUser(userData);
                 setError('');
             } else {
@@ -49,7 +52,7 @@ export const AuthProvider = ({ children }) => {
     const login = async (credentials) => {
         setLoading(true);
         try {
-            const response = await fetch('http://localhost:5000/api/users/login', {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(credentials),

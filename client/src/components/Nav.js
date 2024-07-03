@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import Cookies from 'js-cookie';
 import { useAuth } from '../AuthContext';
 import './Nav.css';
 import '../Style.css';
@@ -10,8 +11,10 @@ const Nav = () => {
     const location = useLocation();
 
     const handleLogout = () => {
+        Cookies.remove('token');
         logout();
     };
+
 
     const isActive = (path) => {
         return location.pathname === path;
