@@ -1,4 +1,7 @@
 import React, { useEffect, useState, createContext, useContext } from 'react';
+import Cookies from 'js-cookie';
+
+
 
 const AuthContext = createContext();
 
@@ -7,10 +10,10 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
-    useEffect(() => {
-        console.log('All environment variables:', process.env);
-        console.log('API URL:', process.env.REACT_APP_API_URL);
-    }, []);
+    // useEffect(() => {
+    //     console.log('All environment variables:', process.env);
+    //     console.log('API URL:', process.env.REACT_APP_API_URL);
+    // }, []);
 
     const fetchCurrentUser = async (token) => {
         try {

@@ -37,15 +37,14 @@ const Login = () => {
 
         try {
             const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users/login`, {
-            // const response = await fetch(`http://localhost:5000/api/users/login`, {
-
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password }),
-              });
+            });
                   
             const responseData = await response.json();
-            console.log('Response data:', responseData);
+            console.log('Response data:', responseData); // Log the response data to check for JSON validity
+            
     
             if (response.ok) {
                 const { token, id, email, username } = responseData;
@@ -54,7 +53,7 @@ const Login = () => {
                 localStorage.setItem('accessToken', token);
                 setMessage('User logged in successfully');
                 setError('');
-    
+            
                 navigate('/dashboard');
             } else {
                 setError(`Failed to login: ${responseData.message}`);
