@@ -1,81 +1,53 @@
 /* GlobalStyles.css */
 
-/* Import the font (example using Google Fonts) */
+/* Import the font */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
-/* Apply the font globally */
+/* Ensure root is always side to side and top to bottom for all browser sizes */
+html, body, #root, .App {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
 
-
+/* Global variables */
 :root {
-  --primary-font: 'Roboto', sans-serif; /* Replace with your desired font family */
+  --primary-font: 'Roboto', sans-serif;
   --field-background-color: #f0f0f0;
   --field-border-color: #ccc;
-  --field-border-radius: 200px;
+  --field-border-radius: 20px;
   --field-padding: 10px;
-  --button-background-color: #007bff; /* Adjust button color */
+  --button-background-color: #007bff;
   --button-color: white;
   --button-border: none;
-  --button-border-radius: 5px;
-  --button-padding: 10px 15px;
-  --button-hover-color: #0067cc; /* Adjust button hover color */
-  --main-font-size: 22px; /* Adjust main font size */
   --button-border-radius: 200px;
-  --border-radius: 200px;
-
-    --width: 50vw; /* 50% of the viewport width */
-    --height: 75vh; /* 75% of the viewport height */
-
-  }
-
-  div {
-    border-radius: 20px;
-  }
-
-.element, .element  {
-  border-radius: 20px;
+  --border-radius: 50px;
+  --button-padding: 10px 15px;
+  --button-hover-color: #0067cc;
+  --main-font-size: 22px;
+  --width: 50vw;
+  --height: 75vh;
 }
 
-
-
+/* Apply the font globally */
 body {
-  font-family: var(--primary-font);
-}
-
-
-
-h2,
-label,
-ul,
-input,
-button {
   font-family: var(--primary-font);
   font-size: var(--main-font-size);
 }
 
-input[type="email"],
-input[type="password"],
-input[type="text"] { /* Style all input fields */
+/* Style elements */
+div, input[type="email"], input[type="password"], input[type="text"] {
+  border-radius: var(--border-radius);
+  font-size: var(--main-font-size);
+}
+
+input[type="email"], input[type="password"], input[type="text"] {
   width: 100%;
   padding: var(--field-padding);
   border: 1px solid var(--field-border-color);
-  border-radius: var(--field-border-radius);
   background-color: var(--field-background-color);
   box-sizing: border-box;
   margin-bottom: 5px;
-  border-radius: 200px;
-
-}
-
-button[type=""] {
-  background-color: var(--button-background-color);
-  color: var(--button-color);
-  padding: var(--button-padding);
-  border: var(--button-border);
-  border-radius: var(--button-border-radius);
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-  width: 100%;
-
 }
 
 button[type="submit"] {
@@ -87,61 +59,78 @@ button[type="submit"] {
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
   width: 100%;
-
+  font-size: var(--main-font-size);
 }
 
 button[type="submit"]:hover {
   background-color: var(--button-hover-color);
 }
 
-.error-message,
-.success-message {
-  /* Style error and success messages */
-  color: red; /* Adjust error message color */
+/* Messages */
+.error-message, .success-message {
+  color: red;
   font-size: var(--main-font-size);
   margin-bottom: 10px;
 }
 
+/* Dashboard Layout */
+.App {
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard {
+  display: flex;
+  flex: 1;
+}
+
+
+.dashboard-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}
+
+.header {
+  flex-shrink: 0;
+}
+
 .main-content {
-  margin-left: 300px; /* Adjust margin when sidebar is expanded */
-  padding: o;
+  flex: 1;
+  overflow: auto;
+  margin-left: 300px;
+  padding: 0;
   border: 10px solid black;
-
+  transition: margin-left 0.3s ease;
 }
-
-.main-content.expanded {
-  margin-left: 300px; /* Adjust margin when sidebar is expanded */
-  padding: o;
-
-}
-
 
 .main-content.contracted {
-  margin-left: 200px; /* Contract main content when sidebar expands */
-  transition: margin-left 0.3s ease; /* Transition for main content margin */
-  padding: o;
-
+  margin-left: 200px;
 }
 
-
-/* Mobile Styles (Media Query) */
+/* Mobile Styles */
 @media (max-width: 768px) {
-  .main-content, sidebar {
-    flex-direction: column; /* Stack elements vertically */
-    
+  .dashboard {
+    flex-direction: column;
   }
 
-  .sidebar-open{
-    width: 10%; /* Ensure full width on mobile */
+  .sidebar {
+    width: 100%;
+    height: auto;
+  }
+
+  .dashboard-content {
+    width: 100%;
+  }
+
+  .sidebar-open, .sidebar-closed {
+    width: 10%;
   }
 
   .sidebar-closed {
-   transform: translateY(-50%); /* Offset vertically to account for element height */
-    width: 10%; /* Ensure full width on mobile */
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-    padding: 1rem; /* Adjust padding for smaller screens */
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 1rem;
   }
 }
-
-
-

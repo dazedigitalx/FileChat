@@ -9,8 +9,8 @@ const UserProfile = () => {
     }
 
     return (
-        <div>
-            <h1>User Profile</h1>
+<div class="UserProfile">
+            <h2>User Profile</h2>
             <p>ID: {user.id}</p>
             <p>Username: {user.username}</p>
             <p>Email: {user.email}</p>

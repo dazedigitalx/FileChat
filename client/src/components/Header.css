@@ -16,14 +16,18 @@
 
 }
 
-.header h1 {
-    font-size: 24px;
-}
 
 .UserProfile {
     display: flex;
-    align-items: center;
+    flex-direction: column; /* Stack elements vertically */
+    align-items: flex-start; /* Left align the text */
+    font-size: 10px;
+    line-height: 1px; /* Set line spacing to 5px (font-size + 5px) */
 }
+
+
+
+  
 
 .UserProfile img {
     width: 40px;

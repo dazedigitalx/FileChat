@@ -1,4 +1,12 @@
 /* General styling for input fields */
+
+
+.sidebar {
+  width: 250px;
+  flex-shrink: 0;
+}
+
+
 .sidebar {
   height: 100%;
   position: fixed;
@@ -29,6 +37,7 @@
   cursor: pointer;
   transition: background-color 0.3s ease;
   border-radius: var(--field-border-radius, 0);
+  font-size: var(--font-size);
 }
 
 .sidebar .toggle-button:hover {
@@ -59,3 +68,25 @@
   background-color: var(--menu-item-hover-bg-color, #555);
   color: var(--menu-item-hover-text-color, #fff);
 }
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+
+
+  .sidebar {
+    width: 100%;
+    height: auto;
+  }
+
+
+  .sidebar-open, .sidebar-closed {
+    width: 10%;
+  }
+
+  .sidebar-closed {
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 1rem;
+  }
+}
+
