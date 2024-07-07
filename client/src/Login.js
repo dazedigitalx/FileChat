@@ -34,18 +34,16 @@ const Login = () => {
         console.log('Email:', email);
         console.log('Password:', password);
 
-
         try {
             const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password }),
             });
-                  
+
             const responseData = await response.json();
-            console.log('Response data:', responseData); // Log the response data to check for JSON validity
-            
-    
+            console.log('Response data:', responseData);
+
             if (response.ok) {
                 const { token, id, email, username } = responseData;
                 console.log('User data:', { id, email, username });
@@ -53,7 +51,7 @@ const Login = () => {
                 localStorage.setItem('accessToken', token);
                 setMessage('User logged in successfully');
                 setError('');
-            
+
                 navigate('/dashboard');
             } else {
                 setError(`Failed to login: ${responseData.message}`);
@@ -64,8 +62,7 @@ const Login = () => {
             setError(`Error logging in. Please try again later. Details: ${error.message}`);
         }
     };
-    
-    
+
     return (
         <div className="login-page">
             <div className="login-hero-image"></div>
