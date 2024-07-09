@@ -9,7 +9,7 @@ const UserProfile = () => {
     }
 
     return (
-<div class="UserProfile">
+<div className="UserProfile">
             <h2>User Profile</h2>
             <p>ID: {user.id}</p>
             <p>Username: {user.username}</p>

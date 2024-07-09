@@ -7,19 +7,26 @@ const Chat = ({ channel }) => {
     const [error, setError] = useState(null);
     const [newMessage, setNewMessage] = useState('');
 
+    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
     useEffect(() => {
+        // Log API_BASE_URL here
+        console.log('%c API_BASE_URL:', 'background: yellow; color: black;', API_BASE_URL);
+
         const fetchMessages = async () => {
             setLoading(true);
             setError(null);
 
             try {
                 const token = localStorage.getItem('accessToken');
-
+                console.log('Fetching messages for channel:', channel);
+                // console.log('Using token:', token);
+                
                 if (!token) {
                     throw new Error('Token not available.');
                 }
 
-                const response = await fetch(`http://localhost:5000/api/messages/channels/${channel._id}/`, {
+                const response = await fetch(`${API_BASE_URL}/api/messages/channels/${channel._id}/`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json',
@@ -27,10 +34,8 @@ const Chat = ({ channel }) => {
                 });
 
                 if (!response.ok) {
-                    if (response.status === 401) {
-                        throw new Error('Unauthorized: Please login again.');
-                    }
-                    throw new Error(`Failed to fetch messages: ${response.statusText}`);
+                    const errorMessage = await getErrorMessage(response);
+                    throw new Error(`Failed to fetch messages: ${errorMessage}`);
                 }
 
                 const data = await response.json();
@@ -46,7 +51,7 @@ const Chat = ({ channel }) => {
         if (channel) {
             fetchMessages();
         }
-    }, [channel]);
+    }, [channel, API_BASE_URL]);
 
     const handleSendMessage = async (e) => {
         e.preventDefault();
@@ -70,7 +75,7 @@ const Chat = ({ channel }) => {
                 user_id: channel.creator_id
             };
 
-            const response = await fetch(`http://localhost:5000/api/messages/channels/${channel._id}/send`, {
+            const response = await fetch(`${API_BASE_URL}/api/messages/channels/${channel._id}/send`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -80,15 +85,8 @@ const Chat = ({ channel }) => {
             });
 
             if (!response.ok) {
-                let errorMessage = `Failed to send message: ${response.statusText}`;
-                if (response.status === 401) {
-                    errorMessage = 'Unauthorized: Please login again.';
-                } else if (response.status === 404) {
-                    errorMessage = 'Endpoint not found: Check the URL and method.';
-                } else if (response.status === 500) {
-                    errorMessage = 'Internal Server Error: Please try again later.';
-                }
-                throw new Error(errorMessage);
+                const errorMessage = await getErrorMessage(response);
+                throw new Error(`Failed to send message: ${errorMessage}`);
             }
 
             const newMessageData = await response.json();
@@ -107,44 +105,47 @@ const Chat = ({ channel }) => {
     const handleDeleteMessage = async (messageId) => {
         try {
             console.log('Deleting Message ID:', messageId);
-    
+
             const token = localStorage.getItem('accessToken');
-    
+
             if (!token) {
                 throw new Error('Token not available.');
             }
-    
-            const response = await fetch(`http://localhost:5000/api/messages/${messageId}`, {
+
+            const response = await fetch(`${API_BASE_URL}/api/messages/${messageId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
             });
-    
+
             if (!response.ok) {
-                let errorMessage = `Failed to delete message: ${response.statusText}`;
-                if (response.status === 400) {
-                    const errorData = await response.json(); // Assuming server returns JSON error details
-                    errorMessage = `Bad Request: ${errorData.error}`;
-                } else if (response.status === 401) {
-                    errorMessage = 'Unauthorized: Please login again.';
-                } else if (response.status === 404) {
-                    errorMessage = 'Message not found.';
-                } else if (response.status === 500) {
-                    errorMessage = 'Internal Server Error: Please try again later.';
-                }
-                throw new Error(errorMessage);
+                const errorMessage = await getErrorMessage(response);
+                throw new Error(`Failed to delete message: ${errorMessage}`);
             }
-    
+
             console.log('Deleted Message ID:', messageId);
-    
+
             // Update UI to remove the deleted message from state
             setMessages(messages.filter(message => message._id !== messageId));
         } catch (error) {
             console.error('Error deleting message:', error);
             setError(`Error deleting message: ${error.message}`);
         }
+    };
+
+    const getErrorMessage = async (response) => {
+        let errorMessage = `Error ${response.status}: ${response.statusText}`;
+        try {
+            const errorData = await response.json();
+            if (errorData && errorData.error) {
+                errorMessage = errorData.error;
+            }
+        } catch (error) {
+            console.error('Failed to parse error response:', error);
+        }
+        return errorMessage;
     };
 
     if (loading) {
@@ -165,7 +166,7 @@ const Chat = ({ channel }) => {
                             <div className="message-details">
                                 <p className="message-content">{message.content}</p>
                                 <div className="message-metadata">
-                                    <p>{`Sent by ${message.sender_name} on ${new Date(message.createdAt).toLocaleString()}`}</p>
+                                    <p>{`Sent by ${message.sender_name || 'Unknown'} on ${message.createdAt ? new Date(message.createdAt).toLocaleString() : 'Unknown Date'}`}</p>
                                     <button
                                         className="delete-button"
                                         onClick={() => handleDeleteMessage(message._id)}

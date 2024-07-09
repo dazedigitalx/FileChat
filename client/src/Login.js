@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from './AuthContext';
+
 import './Login.css';
 import './Style.css';
 
-const Login = () => {
+const Login = ({ axiosInstance }) => {
     const navigate = useNavigate();
     const { setUser } = useAuth();
     const [email, setEmail] = useState('');
@@ -28,30 +29,31 @@ const Login = () => {
     };
 
     const handleLogin = async () => {
-        console.log('All environment variables:', process.env);
-        console.log('API URL:', process.env.REACT_APP_API_URL);
         console.log('Login form submitted');
         console.log('Email:', email);
         console.log('Password:', password);
+    
+        // Ensure axiosInstance is defined before proceeding
+        if (!axiosInstance) {
+            console.error('axiosInstance is undefined!');
+            console.log('axiosInstance:', axiosInstance);
 
+            return;
+        }
+    
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users/login`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password }),
-            });
-
-            const responseData = await response.json();
+            const response = await axiosInstance.post('/api/users/login', { email, password });
+            const responseData = response.data;
             console.log('Response data:', responseData);
-
-            if (response.ok) {
+    
+            if (response.status === 200) {
                 const { token, id, email, username } = responseData;
                 console.log('User data:', { id, email, username });
                 setUser({ id, email, username, token });
                 localStorage.setItem('accessToken', token);
                 setMessage('User logged in successfully');
                 setError('');
-
+    
                 navigate('/dashboard');
             } else {
                 setError(`Failed to login: ${responseData.message}`);
@@ -62,7 +64,7 @@ const Login = () => {
             setError(`Error logging in. Please try again later. Details: ${error.message}`);
         }
     };
-
+    
     return (
         <div className="login-page">
             <div className="login-hero-image"></div>
