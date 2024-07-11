@@ -15,7 +15,9 @@ dotenv.config();
 const app = express();
 
 // Configure CORS middleware
-const allowedOrigins = process.env.CLIENT_ORIGIN.split(',');
+// const allowedOrigins = process.env.CLIENT_ORIGIN.split(',');
+const allowedOrigins = ['http://localhost:3000', 'https://file-chat-client.vercel.app'];
+
 
 
 app.use(cors({

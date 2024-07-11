@@ -7,7 +7,7 @@ import './Login.css';
 import './Style.css';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-console.log('API_BASE_URL:', API_BASE_URL);
+console.log('Login.js API_BASE_URL:', API_BASE_URL);
 
 const Login = ({ axiosInstance }) => {
     const navigate = useNavigate();
@@ -35,7 +35,7 @@ const Login = ({ axiosInstance }) => {
     const handleLogin = async () => {
         console.log('Login form submitted');
         console.log('Email:', email);
-        console.log('API_BASE_URL:', API_BASE_URL); // Log API_BASE_URL to verify
+        console.log('Login 2 API_BASE_URL:', API_BASE_URL); // Log API_BASE_URL to verify
 
         if (!axiosInstance) {
             console.error('axiosInstance is undefined!');
