@@ -27,7 +27,7 @@ root.render(
   </React.StrictMode>
 );
 
-console.log('index .js axiosInstance:', axiosInstance);
+// console.log('index .js axiosInstance:', axiosInstance);
 
 reportWebVitals();
 

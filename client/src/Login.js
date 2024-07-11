@@ -35,11 +35,14 @@ const Login = ({ axiosInstance }) => {
     const handleLogin = async () => {
         console.log('Login form submitted');
         console.log('Email:', email);
-        console.log('Login 2 API_BASE_URL:', API_BASE_URL); // Log API_BASE_URL to verify
+        console.log('Login submitt // API_BASE_URL:', API_BASE_URL); // Log API_BASE_URL to verify
+
 
         if (!axiosInstance) {
             console.error('axiosInstance is undefined!');
             console.log('axiosInstance:', axiosInstance);
+            console.log('Login 2 API_BASE_URL:', API_BASE_URL); // Log API_BASE_URL to verify
+
             return;
         }
 

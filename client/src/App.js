@@ -9,7 +9,7 @@ import Signup from './Signup';
 import Home from './Home';
 
 const App = ({ axiosInstance }) => {
-  console.log('App.js axiosInstance:', axiosInstance);
+  // console.log('App.js axiosInstance:', axiosInstance);
 
   return (
     <Router>
