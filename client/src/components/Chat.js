@@ -10,8 +10,7 @@ const Chat = ({ channel }) => {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
     useEffect(() => {
-        // Log API_BASE_URL here
-        console.log('%c API_BASE_URL:', 'background: yellow; color: black;', API_BASE_URL);
+        console.log('API_BASE_URL:', API_BASE_URL);
 
         const fetchMessages = async () => {
             setLoading(true);
@@ -20,8 +19,8 @@ const Chat = ({ channel }) => {
             try {
                 const token = localStorage.getItem('accessToken');
                 console.log('Fetching messages for channel:', channel);
-                // console.log('Using token:', token);
-                
+                console.log('Using token:', token);
+
                 if (!token) {
                     throw new Error('Token not available.');
                 }
@@ -39,7 +38,7 @@ const Chat = ({ channel }) => {
                 }
 
                 const data = await response.json();
-                setMessages(data); // Assuming data is an array of messages
+                setMessages(data);
             } catch (error) {
                 setError(`Error fetching messages: ${error.message}`);
                 console.error('Error fetching messages:', error);
@@ -127,7 +126,6 @@ const Chat = ({ channel }) => {
 
             console.log('Deleted Message ID:', messageId);
 
-            // Update UI to remove the deleted message from state
             setMessages(messages.filter(message => message._id !== messageId));
         } catch (error) {
             console.error('Error deleting message:', error);
@@ -148,6 +146,19 @@ const Chat = ({ channel }) => {
         return errorMessage;
     };
 
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const formattedDate = date.toLocaleString('en-US', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        });
+        return formattedDate;
+    };
+
     if (loading) {
         return <div className="chat-container">Loading messages...</div>;
     }
@@ -166,7 +177,14 @@ const Chat = ({ channel }) => {
                             <div className="message-details">
                                 <p className="message-content">{message.content}</p>
                                 <div className="message-metadata">
-                                    <p>{`Sent by ${message.sender_name || 'Unknown'} on ${message.createdAt ? new Date(message.createdAt).toLocaleString() : 'Unknown Date'}`}</p>
+                                    {/* <p>{`Message ID: ${message._id}`}</p> */}
+                                    {/* <p>{`Channel Name: ${channel.name}`}</p> */}
+                                    <p>{`Creator ID: ${channel.creator_id}`}</p>
+                                    <p>{`Created At: ${channel.created_at}`}</p>
+                                    {/* Optional: Display sender name and format date */}
+                                    {/* <p>{`Sent by ${message.sender_name || 'Unknown'} on ${message.createdAt ? formatDate(message.createdAt) : 'Unknown Date'}`}</p> */}
+                                </div>
+                                <div className="delete-button-container">
                                     <button
                                         className="delete-button"
                                         onClick={() => handleDeleteMessage(message._id)}
