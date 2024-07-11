@@ -3,7 +3,6 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 import axios from 'axios';
 
-
 import './Login.css';
 import './Style.css';
 
@@ -35,21 +34,19 @@ const Login = ({ axiosInstance }) => {
     const handleLogin = async () => {
         console.log('Login form submitted');
         console.log('Email:', email);
-        // console.log('Password:', password);
-    
-        // Ensure axiosInstance is defined before proceeding
+        console.log('API_BASE_URL:', API_BASE_URL); // Log API_BASE_URL
+
         if (!axiosInstance) {
             console.error('axiosInstance is undefined!');
             console.log('axiosInstance:', axiosInstance);
-
             return;
         }
-    
+
         try {
             const response = await axiosInstance.post(`${API_BASE_URL}/api/users/login`, { email, password });
             const responseData = response.data;
             console.log('Response data:', responseData);
-    
+
             if (response.status === 200) {
                 const { token, id, email, username } = responseData;
                 console.log('User data:', { id, email, username });
@@ -57,7 +54,7 @@ const Login = ({ axiosInstance }) => {
                 localStorage.setItem('accessToken', token);
                 setMessage('User logged in successfully');
                 setError('');
-    
+
                 navigate('/dashboard');
             } else {
                 setError(`Failed to login: ${responseData.message}`);
@@ -68,7 +65,7 @@ const Login = ({ axiosInstance }) => {
             setError(`Error logging in. Please try again later. Details: ${error.message}`);
         }
     };
-    
+
     return (
         <div className="login-page">
             <div className="login-hero-image"></div>
