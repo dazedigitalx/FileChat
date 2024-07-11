@@ -7,7 +7,7 @@ import App from './App';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 console.log('API_BASE_URL:', API_BASE_URL);
-console.log('REACT_APP_API_BASE_URL:', process.env.REACT_APP_API_BASE_URL);
+// console.log('REACT_APP_API_BASE_URL:', process.env.REACT_APP_API_BASE_URL);
 
 
 const axiosInstance = axios.create({
@@ -19,12 +19,9 @@ const axiosInstance = axios.create({
   },
 });
 
-console.log('API_BASE_URL:', API_BASE_URL);
-console.log('REACT_APP_API_BASE_URL:', process.env.REACT_APP_API_BASE_URL);
+// console.log('API_BASE_URL:', API_BASE_URL);
+// console.log('REACT_APP_API_BASE_URL:', process.env.REACT_APP_API_BASE_URL);
 
-console.log('axiosInstance:', axiosInstance);
-
-console.log('Source path of .env file:', __filename); // Log the source path of the file loaded
 
 const root = createRoot(document.getElementById('root'));
 
@@ -35,6 +32,10 @@ root.render(
     </AuthProvider>
   </React.StrictMode>
 );
+
+console.log('axiosInstance:', axiosInstance);
+console.log('Source path of .env file:', __filename); // Log the source path of the file loaded
+
 
 reportWebVitals();
 
