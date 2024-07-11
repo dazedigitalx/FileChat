@@ -5,10 +5,11 @@ import reportWebVitals from './reportWebVitals';
 import { AuthProvider } from './AuthContext';
 import App from './App';
 
-const baseURL = process.env.REACT_APP_API_URL;
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+console.log('API_BASE_URL:', API_BASE_URL);
 
 const axiosInstance = axios.create({
-  baseURL: baseURL,
+  baseURL: API_BASE_URL, // Corrected baseURL to API_BASE_URL
   timeout: 5000,
   headers: {
     'Content-Type': 'application/json',
@@ -16,8 +17,8 @@ const axiosInstance = axios.create({
   },
 });
 
-console.log('API_BASE_URL:', baseURL); // Log the API_BASE_URL to console
-console.log('axiosInstance:', axiosInstance); // Log the axiosInstance to console
+console.log('API_BASE_URL:', API_BASE_URL);
+console.log('axiosInstance:', axiosInstance);
 
 const root = createRoot(document.getElementById('root'));
 
