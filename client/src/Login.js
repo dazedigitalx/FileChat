@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from './AuthContext';
+import axios from 'axios';
+
 
 import './Login.css';
 import './Style.css';
+
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const Login = ({ axiosInstance }) => {
     const navigate = useNavigate();
@@ -31,7 +35,7 @@ const Login = ({ axiosInstance }) => {
     const handleLogin = async () => {
         console.log('Login form submitted');
         console.log('Email:', email);
-        console.log('Password:', password);
+        // console.log('Password:', password);
     
         // Ensure axiosInstance is defined before proceeding
         if (!axiosInstance) {
@@ -42,7 +46,7 @@ const Login = ({ axiosInstance }) => {
         }
     
         try {
-            const response = await axiosInstance.post('/api/users/login', { email, password });
+            const response = await axiosInstance.post(`${API_BASE_URL}/api/users/login`, { email, password });
             const responseData = response.data;
             console.log('Response data:', responseData);
     
