@@ -3,6 +3,8 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const { connectDB } = require('./db');
 const { authMiddleware } = require('./middlewares/authMiddleware');
+const morgan = require('morgan');
+const helmet = require('helmet');
 
 // Import routers
 const userRouter = require('./routes/userRouter');
@@ -14,8 +16,13 @@ dotenv.config();
 
 const app = express();
 
+// Middleware setup
+app.use(helmet());
+app.use(morgan('dev'));
+app.use(express.json());
+
 // Configure CORS middleware
-const allowedOrigins = ['http://localhost:3000', 'https://file-chat-client.vercel.app'];
+const allowedOrigins = (process.env.CORS_ALLOWED_ORIGINS || '').split(',');
 
 app.use(cors({
   origin: function (origin, callback) {
@@ -25,14 +32,8 @@ app.use(cors({
       callback(new Error('Not allowed by CORS'));
     }
   },
-  credentials: true  // Enable credentials if needed
+  credentials: true
 }));
-
-// Middleware setup
-app.use(express.json());
-
-console.log('Environment Variables:', process.env);
-
 
 // Connect to MongoDB
 connectDB()
@@ -66,9 +67,18 @@ app.use((err, req, res, next) => {
   }
 });
 
+// Start the server
 const port = process.env.PORT || 5000;
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Server running on port ${port}`);
+});
+
+// Graceful shutdown
+process.on('SIGINT', () => {
+  server.close(() => {
+    console.log('Server closed');
+    process.exit(0);
+  });
 });
 
 module.exports = app; // Export the app for testing purposes if needed
