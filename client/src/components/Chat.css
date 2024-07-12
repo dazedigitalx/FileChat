@@ -5,11 +5,18 @@
     padding: 20px;
     font-family: var(--primary-font);
     font-size: var(--main-font-size);
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Full viewport height */
 }
 
 .message-list {
-    list-style-type: none;
-    padding: 0;
+    /* list-style-type: none;
+    padding: 0; */
+    flex: 1; /* Take available space */
+    overflow-y: auto; /* Enable scrolling */
+    padding: 10px;
+    border: 1px solid #ccc; /* Optional: add border */
 }
 
 .message-item {
@@ -83,9 +90,16 @@
 /* Send message form */
 .send-message-form {
     margin-top: 20px;
+    display: flex;
+    padding: 10px;
+    background-color: #f1f1f1; /* Optional: background color */
 }
 
+
+
 .send-message-form input[type="text"] {
+    flex: 1; /* Take available space */
+
     font-family: var(--primary-font);
     font-size: var(--main-font-size);
 }

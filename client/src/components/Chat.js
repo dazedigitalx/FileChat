@@ -177,12 +177,8 @@ const Chat = ({ channel }) => {
                             <div className="message-details">
                                 <p className="message-content">{message.content}</p>
                                 <div className="message-metadata">
-                                    {/* <p>{`Message ID: ${message._id}`}</p> */}
-                                    {/* <p>{`Channel Name: ${channel.name}`}</p> */}
                                     <p>{`Creator ID: ${channel.creator_id}`}</p>
                                     <p>{`Created At: ${channel.created_at}`}</p>
-                                    {/* Optional: Display sender name and format date */}
-                                    {/* <p>{`Sent by ${message.sender_name || 'Unknown'} on ${message.createdAt ? formatDate(message.createdAt) : 'Unknown Date'}`}</p> */}
                                 </div>
                                 <div className="delete-button-container">
                                     <button
@@ -199,7 +195,7 @@ const Chat = ({ channel }) => {
                     <p>No messages available</p>
                 )}
             </ul>
-
+    
             <h3>Send Message</h3>
             <form className="send-message-form" onSubmit={handleSendMessage}>
                 <input
@@ -213,6 +209,7 @@ const Chat = ({ channel }) => {
             </form>
         </div>
     );
+    
 };
 
 export default Chat;
