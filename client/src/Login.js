@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from './AuthContext';
-import axiosInstance from '../src/API/axiosInstance'; // Import axiosInstance
 import './Login.css';
 import './Style.css';
 
@@ -36,14 +35,17 @@ const Login = () => {
     };
 
     const handleLogin = async () => {
-        console.log('Login form submitted');
-        console.log('Email:', email);
-
         try {
-            const response = await axiosInstance.post('/api/users/login', { email, password });
-            const responseData = response.data;
+            const response = await fetch('https://file-chat-client.vercel.app/api/users/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }),
+            });
 
             if (response.status === 200) {
+                const responseData = await response.json();
                 const { token, id, username } = responseData;
                 setUser({ id, email, username, token });
                 localStorage.setItem('accessToken', token);
@@ -51,7 +53,8 @@ const Login = () => {
                 setError('');
                 navigate('/dashboard');
             } else {
-                setError(`Failed to login: ${responseData.message}`);
+                const errorData = await response.json();
+                setError(`Failed to login: ${errorData.message}`);
             }
         } catch (error) {
             console.error('Login error:', error);
@@ -91,7 +94,9 @@ const Login = () => {
                             />
                         )}
                         {emailReadOnly && (
-                            <button type="submit" disabled={loading}>{loading ? 'Logging in...' : 'Login'}</button>
+                            <button type="submit" disabled={loading}>
+                                {loading ? 'Logging in...' : 'Login'}
+                            </button>
                         )}
                     </form>
                     <div className="register-link">
