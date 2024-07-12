@@ -30,6 +30,25 @@ const Login = ({ axiosInstance }) => {
 
     const handlePasswordSubmit = async (e) => {
         e.preventDefault();
+        if (password) {
+            handleLogin();
+        }
+    };
+
+    const handleLogin = async () => {
+        console.log('Login form submitted');
+        console.log('Email:', email);
+        console.log('Login submitt // API_BASE_URL:', API_BASE_URL); // Log API_BASE_URL to verify
+
+
+        if (!axiosInstance) {
+            console.error('axiosInstance is undefined!');
+            console.log('axiosInstance:', axiosInstance);
+            console.log('Login 2 API_BASE_URL:', API_BASE_URL); // Log API_BASE_URL to verify
+
+            return;
+        }
+
         try {
             const response = await axiosInstance.post(`${API_BASE_URL}/api/users/login`, { email, password });
             const responseData = response.data;
