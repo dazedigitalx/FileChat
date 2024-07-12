@@ -66,6 +66,27 @@ button[type="submit"]:hover {
   background-color: var(--button-hover-color);
 }
 
+/* Login.css */
+
+/* Login.css */
+
+.continue-button {
+  background-color: var(--button-background-color);
+  color: var(--button-text-color);
+  border: var(--button-border);
+  padding: var(--button-padding);
+  font-size: var(--button-font-size);
+  cursor: var(--button-cursor);
+  border-radius: var(--button-border-radius);
+  margin-top: var(--button-margin-top);
+  color: var(--field-background-color);
+}
+
+.continue-button:hover {
+  background-color: #0056b3; /* Darker blue color on hover */
+}
+
+
 /* Messages */
 .error-message, .success-message {
   color: red;

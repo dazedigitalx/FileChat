@@ -7,45 +7,29 @@ import './Login.css';
 import './Style.css';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-console.log('Login.js API_BASE_URL:', API_BASE_URL);
 
 const Login = ({ axiosInstance }) => {
     const navigate = useNavigate();
     const { setUser } = useAuth();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [step, setStep] = useState(1);
+    const [showNextButton, setShowNextButton] = useState(false);
+    const [emailReadOnly, setEmailReadOnly] = useState(false);
     const [error, setError] = useState('');
     const [message, setMessage] = useState('');
 
-    const handleEmailSubmit = (e) => {
-        e.preventDefault();
-        if (email) {
-            setStep(2);
-        }
+    const handleEmailChange = (e) => {
+        const enteredEmail = e.target.value;
+        setEmail(enteredEmail);
+        setShowNextButton(enteredEmail.includes('@'));
     };
 
-    const handlePasswordSubmit = (e) => {
-        e.preventDefault();
-        if (password) {
-            handleLogin();
-        }
+    const handleNext = () => {
+        setEmailReadOnly(true);
     };
 
-    const handleLogin = async () => {
-        console.log('Login form submitted');
-        console.log('Email:', email);
-        console.log('Login submitt // API_BASE_URL:', API_BASE_URL); // Log API_BASE_URL to verify
-
-
-        if (!axiosInstance) {
-            console.error('axiosInstance is undefined!');
-            console.log('axiosInstance:', axiosInstance);
-            console.log('Login 2 API_BASE_URL:', API_BASE_URL); // Log API_BASE_URL to verify
-
-            return;
-        }
-
+    const handlePasswordSubmit = async (e) => {
+        e.preventDefault();
         try {
             const response = await axiosInstance.post(`${API_BASE_URL}/api/users/login`, { email, password });
             const responseData = response.data;
@@ -78,21 +62,22 @@ const Login = ({ axiosInstance }) => {
                     <h2>Login</h2>
                     {error && <p className="error-message">{error}</p>}
                     {message && <p className="success-message">{message}</p>}
-                    {step === 1 && (
-                        <form onSubmit={handleEmailSubmit}>
-                            <input
-                                type="email"
-                                placeholder="Email"
-                                id="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                required
-                            />
-                            <button type="submit">Next</button>
-                        </form>
-                    )}
-                    {step === 2 && (
-                        <form onSubmit={handlePasswordSubmit}>
+                    <form onSubmit={handlePasswordSubmit}>
+                        <input
+                            type="email"
+                            placeholder="Email"
+                            id="email"
+                            value={email}
+                            onChange={handleEmailChange}
+                            readOnly={emailReadOnly}
+                            required
+                        />
+                        {!emailReadOnly && showNextButton && (
+                            <button type="button" 
+                            className="continue-button"
+                            onClick={handleNext}>Continue</button>
+                        )}
+                        {emailReadOnly && (
                             <input
                                 type="password"
                                 placeholder="Password"
@@ -101,9 +86,11 @@ const Login = ({ axiosInstance }) => {
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
                             />
+                        )}
+                        {emailReadOnly && (
                             <button type="submit">Login</button>
-                        </form>
-                    )}
+                        )}
+                    </form>
                     <div className="register-link">
                         <span>Don't have an account?</span>
                         <Link to="/signup" className="register-button">Register</Link>

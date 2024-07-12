@@ -1,13 +1,13 @@
 const express = require('express');
-const dotenv = require('dotenv');
 const cors = require('cors');
-const { connectDB } = require('./db'); // Import connectDB function
+const dotenv = require('dotenv');
+const { connectDB } = require('./db');
+const { authMiddleware } = require('./middlewares/authMiddleware');
 
 // Import routers
 const userRouter = require('./routes/userRouter');
 const channelRouter = require('./routes/channelRouter');
 const messageRouter = require('./routes/messageRouter');
-// const fileRouter = require('./routes/fileRouter');
 
 // Load environment variables
 dotenv.config();
@@ -15,24 +15,24 @@ dotenv.config();
 const app = express();
 
 // Configure CORS middleware
-// const allowedOrigins = process.env.CLIENT_ORIGIN.split(',');
 const allowedOrigins = ['http://localhost:3000', 'https://file-chat-client.vercel.app'];
 
-
-
 app.use(cors({
-  origin: function(origin, callback) {
+  origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
     }
   },
-  credentials: true // Enable credentials if needed
+  credentials: true  // Enable credentials if needed
 }));
 
 // Middleware setup
 app.use(express.json());
+
+console.log('Environment Variables:', process.env);
+
 
 // Connect to MongoDB
 connectDB()
@@ -48,24 +48,23 @@ connectDB()
 app.use('/api/users', userRouter);
 app.use('/api/channels', channelRouter);
 app.use('/api/messages', messageRouter);
-// app.use('/api/files', fileRouter);
+
+// Protect routes using authMiddleware
+app.get('/api/protected', authMiddleware, (req, res) => {
+  res.send('This is a protected route');
+});
 
 // Error handling middleware
 app.use((err, req, res, next) => {
   if (err.name === 'UnauthorizedError') {
     res.status(401).json({ error: 'Unauthorized' });
+  } else if (err.message === 'Not allowed by CORS') {
+    res.status(403).json({ error: 'CORS policy not fulfilled' });
   } else {
     console.error(err.stack);
     res.status(500).send('Internal Server Error');
   }
 });
-
-
-// index.js or App.js
-// console.log('Environment Variables:', process.env);
-console.log('API URL:', process.env.REACT_APP_API_URL);
-
-
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
