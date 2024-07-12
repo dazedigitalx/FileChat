@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from './AuthContext';
-import axios from 'axios';
+import axiosInstance from '../src/API/axiosInstance'; // Import axiosInstance
 
 import './Login.css';
 import './Style.css';
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-
-const Login = ({ axiosInstance }) => {
+const Login = () => {
     const navigate = useNavigate();
     const { setUser } = useAuth();
     const [email, setEmail] = useState('');
@@ -38,38 +36,24 @@ const Login = ({ axiosInstance }) => {
     const handleLogin = async () => {
         console.log('Login form submitted');
         console.log('Email:', email);
-        console.log('Login submitt // API_BASE_URL:', API_BASE_URL); // Log API_BASE_URL to verify
-
-
-        if (!axiosInstance) {
-            console.error('axiosInstance is undefined!');
-            console.log('axiosInstance:', axiosInstance);
-            console.log('Login 2 API_BASE_URL:', API_BASE_URL); // Log API_BASE_URL to verify
-
-            return;
-        }
 
         try {
-            const response = await axiosInstance.post(`${API_BASE_URL}/api/users/login`, { email, password });
+            const response = await axiosInstance.post('/api/users/login', { email, password });
             const responseData = response.data;
-            console.log('Response data:', responseData);
 
             if (response.status === 200) {
-                const { token, id, email, username } = responseData;
-                console.log('User data:', { id, email, username });
+                const { token, id, username } = responseData;
                 setUser({ id, email, username, token });
                 localStorage.setItem('accessToken', token);
                 setMessage('User logged in successfully');
                 setError('');
-
                 navigate('/dashboard');
             } else {
                 setError(`Failed to login: ${responseData.message}`);
-                console.error('Login failed:', responseData.message);
             }
         } catch (error) {
             console.error('Login error:', error);
-            setError(`Error logging in. Please try again later. Details: ${error.message}`);
+            setError(`Error logging in. Details: ${error.message}`);
         }
     };
 
@@ -92,9 +76,7 @@ const Login = ({ axiosInstance }) => {
                             required
                         />
                         {!emailReadOnly && showNextButton && (
-                            <button type="button" 
-                            className="continue-button"
-                            onClick={handleNext}>Continue</button>
+                            <button type="button" className="continue-button" onClick={handleNext}>Continue</button>
                         )}
                         {emailReadOnly && (
                             <input
