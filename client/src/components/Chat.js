@@ -1,29 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './Chat.css'; // Import the external CSS file
 
 const Chat = ({ channel }) => {
     const [messages, setMessages] = useState([]);
-    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [newMessage, setNewMessage] = useState('');
+    const messagesEndRef = useRef(null); // Reference to scroll to the bottom
 
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
     useEffect(() => {
-        console.log('API_BASE_URL:', API_BASE_URL);
-
         const fetchMessages = async () => {
-            setLoading(true);
             setError(null);
 
             try {
                 const token = localStorage.getItem('accessToken');
-                console.log('Fetching messages for channel:', channel);
-                console.log('Using token:', token);
-
-                if (!token) {
-                    throw new Error('Token not available.');
-                }
+                if (!token) throw new Error('Token not available.');
 
                 const response = await fetch(`${API_BASE_URL}/api/messages/channels/${channel._id}/`, {
                     headers: {
@@ -41,9 +33,6 @@ const Chat = ({ channel }) => {
                 setMessages(data);
             } catch (error) {
                 setError(`Error fetching messages: ${error.message}`);
-                console.error('Error fetching messages:', error);
-            } finally {
-                setLoading(false);
             }
         };
 
@@ -54,24 +43,17 @@ const Chat = ({ channel }) => {
 
     const handleSendMessage = async (e) => {
         e.preventDefault();
-        setLoading(true);
         setError(null);
 
         try {
             const token = localStorage.getItem('accessToken');
-
-            if (!token) {
-                throw new Error('Token not available.');
-            }
-
-            if (!newMessage.trim()) {
-                throw new Error('Message content is required.');
-            }
+            if (!token) throw new Error('Token not available.');
+            if (!newMessage.trim()) throw new Error('Message content is required.');
 
             const messagePayload = {
                 channel_id: channel._id,
                 content: newMessage,
-                user_id: channel.creator_id
+                user_id: channel.creator_id,
             };
 
             const response = await fetch(`${API_BASE_URL}/api/messages/channels/${channel._id}/send`, {
@@ -89,27 +71,17 @@ const Chat = ({ channel }) => {
             }
 
             const newMessageData = await response.json();
-            setMessages([...messages, newMessageData]);
+            setMessages((prevMessages) => [...prevMessages, newMessageData]);
             setNewMessage('');
-
-            console.log('Sent Message ID:', newMessageData._id);
         } catch (error) {
             setError(`Error sending message: ${error.message}`);
-            console.error('Error sending message:', error);
-        } finally {
-            setLoading(false);
         }
     };
 
     const handleDeleteMessage = async (messageId) => {
         try {
-            console.log('Deleting Message ID:', messageId);
-
             const token = localStorage.getItem('accessToken');
-
-            if (!token) {
-                throw new Error('Token not available.');
-            }
+            if (!token) throw new Error('Token not available.');
 
             const response = await fetch(`${API_BASE_URL}/api/messages/${messageId}`, {
                 method: 'DELETE',
@@ -124,11 +96,8 @@ const Chat = ({ channel }) => {
                 throw new Error(`Failed to delete message: ${errorMessage}`);
             }
 
-            console.log('Deleted Message ID:', messageId);
-
-            setMessages(messages.filter(message => message._id !== messageId));
+            setMessages((prevMessages) => prevMessages.filter((message) => message._id !== messageId));
         } catch (error) {
-            console.error('Error deleting message:', error);
             setError(`Error deleting message: ${error.message}`);
         }
     };
@@ -146,22 +115,12 @@ const Chat = ({ channel }) => {
         return errorMessage;
     };
 
-    const formatDate = (dateString) => {
-        const date = new Date(dateString);
-        const formattedDate = date.toLocaleString('en-US', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit'
-        });
-        return formattedDate;
-    };
-
-    if (loading) {
-        return <div className="chat-container">Loading messages...</div>;
-    }
+    // Scroll to the bottom whenever messages change
+    useEffect(() => {
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+        }
+    }, [messages]);
 
     if (error) {
         return <div className="chat-container">Error: {error}</div>;
@@ -169,7 +128,9 @@ const Chat = ({ channel }) => {
 
     return (
         <div className="chat-container">
-            <h2>Chat for {channel.name}</h2>
+            <div className="chat-header">
+                <>{channel.name}</>
+            </div>
             <ul className="message-list">
                 {messages.length > 0 ? (
                     messages.map((message) => (
@@ -178,25 +139,22 @@ const Chat = ({ channel }) => {
                                 <p className="message-content">{message.content}</p>
                                 <div className="message-metadata">
                                     <p>{`Creator ID: ${channel.creator_id}`}</p>
-                                    <p>{`Created At: ${channel.created_at}`}</p>
+                                    <p>{`Created At: ${new Date(message.created_at).toLocaleString()}`}</p>
                                 </div>
-                                <div className="delete-button-container">
-                                    <button
-                                        className="delete-button"
-                                        onClick={() => handleDeleteMessage(message._id)}
-                                    >
-                                        x
-                                    </button>
-                                </div>
+                                <button
+                                    className="delete-button"
+                                    onClick={() => handleDeleteMessage(message._id)}
+                                >
+                                    x
+                                </button>
                             </div>
                         </li>
                     ))
                 ) : (
                     <p>No messages available</p>
                 )}
+                <div ref={messagesEndRef} /> {/* Empty div for scrolling */}
             </ul>
-    
-            <h3>Send Message</h3>
             <form className="send-message-form" onSubmit={handleSendMessage}>
                 <input
                     type="text"
@@ -209,7 +167,6 @@ const Chat = ({ channel }) => {
             </form>
         </div>
     );
-    
 };
 
 export default Chat;

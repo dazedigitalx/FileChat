@@ -2,12 +2,16 @@
 
 /* General styles */
 .chat-container {
-    padding: 20px;
     font-family: var(--primary-font);
     font-size: var(--main-font-size);
     display: flex;
     flex-direction: column;
-    height: 100vh; /* Full viewport height */
+    height: 80vh; /* Full viewport height */
+    /* position: relative; Position for child elements */
+}
+
+.chat-header {
+    height: 20px;
 }
 
 .message-list {
@@ -15,15 +19,17 @@
     padding: 0; */
     flex: 1; /* Take available space */
     overflow-y: auto; /* Enable scrolling */
-    padding: 10px;
+    padding: 2px;
     border: 1px solid #ccc; /* Optional: add border */
+    overflow-x:hidden/* Enable scrolling */
+
 }
 
 .message-item {
     background-color: #f0f0f0; /* Light gray background */
     border-radius: var(--button-border-radius);
-    padding: 10px;
-    margin-bottom: 10px;
+    padding: 0px;
+    margin-bottom: 2px;
     width: 100%;
 }
 
@@ -89,17 +95,24 @@
 
 /* Send message form */
 .send-message-form {
-    margin-top: 20px;
     display: flex;
     padding: 10px;
-    background-color: #f1f1f1; /* Optional: background color */
+    background-color: #f1f1f1; /* Background color for the input area */
+    position: relative; /* Position it at the bottom */
+    bottom: 0; /* Stick to the bottom */
+    left: 0;
+    right: 0;
+
 }
 
-
+.send-message-form input {
+    flex: 1; /* Take available space */
+    padding: 10px;
+    border: 1px solid #ccc; /* Optional: add border */
+}
 
 .send-message-form input[type="text"] {
     flex: 1; /* Take available space */
-
     font-family: var(--primary-font);
     font-size: var(--main-font-size);
 }
