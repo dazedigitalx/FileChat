@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 import axiosInstance from '../src/API/axiosInstance'; // Import axiosInstance
-
 import './Login.css';
 import './Style.css';
 
@@ -15,10 +14,7 @@ const Login = () => {
     const [emailReadOnly, setEmailReadOnly] = useState(false);
     const [error, setError] = useState('');
     const [message, setMessage] = useState('');
-
-    console.log('axiosInstance:', axiosInstance); // Log axiosInstance to verify
-    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-    console.log('API_BASE_URL:', API_BASE_URL); // Log API_BASE_URL to verify
+    const [loading, setLoading] = useState(false);
 
     const handleEmailChange = (e) => {
         const enteredEmail = e.target.value;
@@ -32,8 +28,10 @@ const Login = () => {
 
     const handlePasswordSubmit = async (e) => {
         e.preventDefault();
-        if (password) {
-            handleLogin();
+        if (password && !loading) {
+            setLoading(true);
+            await handleLogin();
+            setLoading(false);
         }
     };
 
@@ -93,7 +91,7 @@ const Login = () => {
                             />
                         )}
                         {emailReadOnly && (
-                            <button type="submit">Login</button>
+                            <button type="submit" disabled={loading}>{loading ? 'Logging in...' : 'Login'}</button>
                         )}
                     </form>
                     <div className="register-link">

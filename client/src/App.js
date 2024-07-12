@@ -7,6 +7,7 @@ import Profile from './components/Profile';
 import Login from './Login';
 import Signup from './Signup';
 import Home from './Home';
+import axiosInstance from '../src/API/axiosInstance'; // Import axiosInstance
 
 const App = ({ axiosInstance }) => {
   console.log('App.js axiosInstance:', axiosInstance);
@@ -27,7 +28,5 @@ const App = ({ axiosInstance }) => {
     </Router>
   );
 };
-
-
 
 export default App;

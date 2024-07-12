@@ -5,18 +5,20 @@ import reportWebVitals from './reportWebVitals';
 import { AuthProvider } from './AuthContext';
 import App from './App';
 
+// Configure the API base URL from environment variables
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 console.log('API_BASE_URL:', API_BASE_URL);
 
+// Create an axios instance
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
   timeout: 5000,
   headers: {
     'Content-Type': 'application/json',
-    // Add other headers if necessary
   },
 });
 
+// Create the root element for rendering
 const root = createRoot(document.getElementById('root'));
 
 root.render(
@@ -27,8 +29,10 @@ root.render(
   </React.StrictMode>
 );
 
-console.log('index .js axiosInstance:', axiosInstance);
+// Log the axios instance for debugging
+console.log('index.js axiosInstance:', axiosInstance);
 
+// Report web vitals
 reportWebVitals();
 
 export default App;
