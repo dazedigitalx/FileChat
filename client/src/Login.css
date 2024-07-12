@@ -49,19 +49,37 @@ body, html {
 }
 
 /* Style elements */
-div, input[type="email"], input[type="password"], input[type="text"] {
+div {
   border-radius: var(--border-radius);
   font-size: var(--main-font-size);
 }
 
-input[type="email"], input[type="password"] {
+input[type="email"], input[type="password"], input[type="text"] {
   width: 100%;
   padding: var(--field-padding);
   border: 1px solid var(--field-border-color);
   background-color: var(--field-background-color);
   box-sizing: border-box;
   margin-bottom: 5px;
+  border-radius: var(--border-radius);
+  font-size: var(--main-font-size);
+  
 }
+
+button {
+  background-color: var(--button-background);
+  color: var(--button-color);
+  border: var(--button-border);
+  border-radius: var(--button-border-radius);
+  padding: var(--button-padding);
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  cursor: pointer;
+  background-color: var(--button-background-color);
+  width: var(--button-width);
+
+}
+
 
 /* button[type="submit"] {
   background-color: var(--button-background-color);
@@ -75,9 +93,7 @@ input[type="email"], input[type="password"] {
   font-size: var(--main-font-size);
 } */
 
-button[type="submit"]:hover {
-  background-color: var(--button-hover-color);
-}
+
 
 .error-message,
 .success-message {

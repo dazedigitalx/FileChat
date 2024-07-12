@@ -13,12 +13,23 @@
 /* Global variables */
 :root {
   --primary-font: 'Roboto', sans-serif;
+
+  --primary-color: #007bff;
+  --secondary-color: #6c757d;
+  --success-color: #28a745;
+  --danger-color: #dc3545;
+  --warning-color: #ffc107;
+  --info-color: #17a2b8;
+  --light-color: #f8f9fa;
+  --dark-color: #343a40;
+
+
   --field-background-color: #f0f0f0;
   --field-border-color: #ccc;
   --field-border-radius: 20px;
   --field-padding: 10px;
   --button-background-color: #007bff;
-  --button-color: white;
+  --button-color: rgb(255, 255, 255);
   --button-border: none;
   --button-border-radius: 200px;
   --border-radius: 50px;
@@ -27,6 +38,7 @@
   --main-font-size: 22px;
   --width: 50vw;
   --height: 75vh;
+  --button-width: 100%; /* Add this variable */
 }
 
 /* Apply the font globally */

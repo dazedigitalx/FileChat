@@ -156,7 +156,7 @@ const Channels = ({ onChannelSelect = () => {}, onCreateChannel = () => {}, acti
                             <span>{channel.name} - {channel.description}</span>
                         </div>
                         <div className="delete-button-container">
-                            <button onClick={() => handleDeleteChannel(channel._id)}>x</button>
+                            <button className="delete-button" onClick={() => handleDeleteChannel(channel._id)}>x</button>
                         </div>
                     </li>
                 ))}
