@@ -16,6 +16,10 @@ const Login = () => {
     const [error, setError] = useState('');
     const [message, setMessage] = useState('');
 
+    console.log('axiosInstance:', axiosInstance); // Log axiosInstance to verify
+    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+    console.log('API_BASE_URL:', API_BASE_URL); // Log API_BASE_URL to verify
+
     const handleEmailChange = (e) => {
         const enteredEmail = e.target.value;
         setEmail(enteredEmail);
