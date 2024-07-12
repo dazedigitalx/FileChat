@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from './AuthContext';
-import axios from 'axios'; // Use axios directly for simplicity
+import axiosInstance from '../src/API/axiosInstance'; // Import axiosInstance
 import './Login.css';
 import './Style.css';
 
@@ -21,7 +21,7 @@ const Login = () => {
         setEmail(enteredEmail);
         setShowNextButton(enteredEmail.includes('@'));
     };
-
+    
     const handleNext = () => {
         setEmailReadOnly(true);
     };
@@ -36,12 +36,8 @@ const Login = () => {
     };
 
     const handleLogin = async () => {
-        const apiUrl = window.location.hostname === 'localhost'
-            ? 'http://localhost:5000/api/users/login' // Local API URL
-            : 'https://file-chat-client.vercel.app/api/users/login'; // Production API URL
-
         try {
-            const response = await axios.post(apiUrl, { email, password });
+            const response = await axiosInstance.post('/api/users/login', { email, password });
 
             if (response.status === 200) {
                 const { token, id, username } = response.data;

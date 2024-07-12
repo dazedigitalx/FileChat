@@ -5,9 +5,17 @@ import reportWebVitals from './reportWebVitals';
 import { AuthProvider } from './AuthContext';
 import App from './App';
 
-// Configure the API base URL from environment variables
+// Check which environment is being used
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
+// Check which environment is being used
+const environment = process.env.NODE_ENV === 'production' ? '.env.production' : '.env';
+
+console.log('Using environment file:', environment);
 console.log('API_BASE_URL:', API_BASE_URL);
+
+
+
 
 // Create an axios instance
 const axiosInstance = axios.create({
