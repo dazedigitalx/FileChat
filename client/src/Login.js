@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from './AuthContext';
+import axiosInstance from '../src/API/axiosInstance'; // Import axiosInstance
 import './Login.css';
 import './Style.css';
 
@@ -36,29 +37,19 @@ const Login = () => {
 
     const handleLogin = async () => {
         try {
-            const response = await fetch('https://file-chat-client.vercel.app/api/users/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email, password }),
-            });
+            const response = await axiosInstance.post('/api/users/login', { email, password });
 
             if (response.status === 200) {
-                const responseData = await response.json();
-                const { token, id, username } = responseData;
+                const { token, id, username } = response.data;
                 setUser({ id, email, username, token });
                 localStorage.setItem('accessToken', token);
                 setMessage('User logged in successfully');
                 setError('');
                 navigate('/dashboard');
-            } else {
-                const errorData = await response.json();
-                setError(`Failed to login: ${errorData.message}`);
             }
         } catch (error) {
             console.error('Login error:', error);
-            setError(`Error logging in. Details: ${error.message}`);
+            setError(`Error logging in. Details: ${error.response ? error.response.data.message : error.message}`);
         }
     };
 
