@@ -16,23 +16,19 @@ dotenv.config();
 
 const app = express();
 
-// Configure CORS with more control
-const corsOptions = {
-  origin: process.env.CORS_ALLOWED_ORIGIN || '*', // Allow specified origins or all if not set
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Specify allowed methods
-  allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
-  credentials: true // Allow cookies
-};
-
-app.use(cors(corsOptions));
+// CORS configuration
+app.use(cors({
+  origin: 'https://file-chat-client.vercel.app', // Specify the origin that is allowed to access resources
+  credentials: true, // Enable credentials if needed
+}));
 
 // Middleware setup
 app.use(helmet());
 app.use(morgan('dev'));
 app.use(express.json());
 
-// Handle preflight requests with CORS configuration
-app.options('*', cors(corsOptions));
+// Handle preflight requests for all routes
+app.options('*', cors());
 
 // Connect to MongoDB
 connectDB()
@@ -61,7 +57,7 @@ app.use((err, req, res, next) => {
   } else if (err.message === 'Not allowed by CORS') {
     res.status(403).json({ error: 'CORS policy not fulfilled' });
   } else {
-    console.error(err.stack); // Log the error stack for debugging
+    console.error(err.stack);
     res.status(500).send('Internal Server Error');
   }
 });
