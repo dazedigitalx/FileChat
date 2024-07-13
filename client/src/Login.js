@@ -17,9 +17,6 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-// Log environment variables for debugging
-console.log('Using environment:', process.env.NODE_ENV);
-console.log('REACT_APP_API_URL:', process.env.REACT_APP_API_URL);
 
 // Determine the environment
 const environment = process.env.NODE_ENV;
