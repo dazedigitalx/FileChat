@@ -44,7 +44,7 @@ connectDB()
     console.log('MongoDB connected');
   })
   .catch((error) => {
-    console.error('MongoDB connection error:', error);
+    console.error('MongoDB connection error X:', error);
     process.exit(1);
   });
 
