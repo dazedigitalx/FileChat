@@ -16,19 +16,19 @@ dotenv.config();
 
 const app = express();
 
-// Configure CORS middleware
+// Allow all CORS origins
 app.use(cors({
   origin: '*', // Allow all origins
-  credentials: true,
+  credentials: true, // Enable set cookies
 }));
-
-// Handle preflight requests
-app.options('*', cors());
 
 // Middleware setup
 app.use(helmet());
 app.use(morgan('dev'));
 app.use(express.json());
+
+// Handle preflight requests for all routes
+app.options('*', cors());
 
 // Connect to MongoDB
 connectDB()
