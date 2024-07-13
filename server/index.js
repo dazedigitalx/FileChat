@@ -6,19 +6,22 @@ const { authMiddleware } = require('./middlewares/authMiddleware');
 const morgan = require('morgan');
 const helmet = require('helmet');
 
-// Import routers
-const userRouter = require('./routes/userRouter');
-const channelRouter = require('./routes/channelRouter');
-const messageRouter = require('./routes/messageRouter');
-
 // Load environment variables
 dotenv.config();
 
 const app = express();
 
 // CORS configuration
+const allowedOrigins = process.env.CORS_ALLOWED_ORIGINS.split(',');
+
 const corsOptions = {
-  origin: process.env.REACT_APP_API_URL, // Allow requests from this origin
+  origin: function (origin, callback) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed HTTP methods
   allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
   credentials: true // Allow credentials (cookies, authorization headers, etc.)
@@ -32,7 +35,7 @@ app.use(helmet());
 app.use(morgan('dev'));
 app.use(express.json());
 
-// Handle preflight requests for all routes
+// Handle preflight requests
 app.options('*', cors(corsOptions));
 
 // Connect to MongoDB
@@ -45,7 +48,11 @@ connectDB()
     process.exit(1);
   });
 
-// Mount routers
+// Import and mount routers
+const userRouter = require('./routes/userRouter');
+const channelRouter = require('./routes/channelRouter');
+const messageRouter = require('./routes/messageRouter');
+
 app.use('/api/users', userRouter);
 app.use('/api/channels', channelRouter);
 app.use('/api/messages', messageRouter);

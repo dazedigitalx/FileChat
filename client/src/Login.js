@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from './AuthContext';
-import axiosInstance from './API/axiosInstance'; // Ensure correct path
+import axiosInstance from './API/axiosInstance';
 import './Login.css';
 import './Style.css';
 
@@ -17,9 +17,9 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Log environment variables once during component mount
     console.log('Using environment file:', process.env.NODE_ENV);
     console.log('REACT_APP_API_URL:', process.env.REACT_APP_API_URL);
+    console.log('WebSocket URL:', process.env.REACT_APP_WEBSOCKET_URL);
   }, []);
 
   const handleEmailChange = (e) => {
@@ -36,26 +36,20 @@ const Login = () => {
     e.preventDefault();
     if (password && !loading) {
       setLoading(true);
-      await handleLogin();
-      setLoading(false);
-    }
-  };
-
-  const handleLogin = async () => {
-    try {
-      const response = await axiosInstance.post('/api/users/login', { email, password });
-
-      if (response.status === 200) {
+      try {
+        const response = await axiosInstance.post('/api/users/login', { email, password });
         const { token, id, username } = response.data;
         setUser({ id, email, username, token });
         localStorage.setItem('accessToken', token);
         setMessage('User logged in successfully');
         setError('');
         navigate('/dashboard');
+      } catch (error) {
+        console.error('Login error:', error);
+        setError(`Error logging in. Details: ${error.response?.data.message || error.message}`);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error('Login error:', error);
-      setError(`Error logging in. Details: ${error.response ? error.response.data.message : error.message}`);
     }
   };
 
@@ -76,24 +70,26 @@ const Login = () => {
               onChange={handleEmailChange}
               readOnly={emailReadOnly}
               required
+              aria-label="Email"
             />
             {!emailReadOnly && showNextButton && (
               <button type="button" className="continue-button" onClick={handleNext}>Continue</button>
             )}
             {emailReadOnly && (
-              <input
-                type="password"
-                placeholder="Password"
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            )}
-            {emailReadOnly && (
-              <button type="submit" disabled={loading}>
-                {loading ? 'Logging in...' : 'Login'}
-              </button>
+              <>
+                <input
+                  type="password"
+                  placeholder="Password"
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  aria-label="Password"
+                />
+                <button type="submit" disabled={loading}>
+                  {loading ? 'Logging in...' : 'Login'}
+                </button>
+              </>
             )}
           </form>
           <div className="register-link">
