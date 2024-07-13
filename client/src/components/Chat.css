@@ -24,7 +24,7 @@
     flex: 1; /* Take available space */
     overflow-y: auto; /* Enable vertical scrolling within the message list */
     padding: 2px;
-    border: 1px solid #ccc; /* Optional: add border */
+    /* border: 1px solid #ccc; Optional: add border */
     overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
