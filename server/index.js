@@ -12,7 +12,7 @@ dotenv.config();
 const app = express();
 
 // CORS configuration
-const allowedOrigins = process.env.CORS_ALLOWED_ORIGINS.split(',');
+const allowedOrigins = ['http://localhost:3000', 'https://file-chat-client.vercel.app'];
 
 const corsOptions = {
   origin: function (origin, callback) {

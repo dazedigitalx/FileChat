@@ -1,14 +1,18 @@
+// src/API/axiosInstance.js
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: process.env.REACT_APP_API_URL,
-  timeout: 5000,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  baseURL: process.env.REACT_APP_API_URL
 });
 
-// Optional: Log the base URL for debugging
-console.log('Axios Base URL:', axiosInstance.defaults.baseURL);
+axiosInstance.interceptors.request.use(config => {
+  const token = localStorage.getItem('accessToken'); // or get token from your auth context
+  if (token) {
+    config.headers['Authorization'] = `Bearer ${token}`;
+  }
+  return config;
+}, error => {
+  return Promise.reject(error);
+});
 
 export default axiosInstance;
