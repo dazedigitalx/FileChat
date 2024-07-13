@@ -14,13 +14,20 @@ const messageRouter = require('./routes/messageRouter');
 // Load environment variables
 dotenv.config();
 
+// Verify that environment variables are loaded
+console.log('Environment Variables:');
+console.log('REACT_APP_API_URL:', process.env.REACT_APP_API_URL);
+console.log('PORT:', process.env.PORT);
+
 const app = express();
 
-// CORS configuration
-app.use(cors({
-  origin: 'https://file-chat-client.vercel.app', // Specify the origin that is allowed to access resources
-  credentials: true, // Enable credentials if needed
-}));
+// CORS configuration using environment variable
+const corsOptions = {
+  origin: process.env.REACT_APP_API_URL, // Use environment variable for allowed origin
+  credentials: true, // Allow credentials (cookies, authorization headers, etc.)
+};
+
+app.use(cors(corsOptions));
 
 // Middleware setup
 app.use(helmet());
@@ -28,7 +35,7 @@ app.use(morgan('dev'));
 app.use(express.json());
 
 // Handle preflight requests for all routes
-app.options('*', cors());
+app.options('*', cors(corsOptions));
 
 // Connect to MongoDB
 connectDB()
@@ -52,13 +59,22 @@ app.get('/api/protected', authMiddleware, (req, res) => {
 
 // Error handling middleware
 app.use((err, req, res, next) => {
+  console.error('Error occurred:', {
+    message: err.message,
+    stack: err.stack,
+    name: err.name
+  });
+
   if (err.name === 'UnauthorizedError') {
     res.status(401).json({ error: 'Unauthorized' });
   } else if (err.message === 'Not allowed by CORS') {
     res.status(403).json({ error: 'CORS policy not fulfilled' });
   } else {
-    console.error(err.stack);
-    res.status(500).send('Internal Server Error');
+    res.status(500).json({ 
+      error: 'Internal Server Error',
+      message: err.message,
+      stack: err.stack
+    });
   }
 });
 
