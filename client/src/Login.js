@@ -17,9 +17,17 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    console.log('Using environment file:', process.env.NODE_ENV);
-    console.log('REACT_APP_API_URL:', process.env.REACT_APP_API_URL);
-    console.log('WebSocket URL:', process.env.REACT_APP_WEBSOCKET_URL);
+// Log environment variables for debugging
+console.log('Using environment:', process.env.NODE_ENV);
+console.log('REACT_APP_API_URL:', process.env.REACT_APP_API_URL);
+
+// Determine the environment
+const environment = process.env.NODE_ENV;
+const apiUrl = process.env.REACT_APP_API_URL;
+
+// Log the API URL and environment for debugging
+console.log(`Environment: ${environment}`);
+console.log(`Client API URL: ${apiUrl}`);
   }, []);
 
   const handleEmailChange = (e) => {

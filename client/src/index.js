@@ -5,25 +5,22 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import axiosInstance from './API/axiosInstance'; // Import axiosInstance
 
-// // Log environment variables for debugging
-// console.log('Using environment file:', process.env.NODE_ENV);
-// console.log('REACT_APP_API_URL:', process.env.REACT_APP_API_URL);
+// Log environment variables for debugging
+console.log('Using environment:', process.env.NODE_ENV);
+console.log('REACT_APP_API_URL:', process.env.REACT_APP_API_URL);
 
+// Determine the environment
+const environment = process.env.NODE_ENV;
+const apiUrl = process.env.REACT_APP_API_URL;
 
-// Check which environment is being used
-const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
-
-// Check which environment is being used
-const environment = process.env.NODE_ENV === 'production' ? '.env.production' : '.env';
-
-console.log('Using environment file:', environment);
-console.log('Client : REACT_APP_API_URL:', REACT_APP_API_URL);
-
-
+// Log the API URL and environment for debugging
+console.log(`Environment: ${environment}`);
+console.log(`Client API URL: ${apiUrl}`);
 
 // Create the root element for rendering
 const root = createRoot(document.getElementById('root'));
 
+// Render the application
 root.render(
   <React.StrictMode>
     <AuthProvider>
