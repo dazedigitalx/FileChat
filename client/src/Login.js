@@ -16,19 +16,21 @@ const Login = () => {
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        console.log('Using environment file:', process.env.NODE_ENV);
-        console.log('API_BASE_URL:', process.env.REACT_APP_API_BASE_URL);
-    }, []);
-
     // Check which environment is being used
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
+
 
 // Check which environment is being used
 const environment = process.env.NODE_ENV === 'production' ? '.env.production' : '.env';
 
 console.log('Using environment file:', environment);
-console.log('API_BASE_URL:', API_BASE_URL);
+console.log('REACT_APP_API_URL:', REACT_APP_API_URL);
+
+
+
+    useEffect(() => {
+        console.log('REACT_APP_API_URL:', process.env.REACT_APP_API_URL);
+    }, []);
 
     const handleEmailChange = (e) => {
         const enteredEmail = e.target.value;
