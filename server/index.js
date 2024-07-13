@@ -48,7 +48,8 @@ connectDB()
     process.exit(1);
   });
 
-// Import and mount routers
+
+// Import and mount routers // 
 const userRouter = require('./routes/userRouter');
 const channelRouter = require('./routes/channelRouter');
 const messageRouter = require('./routes/messageRouter');
