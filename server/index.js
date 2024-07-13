@@ -14,19 +14,17 @@ const messageRouter = require('./routes/messageRouter');
 // Load environment variables
 dotenv.config();
 
-// Verify that environment variables are loaded
-console.log('Environment Variables:');
-console.log('REACT_APP_API_URL:', process.env.REACT_APP_API_URL);
-console.log('PORT:', process.env.PORT);
-
 const app = express();
 
-// CORS configuration using environment variable
+// CORS configuration
 const corsOptions = {
-  origin: process.env.REACT_APP_API_URL, // Use environment variable for allowed origin
-  credentials: true, // Allow credentials (cookies, authorization headers, etc.)
+  origin: process.env.REACT_APP_API_URL, // Allow requests from this origin
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed HTTP methods
+  allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
+  credentials: true // Allow credentials (cookies, authorization headers, etc.)
 };
 
+// Apply CORS middleware
 app.use(cors(corsOptions));
 
 // Middleware setup

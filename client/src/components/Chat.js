@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './Chat.css'; // Import the external CSS file
+import axiosInstance from '../API/axiosInstance'; // Import your axiosInstance
 
 const Chat = ({ channel }) => {
     const [messages, setMessages] = useState([]);
@@ -17,29 +18,23 @@ const Chat = ({ channel }) => {
                 const token = localStorage.getItem('accessToken');
                 if (!token) throw new Error('Token not available.');
 
-                const response = await fetch(`${API_BASE_URL}/api/messages/channels/${channel._id}/`, {
+                const response = await axiosInstance.get(`/api/messages/channels/${channel._id}/`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json',
                     },
                 });
 
-                if (!response.ok) {
-                    const errorMessage = await getErrorMessage(response);
-                    throw new Error(`Failed to fetch messages: ${errorMessage}`);
-                }
-
-                const data = await response.json();
-                setMessages(data);
+                setMessages(response.data);
             } catch (error) {
-                setError(`Error fetching messages: ${error.message}`);
+                setError(`Error fetching messages: ${error.response?.data?.message || error.message}`);
             }
         };
 
         if (channel) {
             fetchMessages();
         }
-    }, [channel, API_BASE_URL]);
+    }, [channel]);
 
     const handleSendMessage = async (e) => {
         e.preventDefault();
@@ -56,25 +51,17 @@ const Chat = ({ channel }) => {
                 user_id: channel.creator_id,
             };
 
-            const response = await fetch(`${API_BASE_URL}/api/messages/channels/${channel._id}/send`, {
-                method: 'POST',
+            const response = await axiosInstance.post(`/api/messages/channels/${channel._id}/send`, messagePayload, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(messagePayload),
             });
 
-            if (!response.ok) {
-                const errorMessage = await getErrorMessage(response);
-                throw new Error(`Failed to send message: ${errorMessage}`);
-            }
-
-            const newMessageData = await response.json();
-            setMessages((prevMessages) => [...prevMessages, newMessageData]);
+            setMessages((prevMessages) => [...prevMessages, response.data]);
             setNewMessage('');
         } catch (error) {
-            setError(`Error sending message: ${error.message}`);
+            setError(`Error sending message: ${error.response?.data?.message || error.message}`);
         }
     };
 
@@ -83,36 +70,17 @@ const Chat = ({ channel }) => {
             const token = localStorage.getItem('accessToken');
             if (!token) throw new Error('Token not available.');
 
-            const response = await fetch(`${API_BASE_URL}/api/messages/${messageId}`, {
-                method: 'DELETE',
+            await axiosInstance.delete(`/api/messages/${messageId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
             });
 
-            if (!response.ok) {
-                const errorMessage = await getErrorMessage(response);
-                throw new Error(`Failed to delete message: ${errorMessage}`);
-            }
-
             setMessages((prevMessages) => prevMessages.filter((message) => message._id !== messageId));
         } catch (error) {
-            setError(`Error deleting message: ${error.message}`);
+            setError(`Error deleting message: ${error.response?.data?.message || error.message}`);
         }
-    };
-
-    const getErrorMessage = async (response) => {
-        let errorMessage = `Error ${response.status}: ${response.statusText}`;
-        try {
-            const errorData = await response.json();
-            if (errorData && errorData.error) {
-                errorMessage = errorData.error;
-            }
-        } catch (error) {
-            console.error('Failed to parse error response:', error);
-        }
-        return errorMessage;
     };
 
     // Scroll to the bottom whenever messages change
@@ -129,7 +97,7 @@ const Chat = ({ channel }) => {
     return (
         <div className="chat-container">
             <div className="chat-header">
-                <>{channel.name}</>
+                {channel.name}
             </div>
             <ul className="message-list">
                 {messages.length > 0 ? (
