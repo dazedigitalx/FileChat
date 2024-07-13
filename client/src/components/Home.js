@@ -1,7 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom'; // Import Link for navigation
-import './Style.css'; // Import the CSS file
+import '../Style.css'; // Import the CSS file
 import './Signup.css'; // Import the CSS file
+
+
 
 
 const Signup = () => {

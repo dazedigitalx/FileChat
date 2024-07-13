@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAnonymousUser } from '../contexts/AnonymousUserContext';
 import axiosInstance from '../API/axiosInstance'; // Update with your axios instance
 
-const Channels = ({ onChannelSelect = () => {}, onCreateChannel = () => {}, activeChannel }) => {
+const AnonChannels = ({ onChannelSelect = () => {}, onCreateChannel = () => {}, activeChannel }) => {
     const { anonymousId } = useAnonymousUser();
     const [channels, setChannels] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -91,7 +91,7 @@ const Channels = ({ onChannelSelect = () => {}, onCreateChannel = () => {}, acti
 
     return (
         <div>
-            <h2>Channels</h2>
+            <h2>Anonymous Channels</h2>
             <ul>
                 {channels.map(channel => (
                     <li key={channel._id} className={activeChannel && activeChannel._id === channel._id ? 'active' : ''}>
@@ -127,4 +127,4 @@ const Channels = ({ onChannelSelect = () => {}, onCreateChannel = () => {}, acti
     );
 };
 
-export default Channels;
+export default AnonChannels;

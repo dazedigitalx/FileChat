@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { useAuth } from '../AuthContext';
+import { useAuth } from '../contexts/AuthContext';
 import './Nav.css';
 import '../Style.css';
 

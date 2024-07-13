@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
-import './Signup.css'; // Import the external CSS file
-import './Style.css'; // Import the external CSS file
+// import 'Signup.css'; // Import the external CSS file
+import '../Style.css';
+import './Signup.css';
 
 
 const Signup = () => {

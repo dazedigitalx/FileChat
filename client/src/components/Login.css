@@ -14,7 +14,7 @@ body, html {
 
 .login-hero-image {
   flex: 1;
-  background: url('./images/login_board.jpg') center;
+  background: url('../images/login_board.jpg') center;
   background-size: cover;
 }
 

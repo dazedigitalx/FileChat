@@ -1,9 +1,10 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { AuthProvider } from './AuthContext';
+import { AuthProvider } from './contexts/AuthContext';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import axiosInstance from './API/axiosInstance'; // Import axiosInstance
+import { AnonymousUserProvider } from './contexts/AnonymousUserContext';
 
 // Log environment variables for debugging
 console.log('Using environment:', process.env.NODE_ENV);
@@ -22,11 +23,13 @@ const root = createRoot(document.getElementById('root'));
 
 // Render the application
 root.render(
-  <React.StrictMode>
-    <AuthProvider>
-      <App axiosInstance={axiosInstance} />
-    </AuthProvider>
-  </React.StrictMode>
+  <AnonymousUserProvider>
+    <React.StrictMode>
+      <AuthProvider>
+        <App axiosInstance={axiosInstance} />
+      </AuthProvider>
+    </React.StrictMode>
+  </AnonymousUserProvider>
 );
 
 // Report web vitals

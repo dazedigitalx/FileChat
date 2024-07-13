@@ -3,6 +3,33 @@
 const Channel = require('../models/Channel'); // Adjust as per your actual model name
 
 
+// GET /api/channels/anonymous
+exports.getChannelsForAnonymous = async (req, res) => {
+    const { anonymousId } = req.query;
+    try {
+        // Fetch channels for the anonymous user
+        const channels = await Channel.find({ anonymousId });
+        res.status(200).json(channels);
+    } catch (error) {
+        console.error('Error fetching channels for anonymous user:', error);
+        res.status(500).json({ message: 'Failed to fetch channels' });
+    }
+};
+
+// POST /api/channels/anonymous
+exports.createChannelForAnonymous = async (req, res) => {
+    const { name, description, anonymousId } = req.body;
+    try {
+        // Create a new channel for the anonymous user
+        const newChannel = new Channel({ name, description, anonymousId });
+        await newChannel.save();
+        res.status(201).json(newChannel);
+    } catch (error) {
+        console.error('Error creating channel for anonymous user:', error);
+        res.status(500).json({ message: 'Failed to create channel' });
+    }
+};
+
 
 // GET a channel by ID
 exports.getChannelById = async (req, res) => {

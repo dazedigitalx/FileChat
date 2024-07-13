@@ -1,7 +1,6 @@
 import React, { useEffect, useState, createContext, useContext } from 'react';
+import axiosInstance from '../API/axiosInstance'; // Adjust path based on your structure
 import Cookies from 'js-cookie';
-
-
 
 const AuthContext = createContext();
 
@@ -10,26 +9,19 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
-    // useEffect(() => {
-    //     console.log('All environment variables:', process.env);
-    //     console.log('API URL:', process.env.REACT_APP_API_URL);
-    // }, []);
-
     const fetchCurrentUser = async (token) => {
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users/me`, {
+            const response = await axiosInstance.get('/api/users/me', {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             });
 
-            if (response.ok) {
-                const userData = await response.json();
-                setUser(userData);
+            if (response.status === 200) {
+                setUser(response.data);
                 setError('');
             } else {
-                const errorData = await response.json();
-                setError(`Failed to fetch user details: ${errorData.message}`);
+                setError(`Failed to fetch user details: ${response.statusText}`);
             }
         } catch (error) {
             setError('Failed to fetch user. Please try again later.');
@@ -55,13 +47,9 @@ export const AuthProvider = ({ children }) => {
     const login = async (credentials) => {
         setLoading(true);
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users/login`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(credentials),
-            });
-            const data = await response.json();
-            if (response.ok) {
+            const response = await axiosInstance.post('/api/users/login', credentials);
+            const data = response.data;
+            if (response.status === 200) {
                 localStorage.setItem('accessToken', data.token);
                 Cookies.set('accessToken', data.token, { expires: 7 });
                 await fetchCurrentUser(data.token);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useAuth } from '../AuthContext';
+import { useAuth } from '../contexts/AuthContext';
 import UserProfile from './UserProfile'; // Import UserProfile component
 import Nav from './Nav'; // Assuming Nav is in the same directory or adjust the path as per your structure
 

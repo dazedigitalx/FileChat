@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from './AuthContext';
-import axiosInstance from './API/axiosInstance';
+import { useAuth } from '../contexts/AuthContext';
+import axiosInstance from '../API/axiosInstance';
 import './Login.css';
-import './Style.css';
+import '../Style.css';
 
 const Login = () => {
   const navigate = useNavigate();

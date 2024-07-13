@@ -5,7 +5,9 @@ const ChannelController = require('../controllers/channelController'); // Import
 const { authMiddleware } = require('../middlewares/authMiddleware'); // Ensure the path is correct
 
 // Example route definitions
-
+// Routes for anonymous users
+router.get('/anonymous', ChannelController.getChannelsForAnonymous);
+router.post('/anonymous', ChannelController.createChannelForAnonymous);
 
 // POST a new channel
 router.post('/', authMiddleware, ChannelController.createChannel);
