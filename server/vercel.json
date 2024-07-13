@@ -1,14 +1,21 @@
 {
   "version": 2,
-  "functions": {
-    "api/**.js": {
-      "runtime": "nodejs16.x"
-    }
-  },
+  "builds": [
+    { "src": "index.js", "use": "@vercel/node" }
+  ],
   "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/api/index.js"
-    }
-  ]
+    { "src": "/(.*)", "dest": "/" }
+  ],
+  "env": {
+    "PORT": "5000",
+    "DB_HOST": "localhost",
+    "DB_USER": "root",
+    "DB_PASSWORD": "",
+    "DB_NAME": "filesharingapp",
+    "JWT_SECRET": "your_secret_key",
+    "REFRESH_TOKEN_SECRET": "your_secret_key",
+    "ACCESS_TOKEN_SECRET": "your_secret_key",
+    "FRONTEND_ORIGIN": "https://file-chat-client.vercel.app",
+    "NODE_ENV": "production"
+  }
 }
