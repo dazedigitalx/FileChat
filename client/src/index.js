@@ -6,20 +6,21 @@ import { AuthProvider } from './AuthContext';
 import App from './App';
 
 // Check which environment is being used
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
+
 
 // Check which environment is being used
 const environment = process.env.NODE_ENV === 'production' ? '.env.production' : '.env';
 
 console.log('Using environment file:', environment);
-console.log('API_BASE_URL:', API_BASE_URL);
+console.log('REACT_APP_API_URL:', REACT_APP_API_URL);
 
 
 
 
 // Create an axios instance
 const axiosInstance = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: REACT_APP_API_URL,
   timeout: 5000,
   headers: {
     'Content-Type': 'application/json',
@@ -38,7 +39,7 @@ root.render(
 );
 
 // Log the axios instance for debugging
-console.log('index.js axiosInstance:', axiosInstance);
+// console.log('index.js axiosInstance:', axiosInstance);
 
 // Report web vitals
 reportWebVitals();

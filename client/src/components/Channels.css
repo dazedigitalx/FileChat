@@ -18,9 +18,40 @@
     align-items: center;
 }
 
-/* Style for the delete button container */
-.delete-button-container {
-    margin-left: auto; /* Pushes delete button to the right */
-    padding-left: 10px; /* Adds space between channel info and delete button */
+ul {
+    list-style-type: none;
+    padding: 0;
 }
+
+li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+}
+
+li.active {
+    background-color: #f0f0f0;
+}
+
+
+.delete-button-container {
+    margin-left: 10px;
+}
+
+.delete-button {
+    background-color: #ff0000;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 3px;
+    align-self: flex-end; /* Aligns the button to the right */
+}
+
+.delete-button:hover {
+    background-color: #cc0000;
+}
+
 

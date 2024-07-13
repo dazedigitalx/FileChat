@@ -6,37 +6,43 @@
     font-size: var(--main-font-size);
     display: flex;
     flex-direction: column;
-    height: 80vh; /* Full viewport height */
-    /* position: relative; Position for child elements */
+    height: 100%;
+    overflow: hidden; /* Prevent scrollbars on the chat container itself */
 }
 
 .chat-header {
     height: 20px;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
 }
 
 .message-list {
-    /* list-style-type: none;
-    padding: 0; */
     flex: 1; /* Take available space */
-    overflow-y: auto; /* Enable scrolling */
+    overflow-y: auto; /* Enable vertical scrolling within the message list */
     padding: 2px;
     border: 1px solid #ccc; /* Optional: add border */
-    overflow-x:hidden/* Enable scrolling */
-
+    overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
 .message-item {
     background-color: #f0f0f0; /* Light gray background */
     border-radius: var(--button-border-radius);
-    padding: 0px;
+    padding: 0;
     margin-bottom: 2px;
     width: 100%;
+    display: flex;
+    align-items: center; /* Center content vertically */
 }
 
 .message-details {
     display: flex;
-    align-items: center;
-    justify-content: space-between; /* Ensure delete-button-container aligns to right */
+    align-items: center; /* Center content vertically */
+    flex: 1;
+    justify-content: space-between; /* Ensure delete-button aligns to the right */
     margin-bottom: 16px; /* Adjust spacing between messages if needed */
 }
 
@@ -49,9 +55,6 @@
     border-radius: 8px;
     margin-right: 8px; /* Adjust spacing between content and metadata */
     flex: 1; /* Allow content to expand */
-
-
-
 }
 
 .message-metadata {
@@ -64,19 +67,20 @@
     padding: 8px; /* Padding for metadata */
     border-radius: 8px;
     color: white;
+    margin-right: 8px; /* Space between metadata and delete button */
 }
-
 
 .message-metadata p {
     margin: 0; /* Remove default margin for paragraphs */
 }
 
+/* Delete button */
 .delete-button-container {
     display: flex;
-    align-items: center;
+    align-items: center; /* Center content vertically */
+    justify-content: center;
 }
 
-/* Delete button */
 .delete-button {
     background-color: #f44336;
     color: white;
@@ -87,8 +91,7 @@
     font-size: var(--main-font-size);
     border-radius: var(--button-border-radius);
     width: 20px;
-
-
+    align-self: flex-end; /* Aligns the button to the right */
 }
 
 .delete-button:hover {
@@ -104,17 +107,12 @@
     bottom: 0; /* Stick to the bottom */
     left: 0;
     right: 0;
-
-}
-
-.send-message-form input {
-    flex: 1; /* Take available space */
-    padding: 10px;
-    border: 1px solid #ccc; /* Optional: add border */
 }
 
 .send-message-form input[type="text"] {
     flex: 1; /* Take available space */
+    padding: 10px;
+    border: 1px solid #ccc; /* Optional: add border */
     font-family: var(--primary-font);
     font-size: var(--main-font-size);
 }

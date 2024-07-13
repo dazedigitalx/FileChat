@@ -7,11 +7,12 @@ import Profile from './components/Profile';
 import Login from './Login';
 import Signup from './Signup';
 import Home from './Home';
-import axiosInstance from '../src/API/axiosInstance'; // Import axiosInstance
+// import axiosInstance from '../src/API/axiosInstance'; // Import axiosInstance
 
 
 const App = ({ axiosInstance }) => {
-  console.log('App.js axiosInstance:', axiosInstance);
+  // console.log('App.js axiosInstance:', axiosInstance);
+  
 
   return (
     <Router>

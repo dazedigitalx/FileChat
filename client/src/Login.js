@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 import axiosInstance from '../src/API/axiosInstance'; // Import axiosInstance
@@ -16,26 +16,12 @@ const Login = () => {
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        console.log('Using environment file:', process.env.NODE_ENV);
-        console.log('API_BASE_URL:', process.env.REACT_APP_API_BASE_URL);
-    }, []);
-
-    // Check which environment is being used
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-
-// Check which environment is being used
-const environment = process.env.NODE_ENV === 'production' ? '.env.production' : '.env';
-
-console.log('Using environment file:', environment);
-console.log('API_BASE_URL:', API_BASE_URL);
-
     const handleEmailChange = (e) => {
         const enteredEmail = e.target.value;
         setEmail(enteredEmail);
         setShowNextButton(enteredEmail.includes('@'));
     };
-
+    
     const handleNext = () => {
         setEmailReadOnly(true);
     };
