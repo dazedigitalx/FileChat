@@ -16,21 +16,11 @@ const Login = () => {
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
 
-    // Check which environment is being used
-const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
-
-
-// Check which environment is being used
-const environment = process.env.NODE_ENV === 'production' ? '.env.production' : '.env';
-
-console.log('Using environment file:', environment);
-console.log('REACT_APP_API_URL:', REACT_APP_API_URL);
-
-
-
     useEffect(() => {
+        // Log environment variables once during component mount
+        console.log('Using environment file:', process.env.NODE_ENV);
         console.log('REACT_APP_API_URL:', process.env.REACT_APP_API_URL);
-    }, []);
+    }, []); // Empty dependency array ensures this runs once
 
     const handleEmailChange = (e) => {
         const enteredEmail = e.target.value;

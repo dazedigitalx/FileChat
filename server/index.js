@@ -16,19 +16,23 @@ dotenv.config();
 
 const app = express();
 
-// Allow all CORS origins
-app.use(cors({
-  origin: '*', // Allow all origins
-  credentials: true, // Enable set cookies
-}));
+// Configure CORS with more control
+const corsOptions = {
+  origin: process.env.CORS_ALLOWED_ORIGIN || '*', // Allow specified origins or all if not set
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Specify allowed methods
+  allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
+  credentials: true // Allow cookies
+};
+
+app.use(cors(corsOptions));
 
 // Middleware setup
 app.use(helmet());
 app.use(morgan('dev'));
 app.use(express.json());
 
-// Handle preflight requests for all routes
-app.options('*', cors());
+// Handle preflight requests with CORS configuration
+app.options('*', cors(corsOptions));
 
 // Connect to MongoDB
 connectDB()
@@ -57,7 +61,7 @@ app.use((err, req, res, next) => {
   } else if (err.message === 'Not allowed by CORS') {
     res.status(403).json({ error: 'CORS policy not fulfilled' });
   } else {
-    console.error(err.stack);
+    console.error(err.stack); // Log the error stack for debugging
     res.status(500).send('Internal Server Error');
   }
 });

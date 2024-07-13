@@ -43,7 +43,7 @@
     align-items: center; /* Center content vertically */
     flex: 1;
     justify-content: space-between; /* Ensure delete-button aligns to the right */
-    margin-bottom: 16px; /* Adjust spacing between messages if needed */
+    margin-bottom: 0px; /* Adjust spacing between messages if needed */
 }
 
 /* Message content and metadata */
@@ -62,11 +62,10 @@
     flex-direction: column;
     gap: 8px; /* Adjust as needed for spacing between elements */
     font-size: xx-small;
-    background-color: #4CAF50;
-    width: 50px; /* Fixed width */
+    background-color: #ffffff;
     padding: 8px; /* Padding for metadata */
-    border-radius: 8px;
-    color: white;
+    border-radius: var(--button-border-radius);
+    color: rgb(198, 198, 198);
     margin-right: 8px; /* Space between metadata and delete button */
 }
 
@@ -82,7 +81,7 @@
 }
 
 .delete-button {
-    background-color: #f44336;
+    background-color: #ededed;
     color: white;
     border: none;
     padding: 5px 10px;
@@ -90,8 +89,10 @@
     font-family: var(--primary-font);
     font-size: var(--main-font-size);
     border-radius: var(--button-border-radius);
-    width: 20px;
+    width: 40px;
     align-self: flex-end; /* Aligns the button to the right */
+    align-self: center; /* Ensure button is centered vertically */
+
 }
 
 .delete-button:hover {
