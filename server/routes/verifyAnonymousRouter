@@ -1,0 +1,28 @@
+const express = require('express');
+const router = express.Router();
+const ChannelsAnon = require('../models/ChannelsAnon'); // Ensure this path is correct
+
+// Verify anonymous user ID
+router.get('/verify-anonymous', async (req, res) => {
+    const { anonymousId } = req.query;
+
+    if (!anonymousId) {
+        return res.status(400).json({ error: 'Anonymous ID is required' });
+    }
+
+    try {
+        // Verify if the anonymous ID exists in the 'channelsAnon' collection
+        const isValidAnonymous = await ChannelsAnon.exists({ anonymousId: anonymousId });
+
+        if (isValidAnonymous) {
+            return res.status(200).send('Anonymous ID is valid');
+        } else {
+            return res.status(401).json({ error: 'Invalid Anonymous ID' });
+        }
+    } catch (error) {
+        console.error('Error verifying anonymous ID:', error);
+        return res.status(500).json({ error: 'Server Error' });
+    }
+});
+
+module.exports = router;

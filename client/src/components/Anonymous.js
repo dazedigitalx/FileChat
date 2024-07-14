@@ -1,30 +1,43 @@
+// src/components/Anonymous.js
+
 import React, { useState, useEffect } from 'react';
-import { useAnonymousUser } from '../contexts/AnonymousUserContext';
 import axiosInstance from '../API/axiosInstance';
+import { useAnonymousUser } from '../contexts/AnonymousUserContext';
 import Header from './Header';
 import Sidebar from './Sidebar';
-import Chat from './Chat';
-import './Dashboard.css'; // Assuming you use the same CSS
+// import Chat from './Chat';
+// import ChannelsAnonymous from './ChannelsAnonymous';
+import './Dashboard.css';
 
 const Anonymous = () => {
     const { anonymousId } = useAnonymousUser();
     const [isSidebarOpen, setSidebarOpen] = useState(true);
     const [activeChannel, setActiveChannel] = useState(null);
-    const [channels, setChannels] = useState([]);
+    const [isAnonymous, setIsAnonymous] = useState(false);
+    const [error, setError] = useState(null);
 
+    // Check if user is anonymous
     useEffect(() => {
-        const fetchChannels = async () => {
+        const verifyAnonymous = async () => {
             try {
-                const response = await axiosInstance.get('/api/channels/', {
+                const response = await axiosInstance.get('/api/verify-anonymous', {
                     params: { anonymousId }
                 });
-                setChannels(response.data);
-            } catch (error) {
-                console.error('Error fetching channels:', error);
+                if (response.status === 200) {
+                    setIsAnonymous(true);
+                }
+            } catch (err) {
+                setError('Invalid anonymous ID or unable to verify.');
+                setIsAnonymous(false);
             }
         };
 
-        fetchChannels();
+        if (anonymousId) {
+            verifyAnonymous();
+        } else {
+            setError('Anonymous ID is missing.');
+            setIsAnonymous(false);
+        }
     }, [anonymousId]);
 
     const handleChannelSelect = (channel) => {
@@ -33,19 +46,18 @@ const Anonymous = () => {
 
     const handleCreateChannel = async (name, description) => {
         try {
-            const response = await axiosInstance.post('/api/channels/', {
+            await axiosInstance.post('/api/channels/anonymous', {
                 name,
                 description,
                 anonymousId
             });
-            setChannels([...channels, response.data]);
+            // Optionally handle channel creation success
         } catch (error) {
             console.error('Error creating channel:', error);
         }
     };
 
     const handleBeforeUnload = (event) => {
-        // Prompt user to create an account to save data
         event.preventDefault();
         event.returnValue = 'You will lose your data if you leave. Please create an account to save your data.';
     };
@@ -57,6 +69,14 @@ const Anonymous = () => {
         };
     }, []);
 
+    if (error) {
+        return <div className="error">{error}</div>;
+    }
+
+    if (!isAnonymous) {
+        return <div className="loading">Loading...</div>;
+    }
+
     return (
         <div className="dashboard">
             <Sidebar
@@ -67,20 +87,11 @@ const Anonymous = () => {
             <div className={`dashboard-content ${isSidebarOpen ? 'expanded' : ''}`}>
                 <Header />
                 {activeChannel && <Chat channel={activeChannel} />}
-                <div>
-                    <h3>Create New Channel</h3>
-                    {/* Form to create channels */}
-                    <form onSubmit={(e) => {
-                        e.preventDefault();
-                        const name = e.target.name.value;
-                        const description = e.target.description.value;
-                        handleCreateChannel(name, description);
-                    }}>
-                        <input type="text" name="name" placeholder="Channel Name" required />
-                        <input type="text" name="description" placeholder="Channel Description" required />
-                        <button type="submit">Create Channel</button>
-                    </form>
-                </div>
+                <ChannelsAnonymous
+                    onChannelSelect={handleChannelSelect}
+                    onCreateChannel={handleCreateChannel}
+                    activeChannel={activeChannel}
+                />
             </div>
         </div>
     );

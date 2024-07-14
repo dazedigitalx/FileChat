@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useAnonymousUser } from '../contexts/AnonymousUserContext';
 import axiosInstance from '../API/axiosInstance'; // Update with your axios instance
 
 const Channels = ({ onChannelSelect = () => {}, onCreateChannel = () => {}, activeChannel }) => {
-    const { anonymousId } = useAnonymousUser();
     const [channels, setChannels] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -16,9 +14,7 @@ const Channels = ({ onChannelSelect = () => {}, onCreateChannel = () => {}, acti
             setError(null);
 
             try {
-                const response = await axiosInstance.get('/api/channels/', {
-                    params: { anonymousId }
-                });
+                const response = await axiosInstance.get('/api/channels/');
                 setChannels(response.data);
             } catch (error) {
                 setError(`Error fetching channels: ${error.message}`);
@@ -29,7 +25,7 @@ const Channels = ({ onChannelSelect = () => {}, onCreateChannel = () => {}, acti
         };
 
         fetchChannels();
-    }, [anonymousId]);
+    }, []);
 
     const handleCreateChannel = async (e) => {
         e.preventDefault();
@@ -43,8 +39,7 @@ const Channels = ({ onChannelSelect = () => {}, onCreateChannel = () => {}, acti
 
             const response = await axiosInstance.post('/api/channels/', {
                 name: newChannelName,
-                description: newChannelDescription,
-                anonymousId
+                description: newChannelDescription
             });
 
             setChannels([...channels, response.data]);
@@ -68,10 +63,7 @@ const Channels = ({ onChannelSelect = () => {}, onCreateChannel = () => {}, acti
         setError(null);
 
         try {
-            await axiosInstance.delete(`/api/channels/${channelId}`, {
-                params: { anonymousId }
-            });
-
+            await axiosInstance.delete(`/api/channels/${channelId}`);
             setChannels(channels.filter(channel => channel._id !== channelId));
         } catch (error) {
             setError(`Error deleting channel: ${error.message}`);

@@ -5,6 +5,7 @@ const { connectDB } = require('./db');
 const { authMiddleware } = require('./middlewares/authMiddleware');
 const morgan = require('morgan');
 const helmet = require('helmet');
+const verifyAnonymousRouter = require('./routes/verifyAnonymousRouter'); // Ensure this path is correct
 
 // Load environment variables
 dotenv.config();
@@ -66,6 +67,10 @@ const userRouter = require('./routes/userRouter');
 const channelRouter = require('./routes/channelRouter');
 const messageRouter = require('./routes/messageRouter');
 
+// Mount the router for verifying anonymous users
+app.use('/api/verify-anonymous', verifyAnonymousRouter);
+
+// Other routes
 app.use('/api/users', userRouter);
 app.use('/api/channels', channelRouter);
 app.use('/api/messages', messageRouter);

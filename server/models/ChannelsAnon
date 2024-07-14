@@ -1,0 +1,10 @@
+const mongoose = require('mongoose');
+
+const ChannelsAnonSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  description: { type: String },
+  anonymousId: { type: String, required: true }
+});
+
+// Use the collection name 'channelsAnon' explicitly
+module.exports = mongoose.model('ChannelsAnon', ChannelsAnonSchema, 'channelsAnon');
