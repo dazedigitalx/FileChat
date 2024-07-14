@@ -123,20 +123,30 @@
     exports.createChannelForAnonymous = async (req, res) => {
         try {
             const { name, description, anonymousId } = req.body;
-
+    
+            if (!name || !description || !anonymousId) {
+                return res.status(400).json({ error: 'Name, description, and anonymous ID are required' });
+            }
+    
+            // Check for duplicate names if required
+            const existingChannel = await ChannelGuest.findOne({ name, anonymousId });
+            if (existingChannel) {
+                return res.status(409).json({ error: 'Channel with this name already exists for this anonymous ID.' });
+            }
+    
             // Create a new channel instance
-            const newChannel = new Channel({ name, description, anonymousId });
-
+            const newChannel = new ChannelGuest({ name, description, anonymousId });
+    
             // Save the channel to the database
-            await newChannel.save();
-
-            res.status(201).json(newChannel);
+            const savedChannel = await newChannel.save();
+    
+            res.status(201).json(savedChannel);
         } catch (error) {
-            console.error('Error creating channel for anonymous users:', error);
-            res.status(500).json({ error: 'Error creating channel' });
+            console.error('Error creating channel for anonymous users:', error.message);
+            res.status(500).json({ error: 'Error creating channel', details: error.message });
         }
     };
-
+    
     // DELETE channel for anonymous users
     exports.deleteChannelForAnonymous = async (req, res) => {
         const { anonymousId } = req.query;
