@@ -1,3 +1,5 @@
+// index.js or app.js
+
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
@@ -5,7 +7,7 @@ const { connectDB } = require('./db');
 const { authMiddleware } = require('./middlewares/authMiddleware');
 const morgan = require('morgan');
 const helmet = require('helmet');
-const verifyAnonymousRouter = require('./routes/verifyAnonymousRouter'); // Ensure this path is correct
+const verifyAnonymousRouter = require('./routes/verifyAnonymousRouter'); // Ensure the path is correct
 
 // Load environment variables
 dotenv.config();
@@ -14,6 +16,8 @@ const app = express();
 
 // CORS configuration
 const allowedOrigins = ['http://localhost:3000', 'https://file-chat-client.vercel.app'];
+
+
 
 const corsOptions = {
   origin: function (origin, callback) {
@@ -51,9 +55,6 @@ app.use(helmet({
 app.use(morgan('dev'));
 app.use(express.json());
 
-// Handle preflight requests
-app.options('*', cors(corsOptions));
-
 // Connect to MongoDB
 connectDB()
   .then(() => console.log('MongoDB connected'))
@@ -67,28 +68,22 @@ const userRouter = require('./routes/userRouter');
 const channelRouter = require('./routes/channelRouter');
 const messageRouter = require('./routes/messageRouter');
 
-// Mount the router for verifying anonymous users
-app.use('/api/verify-anonymous', verifyAnonymousRouter);
-
-// Other routes
 app.use('/api/users', userRouter);
 app.use('/api/channels', channelRouter);
 app.use('/api/messages', messageRouter);
+// Ensure this line is present
+app.use('/api/verify-anonymous', verifyAnonymousRouter);
 
 // Protect routes using authMiddleware
 app.get('/api/protected', authMiddleware, (req, res) => res.send('This is a protected route'));
 
 // Error handling middleware
-app.use((err, req, res, next) => {
-  console.error('Error occurred:', { message: err.message, stack: err.stack, name: err.name });
-  if (err.name === 'UnauthorizedError') {
-    res.status(401).json({ error: 'Unauthorized' });
-  } else if (err.message === 'Not allowed by CORS') {
-    res.status(403).json({ error: 'CORS policy not fulfilled' });
-  } else {
-    res.status(500).json({ error: 'Internal Server Error', message: err.message, stack: err.stack });
-  }
+// Error handling middleware
+app.use((req, res, next) => {
+  res.status(404).json({ error: 'Not Found', message: `The route ${req.originalUrl} does not exist` });
 });
+
+
 
 // Start the server
 const port = process.env.PORT || 5000;
