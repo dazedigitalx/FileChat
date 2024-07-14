@@ -1,98 +1,67 @@
-// src/components/Anonymous.js
-
-import React, { useState, useEffect } from 'react';
-import axiosInstance from '../API/axiosInstance';
-import { useAnonymousUser } from '../contexts/AnonymousUserContext';
-import Header from './Header';
-import Sidebar from './Sidebar';
-// import Chat from './Chat';
-// import ChannelsAnonymous from './ChannelsAnonymous';
-import './Dashboard.css';
+import React, { useState } from 'react';
+import axios from 'axios';
+import { generateAnonymousId } from '../utils'; // Import the utility function
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for programmatic navigation
 
 const Anonymous = () => {
-    const { anonymousId } = useAnonymousUser();
-    const [isSidebarOpen, setSidebarOpen] = useState(true);
-    const [activeChannel, setActiveChannel] = useState(null);
-    const [isAnonymous, setIsAnonymous] = useState(false);
-    const [error, setError] = useState(null);
+    const [anonymousId, setAnonymousId] = useState(generateAnonymousId()); // Generate and set the anonymous ID on component mount
+    const [message, setMessage] = useState('');
+    const [errorDetails, setErrorDetails] = useState(''); // State to store detailed error info
+    const navigate = useNavigate(); // Initialize the navigate function
 
-    // Check if user is anonymous
-    useEffect(() => {
-        const verifyAnonymous = async () => {
-            try {
-                const response = await axiosInstance.get('/api/verify-anonymous', {
-                    params: { anonymousId }
-                });
-                if (response.status === 200) {
-                    setIsAnonymous(true);
-                }
-            } catch (err) {
-                setError('Invalid anonymous ID or unable to verify.');
-                setIsAnonymous(false);
-            }
-        };
-
-        if (anonymousId) {
-            verifyAnonymous();
-        } else {
-            setError('Anonymous ID is missing.');
-            setIsAnonymous(false);
-        }
-    }, [anonymousId]);
-
-    const handleChannelSelect = (channel) => {
-        setActiveChannel(channel);
-    };
-
-    const handleCreateChannel = async (name, description) => {
+    const handleVerify = async () => {
         try {
-            await axiosInstance.post('/api/channels/anonymous', {
-                name,
-                description,
-                anonymousId
-            });
-            // Optionally handle channel creation success
+            const response = await axios.get(`/api/verify-anonymous`, { params: { anonymousId } });
+            setMessage(response.data.message);  // Set the message from the response
+            // Check if the ID is valid and navigate to the dashboard
+            if (response.status === 200) {
+                navigate('/anonymous-dashboard'); // Redirect to the Anonymous Dashboard on successful verification
+            }
         } catch (error) {
-            console.error('Error creating channel:', error);
+            // Handle network or client-side errors
+            if (!error.response) {
+                setMessage('Network error: Unable to reach the server. Please check your internet connection.');
+                setErrorDetails(`Network Error: ${error.message}`);
+                console.error('Network Error:', error);
+                return;
+            }
+
+            // Handle server-side errors
+            switch (error.response.status) {
+                case 400:
+                    // Bad Request
+                    if (error.response.data.error === 'Invalid Anonymous ID') {
+                        setMessage('The provided anonymous ID is invalid. Please check and try again.');
+                    } else {
+                        setMessage('Bad Request: Please check your input and try again.');
+                    }
+                    break;
+                case 404:
+                    // Not Found
+                    setMessage('The requested resource could not be found. Please check the URL and try again.');
+                    break;
+                case 500:
+                    // Internal Server Error
+                    setMessage('Server error: There was an issue with the server. Please try again later.');
+                    break;
+                default:
+                    // Other errors
+                    setMessage(error.response.data.error || 'An unknown error occurred.');
+                    break;
+            }
+
+            setErrorDetails(`Status Code: ${error.response.status}, Error Message: ${error.response.data.error}`);
+            console.error('Error response:', error.response);
         }
     };
-
-    const handleBeforeUnload = (event) => {
-        event.preventDefault();
-        event.returnValue = 'You will lose your data if you leave. Please create an account to save your data.';
-    };
-
-    useEffect(() => {
-        window.addEventListener('beforeunload', handleBeforeUnload);
-        return () => {
-            window.removeEventListener('beforeunload', handleBeforeUnload);
-        };
-    }, []);
-
-    if (error) {
-        return <div className="error">{error}</div>;
-    }
-
-    if (!isAnonymous) {
-        return <div className="loading">Loading...</div>;
-    }
 
     return (
-        <div className="dashboard">
-            <Sidebar
-                isSidebarOpen={isSidebarOpen}
-                toggleSidebar={() => setSidebarOpen(!isSidebarOpen)}
-                onChannelSelect={handleChannelSelect}
-            />
-            <div className={`dashboard-content ${isSidebarOpen ? 'expanded' : ''}`}>
-                <Header />
-                {activeChannel && <Chat channel={activeChannel} />}
-                <ChannelsAnonymous
-                    onChannelSelect={handleChannelSelect}
-                    onCreateChannel={handleCreateChannel}
-                    activeChannel={activeChannel}
-                />
-            </div>
+        <div>
+            <h2>Anonymous Verification</h2>
+            <p><strong>Generated Anonymous ID:</strong> {anonymousId}</p>
+            <button onClick={handleVerify}>Verify ID</button>
+            <p>{message}</p>
+            {errorDetails && <pre style={{ color: 'red' }}>{errorDetails}</pre>} {/* Display detailed error info */}
         </div>
     );
 };

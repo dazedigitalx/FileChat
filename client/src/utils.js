@@ -1,4 +1,4 @@
-// src/utils.js
+import { v4 as uuidv4 } from 'uuid';
 
-// Utility function to generate a unique identifier
-export const generateAnonymousId = () => `anon_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+// Utility function to generate a UUID
+export const generateAnonymousId = () => uuidv4();
