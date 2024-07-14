@@ -4,7 +4,9 @@ const dotenv = require('dotenv');
 const { connectDB } = require('./db');
 const morgan = require('morgan');
 const helmet = require('helmet');
-const anonymousRoutes = require('./routes/anonymousRoutes');
+const guestChannelRoutes = require('./routes/guestChannelRoutes.js');
+const channelRouter = require('./routes/channelRouter');
+
 
 dotenv.config();
 
@@ -32,7 +34,7 @@ connectDB()
 // Mount 
 
 // Other routes
-app.use('/api/anonymous', anonymousRoutes); // Mount anonymous routes
+app.use('/api/anonymous', guestChannelRoutes);
 
 app.use('/api/users', require('./routes/userRouter'));
 app.use('/api/channels', require('./routes/channelRouter'));
