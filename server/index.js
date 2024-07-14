@@ -4,7 +4,7 @@ const dotenv = require('dotenv');
 const { connectDB } = require('./db');
 const morgan = require('morgan');
 const helmet = require('helmet');
-const anonymousRouter = require('./routes/anonymous'); // Ensure this path is correct
+const anonymousRoutes = require('./routes/anonymousRoutes');
 
 dotenv.config();
 
@@ -16,6 +16,11 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(helmet()); // Optional: adds security headers
 
+
+app.use(cors({
+  origin: 'http://localhost:3000' // Allow requests from this origin
+}));
+
 // Connect to MongoDB
 connectDB()
   .then(() => console.log('MongoDB connected'))
@@ -24,10 +29,11 @@ connectDB()
     process.exit(1);
   });
 
-// Mount routers
-app.use('/api/anonymous', anonymousRouter); // Mount the router at the correct path
+// Mount 
 
 // Other routes
+app.use('/api/anonymous', anonymousRoutes); // Mount anonymous routes
+
 app.use('/api/users', require('./routes/userRouter'));
 app.use('/api/channels', require('./routes/channelRouter'));
 app.use('/api/messages', require('./routes/messageRouter'));

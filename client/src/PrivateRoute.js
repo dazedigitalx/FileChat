@@ -1,16 +1,15 @@
-// client/src/PrivateRoute.js
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { useAuth } from './contexts/AuthContext';
+import { useAuth } from '../contexts/AuthContext';
 
-const PrivateRoute = ({ children }) => {
+const PrivateRoute = ({ element }) => {
   const { user, loading } = useAuth();
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>Loading...</div>; // or a spinner
   }
 
-  return user ? children : <Navigate to="/login" />;
+  return user ? element : <Navigate to="/login" />;
 };
 
 export default PrivateRoute;

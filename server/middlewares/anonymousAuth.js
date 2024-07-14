@@ -1,18 +1,12 @@
-// Middleware to verify anonymous ID
-const verifyAnonymous = async (req, res, next) => {
-    const { anonymousId } = req.query; // Get anonymousId from query parameters
+const verifyAnonymous = (req, res, next) => {
+    const anonymousId = req.query.anonymousId || req.body.anonymousId;
 
     if (!anonymousId) {
         return res.status(400).json({ error: 'Anonymous ID is required' });
     }
 
-    // Verify if the anonymousId exists in your database
-    const isValidAnonymous = await Channel.exists({ 'anonymousId': anonymousId });
-
-    if (!isValidAnonymous) {
-        return res.status(401).json({ error: 'Invalid Anonymous ID' });
-    }
-
+    // Optionally, add more checks or logic here if needed
+    req.anonymousId = anonymousId; // Pass anonymousId to request object
     next();
 };
 

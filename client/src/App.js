@@ -1,14 +1,13 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './contexts/AuthContext'; // Adjust the path as needed
-import { AnonymousUserProvider } from './contexts/AnonymousUserContext'; // Adjust the path as needed
-import PrivateRoute from './routes/PrivateRoute';
+import { AuthProvider } from './contexts/AuthContext';
+import { AnonymousUserProvider } from './contexts/AnonymousUserContext';
 import Dashboard from './components/Dashboard';
 import Profile from './components/Profile';
 import Login from './components/Login';
 import Signup from './components/Signup';
-import Home from './components/Home';
-import Anonymous from './components/Anonymous'; // Correct path to Anonymous component
+import Guest from './components/Guest';
+import PrivateRoute from './routes/PrivateRoute';
 
 const App = () => {
     return (
@@ -17,12 +16,11 @@ const App = () => {
                 <Router>
                     <div className="App">
                         <Routes>
-                            <Route path="/" element={<Home />} />
+                            <Route path="/" element={<Guest />} />
                             <Route path="/login" element={<Login />} />
                             <Route path="/signup" element={<Signup />} />
-                            <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-                            <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
-                            <Route path="/anonymous" element={<Anonymous />} />
+                            <Route path="/dashboard" element={<PrivateRoute element={<Dashboard />} />} />
+                            <Route path="/profile" element={<PrivateRoute element={<Profile />} />} />
                         </Routes>
                     </div>
                 </Router>
