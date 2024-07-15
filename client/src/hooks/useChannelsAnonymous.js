@@ -4,23 +4,12 @@ import axiosInstance from '../API/axiosInstance';
 const useChannelsAnonymous = () => {
     const [channels, setChannels] = useState([]);
     const [error, setError] = useState('');
-    
-    // Generate or retrieve anonymous ID
-    const getAnonymousId = () => {
-        let anonymousId = localStorage.getItem('anonymousId');
-        if (!anonymousId) {
-            anonymousId = Math.random().toString(36).substring(2, 15);
-            localStorage.setItem('anonymousId', anonymousId);
-        }
-        return anonymousId;
-    };
 
     useEffect(() => {
         const fetchChannels = async () => {
             try {
-                const anonymousId = getAnonymousId();
                 const response = await axiosInstance.get('/api/anonymous', {
-                    params: { anonymousId }
+                    params: { anonymousId: localStorage.getItem('anonymousId') }
                 });
                 setChannels(response.data);
             } catch (err) {
@@ -38,7 +27,7 @@ const useChannelsAnonymous = () => {
         fetchChannels();
     }, []);
 
-    return { channels, error };
+    return { channels, setChannels, error, setError };
 };
 
 export default useChannelsAnonymous;

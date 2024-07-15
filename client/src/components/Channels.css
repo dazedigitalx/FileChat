@@ -1,57 +1,29 @@
-/* Channels.css */
+/* Channels.css or Sidebar.css */
 
-/* Container for each channel item */
-.channel-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    border: 1px solid #ccc;
-    margin-bottom: 5px;
-}
-
-/* Style for the channel name and description */
 .channel-info {
-    flex: 1; /* Take up remaining space */
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: space-between; /* Align text and button */
+    align-items: center; /* Center align items vertically */
 }
-
-ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px;
-    /* border-bottom: 1px solid #ddd; */
-}
-
-li.active {
-    background-color: #f0f0f0;
-}
-
 
 .delete-button-container {
-    margin-left: 10px;
+    margin-left: 10px; /* Add space between text and button */
 }
 
 .delete-button {
-    background-color: #ff0000;
+    background-color: #f44336; /* Red color for delete button */
     color: white;
     border: none;
+    border-radius: 4px;
     padding: 5px 10px;
     cursor: pointer;
-    border-radius: 3px;
-    align-self: flex-end; /* Aligns the button to the right */
+    font-size: 0.875rem; /* Adjust font size if needed */
 }
 
 .delete-button:hover {
-    background-color: #cc0000;
+    background-color: #c62828; /* Darker red for hover effect */
 }
 
-
+.active {
+    background-color: #e0e0e0; /* Highlight active channel */
+}

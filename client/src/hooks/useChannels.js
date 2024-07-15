@@ -1,31 +1,26 @@
 import { useState, useEffect } from 'react';
 import axiosInstance from '../API/axiosInstance';
+import { useAuth } from '../contexts/AuthContext';
 
-const useChannelsAnonymous = () => {
+const useChannels = () => {
+    const { user } = useAuth();
     const [channels, setChannels] = useState([]);
     const [error, setError] = useState('');
-    
-    // Generate or retrieve anonymous ID
-    const getAnonymousId = () => {
-        let anonymousId = localStorage.getItem('anonymousId');
-        if (!anonymousId) {
-            anonymousId = Math.random().toString(36).substring(2, 15);
-            localStorage.setItem('anonymousId', anonymousId);
-        }
-        return anonymousId;
-    };
 
     useEffect(() => {
         const fetchChannels = async () => {
             try {
-                const anonymousId = getAnonymousId();
-                const response = await axiosInstance.get('/api/anonymous', {
-                    params: { anonymousId }
+                const response = await axiosInstance.get('/api/channels', {
+                    headers: {
+                        Authorization: `Bearer ${user ? user.token : ''}`,
+                    },
                 });
                 setChannels(response.data);
             } catch (err) {
                 console.error('Error fetching channels:', err);
-                if (err.response && err.response.status === 404) {
+                if (err.response && err.response.status === 401) {
+                    setError('Unauthorized. Please log in.');
+                } else if (err.response && err.response.status === 404) {
                     setError('Channels not found.');
                 } else if (err.message.includes('CORS')) {
                     setError('CORS error. Please check server settings.');
@@ -35,10 +30,12 @@ const useChannelsAnonymous = () => {
             }
         };
 
-        fetchChannels();
-    }, []);
+        if (user) {
+            fetchChannels();
+        }
+    }, [user]);
 
-    return { channels, error };
+    return { channels, setChannels, error, setError };
 };
 
-export default useChannelsAnonymous;
+export default useChannels;

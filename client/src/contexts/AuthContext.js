@@ -49,13 +49,13 @@ export const AuthProvider = ({ children }) => {
         try {
             const response = await axiosInstance.post('/api/users/login', credentials);
             const data = response.data;
-            if (response.status === 200) {
+            if (response.status === 200 && data.token) {
                 localStorage.setItem('accessToken', data.token);
                 Cookies.set('accessToken', data.token, { expires: 7 });
                 await fetchCurrentUser(data.token);
                 setError('');
             } else {
-                setError('Login failed: ' + data.message);
+                setError('Login failed: ' + data.message || 'Unknown error');
             }
         } catch (error) {
             setError('Login error: ' + error.message);

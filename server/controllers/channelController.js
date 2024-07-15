@@ -105,64 +105,64 @@
         }
     };
 
-    // GET channels for anonymous users
-    exports.getChannelsForAnonymous = async (req, res) => {
-        const { anonymousId } = req.query;
+    // // GET channels for anonymous users
+    // exports.getChannelsForAnonymous = async (req, res) => {
+    //     const { anonymousId } = req.query;
 
-        try {
-            // Fetch channels where anonymousId matches
-            const channels = await Channel.find({ anonymousId });
-            res.status(200).json(channels);
-        } catch (error) {
-            console.error('Error fetching channels for anonymous users:', error);
-            res.status(500).json({ error: 'Error fetching channels' });
-        }
-    };
+    //     try {
+    //         // Fetch channels where anonymousId matches
+    //         const channels = await Channel.find({ anonymousId });
+    //         res.status(200).json(channels);
+    //     } catch (error) {
+    //         console.error('Error fetching channels for anonymous users:', error);
+    //         res.status(500).json({ error: 'Error fetching channels' });
+    //     }
+    // };
 
-    // POST a new channel for anonymous users
-    exports.createChannelForAnonymous = async (req, res) => {
-        try {
-            const { name, description, anonymousId } = req.body;
+    // // POST a new channel for anonymous users
+    // exports.createChannelForAnonymous = async (req, res) => {
+    //     try {
+    //         const { name, description, anonymousId } = req.body;
     
-            if (!name || !description || !anonymousId) {
-                return res.status(400).json({ error: 'Name, description, and anonymous ID are required' });
-            }
+    //         if (!name || !description || !anonymousId) {
+    //             return res.status(400).json({ error: 'Name, description, and anonymous ID are required' });
+    //         }
     
-            // Check for duplicate names if required
-            const existingChannel = await ChannelGuest.findOne({ name, anonymousId });
-            if (existingChannel) {
-                return res.status(409).json({ error: 'Channel with this name already exists for this anonymous ID.' });
-            }
+    //         // Check for duplicate names if required
+    //         const existingChannel = await ChannelGuest.findOne({ name, anonymousId });
+    //         if (existingChannel) {
+    //             return res.status(409).json({ error: 'Channel with this name already exists for this anonymous ID.' });
+    //         }
     
-            // Create a new channel instance
-            const newChannel = new ChannelGuest({ name, description, anonymousId });
+    //         // Create a new channel instance
+    //         const newChannel = new ChannelGuest({ name, description, anonymousId });
     
-            // Save the channel to the database
-            const savedChannel = await newChannel.save();
+    //         // Save the channel to the database
+    //         const savedChannel = await newChannel.save();
     
-            res.status(201).json(savedChannel);
-        } catch (error) {
-            console.error('Error creating channel for anonymous users:', error.message);
-            res.status(500).json({ error: 'Error creating channel', details: error.message });
-        }
-    };
+    //         res.status(201).json(savedChannel);
+    //     } catch (error) {
+    //         console.error('Error creating channel for anonymous users:', error.message);
+    //         res.status(500).json({ error: 'Error creating channel', details: error.message });
+    //     }
+    // };
     
-    // DELETE channel for anonymous users
-    exports.deleteChannelForAnonymous = async (req, res) => {
-        const { anonymousId } = req.query;
-        const { channelId } = req.params;
+    // // DELETE channel for anonymous users
+    // exports.deleteChannelForAnonymous = async (req, res) => {
+    //     const { anonymousId } = req.query;
+    //     const { channelId } = req.params;
 
-        try {
-            // Verify that the channel belongs to the anonymous user
-            const channel = await Channel.findOne({ _id: channelId, anonymousId });
-            if (!channel) {
-                return res.status(404).json({ error: 'Channel not found or does not belong to the anonymous user' });
-            }
+    //     try {
+    //         // Verify that the channel belongs to the anonymous user
+    //         const channel = await Channel.findOne({ _id: channelId, anonymousId });
+    //         if (!channel) {
+    //             return res.status(404).json({ error: 'Channel not found or does not belong to the anonymous user' });
+    //         }
 
-            await Channel.deleteOne({ _id: channelId });
-            res.status(200).json({ message: 'Channel deleted successfully' });
-        } catch (error) {
-            console.error('Error deleting channel for anonymous user:', error);
-            res.status(500).json({ error: 'Error deleting channel' });
-        }
-    };
+    //         await Channel.deleteOne({ _id: channelId });
+    //         res.status(200).json({ message: 'Channel deleted successfully' });
+    //     } catch (error) {
+    //         console.error('Error deleting channel for anonymous user:', error);
+    //         res.status(500).json({ error: 'Error deleting channel' });
+    //     }
+    // };

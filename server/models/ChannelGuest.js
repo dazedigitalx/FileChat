@@ -1,19 +1,12 @@
 const mongoose = require('mongoose');
 
-const channelGuestSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true,
-        unique: true, // Ensure uniqueness if needed
-    },
-    description: {
-        type: String,
-        required: true,
-    },
-    anonymousId: {
-        type: String,
-        required: true,
-    },
-}, { timestamps: true });
+const channelSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    anonymousId: { type: String, required: true },
+    description: { type: String, required: true },
+    createdAt: { type: Date, default: Date.now },
+    expiresAt: { type: Date } // Optional: Add expiration logic if needed
+});
 
-module.exports = mongoose.model('ChannelGuest', channelGuestSchema);
+// Use the collection name 'channelsAnon' explicitly
+module.exports = mongoose.model('ChannelGuest', channelSchema, 'channelsAnon');

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axiosInstance from '../API/axiosInstance'; // Update with your axios instance
+import axiosInstance from '../API/axiosInstance'; // Ensure correct path to your axiosInstance
 
 const Channels = ({ onChannelSelect = () => {}, onCreateChannel = () => {}, activeChannel }) => {
     const [channels, setChannels] = useState([]);
@@ -8,13 +8,14 @@ const Channels = ({ onChannelSelect = () => {}, onCreateChannel = () => {}, acti
     const [newChannelName, setNewChannelName] = useState('');
     const [newChannelDescription, setNewChannelDescription] = useState('');
 
+    // Fetch channels on component mount
     useEffect(() => {
         const fetchChannels = async () => {
             setLoading(true);
             setError(null);
 
             try {
-                const response = await axiosInstance.get('/api/channels/');
+                const response = await axiosInstance.get('/api/channels');
                 setChannels(response.data);
             } catch (error) {
                 setError(`Error fetching channels: ${error.message}`);
@@ -25,8 +26,9 @@ const Channels = ({ onChannelSelect = () => {}, onCreateChannel = () => {}, acti
         };
 
         fetchChannels();
-    }, []);
+    }, []); // Empty dependency array means this effect runs once on mount
 
+    // Handle creating a new channel
     const handleCreateChannel = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -37,7 +39,7 @@ const Channels = ({ onChannelSelect = () => {}, onCreateChannel = () => {}, acti
                 throw new Error('Channel Name and Description are required.');
             }
 
-            const response = await axiosInstance.post('/api/channels/', {
+            const response = await axiosInstance.post('/api/channels', {
                 name: newChannelName,
                 description: newChannelDescription
             });
@@ -54,22 +56,26 @@ const Channels = ({ onChannelSelect = () => {}, onCreateChannel = () => {}, acti
         }
     };
 
+    // Handle channel click
     const handleChannelClick = (channel) => {
         onChannelSelect(channel);
     };
 
+    // Handle deleting a channel
     const handleDeleteChannel = async (channelId) => {
-        setLoading(true);
-        setError(null);
+        if (window.confirm('Are you sure you want to delete this channel?')) {
+            setLoading(true);
+            setError(null);
 
-        try {
-            await axiosInstance.delete(`/api/channels/${channelId}`);
-            setChannels(channels.filter(channel => channel._id !== channelId));
-        } catch (error) {
-            setError(`Error deleting channel: ${error.message}`);
-            console.error('Error deleting channel:', error);
-        } finally {
-            setLoading(false);
+            try {
+                await axiosInstance.delete(`/api/channels/${channelId}`);
+                setChannels(channels.filter(channel => channel._id !== channelId));
+            } catch (error) {
+                setError(`Error deleting channel: ${error.message}`);
+                console.error('Error deleting channel:', error);
+            } finally {
+                setLoading(false);
+            }
         }
     };
 
@@ -85,16 +91,28 @@ const Channels = ({ onChannelSelect = () => {}, onCreateChannel = () => {}, acti
         <div>
             <h2>Channels</h2>
             <ul>
-                {channels.map(channel => (
-                    <li key={channel._id} className={activeChannel && activeChannel._id === channel._id ? 'active' : ''}>
-                        <div className="channel-info" onClick={() => handleChannelClick(channel)}>
-                            <span>{channel.name} - {channel.description}</span>
-                        </div>
-                        <div className="delete-button-container">
-                            <button className="delete-button" onClick={() => handleDeleteChannel(channel._id)}>x</button>
-                        </div>
-                    </li>
-                ))}
+                {channels.length > 0 ? (
+                    channels.map(channel => (
+                        <li key={channel._id} className={activeChannel?._id === channel._id ? 'active' : ''}>
+                            <div className="channel-info" onClick={() => handleChannelClick(channel)}>
+                                <span>{channel.name} - {channel.description}</span>
+                            </div>
+                            <div className="delete-button-container">
+                                <button
+                                    className="delete-button"
+                                    onClick={(e) => {
+                                        e.stopPropagation(); // Prevent triggering channel select
+                                        handleDeleteChannel(channel._id);
+                                    }}
+                                >
+                                    Delete
+                                </button>
+                            </div>
+                        </li>
+                    ))
+                ) : (
+                    <p>No channels available.</p>
+                )}
             </ul>
 
             <h3>Create New Channel</h3>

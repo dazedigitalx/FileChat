@@ -1,6 +1,8 @@
 const ChannelGuest = require('../models/ChannelGuest');
 
 // GET channels for anonymous users
+const ChannelGuest = require('../models/ChannelGuest');
+
 exports.getChannelsForAnonymous = async (req, res) => {
     const { anonymousId } = req.query;
 
@@ -9,7 +11,6 @@ exports.getChannelsForAnonymous = async (req, res) => {
     }
 
     try {
-        // Fetch channels where anonymousId matches
         const channels = await ChannelGuest.find({ anonymousId });
         res.status(200).json(channels);
     } catch (error) {
@@ -19,26 +20,24 @@ exports.getChannelsForAnonymous = async (req, res) => {
 };
 
 // POST a new channel for anonymous users
+// POST a new channel for anonymous users
 exports.createChannelForAnonymous = async (req, res) => {
+    const { name, description, anonymousId } = req.body;
+
+    if (!name || !description || !anonymousId) {
+        return res.status(400).json({ error: 'Name, description, and anonymous ID are required' });
+    }
+
     try {
-        const { name, description, anonymousId } = req.body;
-
-        if (!name || !description || !anonymousId) {
-            return res.status(400).json({ error: 'Name, description, and anonymous ID are required' });
-        }
-
-        // Create a new channel instance
         const newChannel = new ChannelGuest({ name, description, anonymousId });
-
-        // Save the channel to the database
         await newChannel.save();
-
         res.status(201).json(newChannel);
     } catch (error) {
-        console.error('Error creating channel for anonymous users:', error);
-        res.status(500).json({ error: 'Error creating channel' });
+        console.error('Error creating channel for anonymous users:', error.message); // Detailed error
+        res.status(500).json({ error: 'Error creating channel', details: error.message });
     }
 };
+
 
 // DELETE a channel for anonymous users
 exports.deleteChannelForAnonymous = async (req, res) => {

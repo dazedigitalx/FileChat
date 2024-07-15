@@ -8,7 +8,7 @@ const Chat = ({ channel }) => {
     const [newMessage, setNewMessage] = useState('');
     const messagesEndRef = useRef(null); // Reference to scroll to the bottom
 
-    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL; // Ensure this is set in your .env file
 
     useEffect(() => {
         const fetchMessages = async () => {
@@ -18,7 +18,7 @@ const Chat = ({ channel }) => {
                 const token = localStorage.getItem('accessToken');
                 if (!token) throw new Error('Token not available.');
 
-                const response = await axiosInstance.get(`/api/messages/channels/${channel._id}/`, {
+                const response = await axiosInstance.get(`${API_BASE_URL}/api/messages/channels/${channel._id}/`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json',
@@ -34,7 +34,7 @@ const Chat = ({ channel }) => {
         if (channel) {
             fetchMessages();
         }
-    }, [channel]);
+    }, [channel, API_BASE_URL]);
 
     const handleSendMessage = async (e) => {
         e.preventDefault();
@@ -51,7 +51,7 @@ const Chat = ({ channel }) => {
                 user_id: channel.creator_id,
             };
 
-            const response = await axiosInstance.post(`/api/messages/channels/${channel._id}/send`, messagePayload, {
+            const response = await axiosInstance.post(`${API_BASE_URL}/api/messages/channels/${channel._id}/send`, messagePayload, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json',
@@ -70,7 +70,7 @@ const Chat = ({ channel }) => {
             const token = localStorage.getItem('accessToken');
             if (!token) throw new Error('Token not available.');
 
-            await axiosInstance.delete(`/api/messages/${messageId}`, {
+            await axiosInstance.delete(`${API_BASE_URL}/api/messages/${messageId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json',
