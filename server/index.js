@@ -4,43 +4,50 @@ const dotenv = require('dotenv');
 const { connectDB } = require('./db');
 const morgan = require('morgan');
 const helmet = require('helmet');
-const guestChannelRoutes = require('./routes/guestChannelRoutes.js');
+const guestChannelRoutes = require('./routes/guestChannelRoutes');
 const channelRouter = require('./routes/channelRouter');
+const userRouter = require('./routes/userRouter');
+const messageRouter = require('./routes/messageRouter');
 
 dotenv.config();
 
 const app = express();
 
-// CORS configuration
-const corsOptions = {
-  origin: ['http://localhost:3000', 'https://file-chat-client.vercel.app'], // Allow multiple origins
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true, // Allow cookies to be sent
-};
+// Configure CORS
+app.use(cors({
+  origin: 'http://localhost:3000', // Adjust as necessary for your frontend
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true,
+}));
 
 // Middleware setup
-app.use(cors(corsOptions)); // Apply CORS middleware with options
 app.use(morgan('dev'));
 app.use(express.json());
-app.use(helmet()); // Optional: adds security headers
+app.use(helmet()); // Adds security headers
 
 // Connect to MongoDB
 connectDB()
   .then(() => console.log('MongoDB connected'))
-  .catch(error => {
+  .catch((error) => {
     console.error('MongoDB connection error:', error);
     process.exit(1);
   });
 
 // Mount routes
-app.use('/api/anonymous', guestChannelRoutes);
-app.use('/api/users', require('./routes/userRouter'));
-app.use('/api/channels', channelRouter);
-app.use('/api/messages', require('./routes/messageRouter'));
+app.use('/api/anonymous', guestChannelRoutes); // For channels accessible by anonymous users
+app.use('/api/users', userRouter); // User-related routes
+app.use('/api/channels', channelRouter); // Channel-related routes
+app.use('/api/messages', messageRouter); // Message-related routes
 
 // Error handling middleware
 app.use((req, res, next) => {
   res.status(404).json({ error: 'Not Found', message: `The route ${req.originalUrl} does not exist` });
+});
+
+// Global error handling middleware
+app.use((err, req, res, next) => {
+  console.error('Global error handler:', err.stack || err);
+  res.status(err.status || 500).json({ error: 'Internal Server Error', message: err.message || 'Something went wrong' });
 });
 
 // Start the server

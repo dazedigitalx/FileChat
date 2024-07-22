@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import axiosInstance from '../API/axiosInstance';
@@ -16,17 +16,6 @@ const Login = () => {
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-
-// Determine the environment
-const environment = process.env.NODE_ENV;
-const apiUrl = process.env.REACT_APP_API_URL;
-
-// Log the API URL and environment for debugging
-console.log(`Environment: ${environment}`);
-console.log(`Client API URL: ${apiUrl}`);
-  }, []);
-
   const handleEmailChange = (e) => {
     const enteredEmail = e.target.value;
     setEmail(enteredEmail);
@@ -42,10 +31,18 @@ console.log(`Client API URL: ${apiUrl}`);
     if (password && !loading) {
       setLoading(true);
       try {
+        // Log the request payload for debugging
+        console.log('Attempting login with:', { email, password });
+
         const response = await axiosInstance.post('/api/users/login', { email, password });
+        
+        // Log the response for debugging
+        console.log('Login response:', response.data);
+
         const { token, id, username } = response.data;
         setUser({ id, email, username, token });
         localStorage.setItem('accessToken', token);
+
         setMessage('User logged in successfully');
         setError('');
         navigate('/dashboard');

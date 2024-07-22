@@ -1,5 +1,3 @@
-const ChannelGuest = require('../models/ChannelGuest');
-
 // GET channels for anonymous users
 const ChannelGuest = require('../models/ChannelGuest');
 
@@ -19,6 +17,7 @@ exports.getChannelsForAnonymous = async (req, res) => {
     }
 };
 
+
 // POST a new channel for anonymous users
 // POST a new channel for anonymous users
 exports.createChannelForAnonymous = async (req, res) => {
@@ -37,7 +36,6 @@ exports.createChannelForAnonymous = async (req, res) => {
         res.status(500).json({ error: 'Error creating channel', details: error.message });
     }
 };
-
 
 // DELETE a channel for anonymous users
 exports.deleteChannelForAnonymous = async (req, res) => {
@@ -62,3 +60,4 @@ exports.deleteChannelForAnonymous = async (req, res) => {
         res.status(500).json({ error: 'Error deleting channel' });
     }
 };
+
