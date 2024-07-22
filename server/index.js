@@ -8,14 +8,28 @@ const guestChannelRoutes = require('./routes/guestChannelRoutes');
 const channelRouter = require('./routes/channelRouter');
 const userRouter = require('./routes/userRouter');
 const messageRouter = require('./routes/messageRouter');
+const { method } = require('bluebird');
 
 dotenv.config();
 
 const app = express();
 
 // Configure CORS
+const allowedOrigins = [
+  'http://localhost:3000', // Adjust as necessary for your frontend
+  'https://file-chat-client.vercel.app' // Add your production frontend URL here
+];
+
 app.use(cors({
-  origin: 'http://localhost:3000', // Adjust as necessary for your frontend
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+        
+      } else {
+      callback(new Error('Not Allowed by CORS'));
+
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true,
 }));
