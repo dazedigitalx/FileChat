@@ -1,6 +1,6 @@
 const ChannelGuest = require('../models/ChannelGuest');
 
-exports.getChannelsForAnonymous = async (req, res) => {
+exports.getChannelsForGuest = async (req, res) => {
     const { guestId } = req.query;
 
     if (!guestId) {
@@ -16,7 +16,7 @@ exports.getChannelsForAnonymous = async (req, res) => {
     }
 };
 
-exports.createChannelForAnonymous = async (req, res) => {
+exports.createChannelForGuest = async (req, res) => {
     const { name, description, guestId } = req.body;
 
     if (!name || !description || !guestId) {

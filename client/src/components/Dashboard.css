@@ -1,8 +1,8 @@
 /* Overall dashboard layout */
 .dashboard {
   display: flex;
+  flex-direction: column;
   height: 100vh; /* Full viewport height */
-  flex-direction: column; /* Ensure header and main content are stacked vertically */
 }
 
 /* Header styles */
@@ -28,10 +28,16 @@
 /* Content area that adjusts with the sidebar */
 .dashboard-content {
   flex: 1; /* Fill available space */
-  padding: 0px;
+  padding: 0;
   transition: margin-left 0.3s ease; /* Smooth transition for margin changes */
   border: 10px solid rgb(236, 236, 236);
   overflow-y: auto; /* Allow vertical scrolling if content overflows */
+  overflow: -moz-scrollbars-none;
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.dashboard-content::-webkit-scrollbar {
+  display: none;
 }
 
 /* State when the sidebar is expanded */
@@ -42,4 +48,51 @@
 /* State when the sidebar is contracted */
 .dashboard-content.contracted {
   margin-left: 200px; /* Adjust based on the sidebar width */
+}
+@media (max-width: 768px) {
+  .dashboard {
+    flex-direction: column;
+  }
+
+  .dashboard-header {
+    font-size: 1.2em;
+  }
+
+  .dashboard-main {
+    margin-top: 10px;
+    padding: 10px;
+  }
+
+  .dashboard-content {
+    margin-left: 0; /* No sidebar on smaller screens */
+    padding: 10px;
+  }
+
+  .dashboard-content.expanded, .dashboard-content.contracted {
+    margin-left: 0; /* No sidebar on smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-header {
+    font-size: 1em;
+    padding: 8px;
+  }
+
+  .dashboard-main {
+    margin-top: 8px;
+    padding: 8px;
+  }
+
+  .dashboard-content {
+    padding: 8px;
+  }
+
+  h1 {
+    font-size: 1.5em;
+  }
+
+  p {
+    font-size: 1em;
+  }
 }

@@ -8,7 +8,6 @@ const guestChannelRoutes = require('./routes/guestChannelRoutes');
 const channelRouter = require('./routes/channelRouter');
 const userRouter = require('./routes/userRouter');
 const messageRouter = require('./routes/messageRouter');
-const { method } = require('bluebird');
 
 dotenv.config();
 
@@ -48,7 +47,7 @@ connectDB()
   });
 
 // Mount routes
-app.use('/api/anonymous', guestChannelRoutes); // For channels accessible by anonymous users
+app.use('/api/guest', guestChannelRoutes); // For channels accessible by anonymous users
 app.use('/api/users', userRouter); // User-related routes
 app.use('/api/channels', channelRouter); // Channel-related routes
 app.use('/api/messages', messageRouter); // Message-related routes

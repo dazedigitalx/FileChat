@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
-import { AnonymousUserProvider } from './contexts/AnonymousUserContext';
+import { GuestUserProvider } from './contexts/GuestUserContext';
 import Dashboard from './components/Dashboard';
 import Profile from './components/Profile';
 import Login from './components/Login';
@@ -12,7 +12,7 @@ import PrivateRoute from './routes/PrivateRoute';
 const App = () => {
     return (
         <AuthProvider>
-            <AnonymousUserProvider>
+            <GuestUserProvider>
                 <Router>
                     <div className="App">
                         <Routes>
@@ -24,7 +24,7 @@ const App = () => {
                         </Routes>
                     </div>
                 </Router>
-            </AnonymousUserProvider>
+            </GuestUserProvider>
         </AuthProvider>
     );
 };

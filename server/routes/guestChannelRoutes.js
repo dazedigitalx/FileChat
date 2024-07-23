@@ -2,16 +2,16 @@ const express = require('express');
 const router = express.Router();
 const guestChannelController = require('../controllers/guestChannelController.js');
 
-// GET channels for anonymous users
-// Example URL: /api/anonymous?guestId=someId
-router.get('/', guestChannelController.getChannelsForAnonymous);
+// GET channels for guest users
+// Example URL: /api/guest?guestId=someId
+router.get('/', guestChannelController.getChannelsForGuest);
 
-// POST a new channel for anonymous users
-// Example URL: /api/anonymous
-router.post('/', guestChannelController.createChannelForAnonymous);
+// POST a new channel for guest users
+// Example URL: /api/guest
+router.post('/', guestChannelController.createChannelForGuest);
 
-// DELETE a channel for anonymous users
-// Example URL: /api/anonymous/:channelId?guestId=someId
-router.delete('/:channelId', guestChannelController.deleteChannelForAnonymous);
+// DELETE a channel for guest users
+// Example URL: /api/guest/:channelId?guestId=someId
+router.delete('/:channelId', guestChannelController.deleteChannelForGuest);
 
 module.exports = router;

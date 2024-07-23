@@ -1,20 +1,17 @@
-/* Global Styles (Optional) */
+/* Global Styles */
 body, html {
-  /* height: 100%;
   margin: 0;
-  font-family: Arial, sans-serif; */
+  height: 100%;
+  overflow: hidden; /* Prevent body overflow */
 }
 
 /* Login Page Styles */
-
 .login-page {
   display: flex;
-  height: 100vh;
-}
-
-.login-hero-image {
-  flex: 1;
-  background: url('../images/login_board.jpg') center;
+  min-height: 100vh;
+  background-image: url('../images/login_board.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
   background-size: cover;
 }
 
@@ -23,7 +20,6 @@ body, html {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f0f0f0;
 }
 
 .login-box {
@@ -31,117 +27,61 @@ body, html {
   padding: 2rem;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   width: 400px;
-  max-width: 100%; /* Adjust max-width as needed */
+  max-width: 100%;
+  border-radius: var(--border-radius);
   text-align: center;
-  border-radius: var(--border-radius);
 }
 
-
-
-
-.login-box h2 {
-  margin-bottom: 1rem;
-}
-
-.login-box form {
-  display: flex;
-  flex-direction: column;
-}
-
-/* Style elements */
-div {
-  border-radius: var(--border-radius);
-  font-size: var(--main-font-size);
-}
-
-input[type="email"], input[type="password"], input[type="text"] {
+/* Form Fields */
+input[type="email"], 
+input[type="password"], 
+input[type="text"] {
   width: 100%;
-  padding: var(--field-padding);
-  border: 1px solid var(--field-border-color);
-  background-color: var(--field-background-color);
+  padding: 0.75rem; /* Adjust padding for consistency */
+  border: 1px solid #ccc; /* Light grey border */
+  background-color: #f9f9f9; /* Light grey background */
   box-sizing: border-box;
-  margin-bottom: 5px;
+  margin-bottom: 1rem; /* Space between fields */
   border-radius: var(--border-radius);
-  font-size: var(--main-font-size);
-  
+  font-size: 1rem; /* Consistent font size */
 }
 
+/* Buttons */
 button {
-  background-color: var(--button-background);
-  color: var(--button-color);
-  border: var(--button-border);
-  border-radius: var(--button-border-radius);
-  padding: var(--button-padding);
-  font-family: var(--font-family);
-  font-size: var(--font-size);
+  background-color: #007bff; /* Primary color */
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 0.75rem;
+  font-family: Arial, sans-serif;
+  font-size: 1rem;
   cursor: pointer;
-  background-color: var(--button-background-color);
-  width: var(--button-width);
-
+  transition: background-color 0.3s ease-in-out;
+  width: 100%;
 }
 
+button:hover {
+  background-color: #0056b3; /* Darker shade on hover */
+}
 
-/* button[type="submit"] {
-  background-color: var(--button-background-color);
-  color: var(--button-color);
-  padding: var(--button-padding);
-  border: var(--button-border);
-  border-radius: var(--button-border-radius);
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-  width: 100%;
-  font-size: var(--main-font-size);
-} */
-
-
-
+/* Error and Success Messages */
 .error-message,
 .success-message {
   margin-bottom: 1rem;
-  color: red;
+  font-size: 0.875rem; /* Slightly smaller font size */
 }
 
 .success-message {
   color: green;
 }
 
-.register-link {
-  margin-top: 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.error-message {
+  color: red;
 }
 
-.register-button {
-  /* ... (existing register button styles) */
-}
-
-.register-button:hover {
-  /* ... (existing hover styles) */
-}
-
-/* Mobile Styles (Media Query) */
+/* Mobile Styles */
 @media (max-width: 768px) {
-  .login-page {
-    flex-direction: column; /* Stack elements vertically */
-    
-  }
-
-  .login-hero-image {
-    flex: none; /* Remove flex-grow for mobile */
-    height: 100vh; /* Set full viewport height */
-  }
-
-  .login-form-container {
-    flex: none; /* Remove flex-grow for mobile */
-    position: absolute; /* Position login box absolutely on top of the image */
-    top: 50%; /* Center vertically by setting top to 50% */
-    transform: translateY(-50%); /* Offset vertically to account for element height */
-    width: 90%; /* Ensure full width on mobile */
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-    padding: 1rem; /* Adjust padding for smaller screens */
+  .login-box {
+    width: 80%; /* Adjust width for smaller screens */
   }
 }
-
-/* Signup Page Styles (Commented Out) */
-/* ... (similar styles with media queries for signup page, if needed) */
