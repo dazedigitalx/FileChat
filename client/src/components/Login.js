@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import axiosInstance from '../API/axiosInstance';
@@ -16,6 +16,9 @@ const Login = () => {
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
+  // Create a ref for the password input
+  const passwordInputRef = useRef(null);
+
   const handleEmailChange = (e) => {
     const enteredEmail = e.target.value;
     setEmail(enteredEmail);
@@ -24,6 +27,9 @@ const Login = () => {
 
   const handleNext = () => {
     setEmailReadOnly(true);
+    if (passwordInputRef.current) {
+      passwordInputRef.current.focus(); // Set focus to the password input using the ref
+    }
   };
 
   const handlePasswordSubmit = async (e) => {
@@ -55,6 +61,13 @@ const Login = () => {
     }
   };
 
+  // Function to handle Enter key in email input
+  const handleEmailKeyDown = (e) => {
+    if (e.key === 'Enter' && showNextButton) {
+      handleNext(); // Call the next button function
+    }
+  };
+
   return (
     <div className="login-page">
       <div className="login-hero-image"></div>
@@ -70,6 +83,7 @@ const Login = () => {
               id="email"
               value={email}
               onChange={handleEmailChange}
+              onKeyDown={handleEmailKeyDown} // Add this line to handle Enter key
               readOnly={emailReadOnly}
               required
               aria-label="Email"
@@ -83,6 +97,7 @@ const Login = () => {
                   type="password"
                   placeholder="Password"
                   id="password"
+                  ref={passwordInputRef} // Attach the ref here
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
