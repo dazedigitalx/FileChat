@@ -4,8 +4,8 @@ import Cookies from 'js-cookie';
 // Directly specify the API URL
 const API_URL = process.env.REACT_APP_API_URL; // Use environment variable
 
-// const API_URL = 'http://localhost:5000'; // Replace with your actual API URL
-// const API_URL = 'https://file-chat-server.vercel.app'; // Replace with your actual API URL
+// Debugging line to ensure API_URL is set
+console.log('API URL:', API_URL); 
 
 const axiosInstance = axios.create({
   baseURL: API_URL,

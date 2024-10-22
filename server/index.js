@@ -15,6 +15,9 @@ if (result.error) {
   throw result.error;
 }
 console.log(`.env file loaded from: ${result.parsed ? result.parsed.PATH : '.env'}`);
+console.log('Using environment:', process.env.NODE_ENV);
+console.log('REACT_APP_API_URL:', process.env.REACT_APP_API_URL);
+
 
 const app = express();
 
