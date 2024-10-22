@@ -9,7 +9,12 @@ const channelRouter = require('./routes/channelRouter');
 const userRouter = require('./routes/userRouter');
 const messageRouter = require('./routes/messageRouter');
 
-dotenv.config();
+// Load .env file and show its path
+const result = dotenv.config();
+if (result.error) {
+  throw result.error;
+}
+console.log(`.env file loaded from: ${result.parsed ? result.parsed.PATH : '.env'}`);
 
 const app = express();
 
@@ -33,12 +38,18 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(helmet()); // Adds security headers
 
-// Connect to MongoDB
+// Connect to MongoDB (ensuring only one message on successful connection)
+let dbConnectionInitialized = false;
 connectDB()
-  .then(() => console.log('MongoDB connected'))
+  .then(() => {
+    if (!dbConnectionInitialized) {
+      console.log('MongoDB connected');
+      dbConnectionInitialized = true; // Prevent duplicate logs
+    }
+  })
   .catch((error) => {
     console.error('MongoDB connection error:', error);
-    process.exit(1);
+    process.exit(1); // Exit on database connection failure
   });
 
 // Mount routes
@@ -58,6 +69,12 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500).json({ error: 'Internal Server Error', message: err.message || 'Something went wrong' });
 });
 
-// Start the server
-const port = process.env.PORT || 5000;
+// Check if PORT is defined in .env
+if (!process.env.PORT) {
+  console.error('Error: PORT is not defined in the .env file');
+  process.exit(1); // Exit the application if PORT is not specified
+}
+
+// Start the server using the port from .env
+const port = process.env.PORT;
 app.listen(port, () => console.log(`Server running on port ${port}`));
