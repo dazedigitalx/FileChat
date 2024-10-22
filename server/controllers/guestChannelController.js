@@ -16,6 +16,7 @@ exports.getChannelsForGuest = async (req, res) => {
     }
 };
 
+// Make sure to have the other exported functions as well
 exports.createChannelForGuest = async (req, res) => {
     const { name, description, guestId } = req.body;
 
@@ -33,7 +34,7 @@ exports.createChannelForGuest = async (req, res) => {
     }
 };
 
-exports.deleteChannelForAnonymous = async (req, res) => {
+exports.deleteChannelForGuest = async (req, res) => {
     const { guestId } = req.query;
     const { channelId } = req.params;
 

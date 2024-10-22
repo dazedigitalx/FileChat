@@ -14,19 +14,14 @@ dotenv.config();
 const app = express();
 
 // Configure CORS
-const allowedOrigins = [
-  'http://localhost:3000', // Adjust as necessary for your frontend
-  'https://file-chat-client.vercel.app' // Add your production frontend URL here
-];
+const allowedOrigins = process.env.ALLOWED_ORIGINS.split(','); // Load origins from environment variable
 
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
+    if (!origin || allowedOrigins.includes(origin.trim())) { // Trim to avoid whitespace issues
       callback(null, true);
-        
-      } else {
+    } else {
       callback(new Error('Not Allowed by CORS'));
-
     }
   },
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
