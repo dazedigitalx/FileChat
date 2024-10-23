@@ -21,9 +21,13 @@ console.log('REACT_APP_API_URL:', process.env.REACT_APP_API_URL);
 const app = express();
 
 // Configure CORS
-const allowedOrigins = process.env.ALLOWED_ORIGINS.split(','); // Load origins from environment variable
-allowedOrigins.push('http://localhost:5000'); // Add localhost to allowed origins
+const allowedOrigins = [
+  'http://localhost:3000',  // Your frontend URL
+  'https://file-chat-client.vercel.app/', // Replace with your production URL
+  'https://file-chat-server.vercel.app/'   // Another allowed origin if needed
+];
 
+// Use the hardcoded allowed origins in CORS middleware
 app.use(cors({
   origin: (origin, callback) => {
     if (!origin || allowedOrigins.includes(origin.trim())) { // Trim to avoid whitespace issues
