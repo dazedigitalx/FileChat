@@ -18,11 +18,11 @@ console.log(`.env file loaded from: ${result.parsed ? result.parsed.PATH : '.env
 console.log('Using environment:', process.env.NODE_ENV);
 console.log('REACT_APP_API_URL:', process.env.REACT_APP_API_URL);
 
-
 const app = express();
 
 // Configure CORS
 const allowedOrigins = process.env.ALLOWED_ORIGINS.split(','); // Load origins from environment variable
+allowedOrigins.push('http://localhost:5000'); // Add localhost to allowed origins
 
 app.use(cors({
   origin: (origin, callback) => {
