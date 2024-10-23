@@ -24,7 +24,7 @@ const app = express();
 const allowedOrigins = [
   'http://localhost:3000',  // Your frontend URL
   'https://file-chat-client.vercel.app/', // Replace with your production URL
-  'https://file-chat-server.vercel.app/'   // Another allowed origin if needed
+  'http://localhost:5000'   // Another allowed origin if needed
 ];
 
 // Use the hardcoded allowed origins in CORS middleware
