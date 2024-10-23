@@ -9,28 +9,26 @@ const channelRouter = require('./routes/channelRouter');
 const userRouter = require('./routes/userRouter');
 const messageRouter = require('./routes/messageRouter');
 
-// Load .env file and show its path
-const result = dotenv.config();
-if (result.error) {
-  throw result.error;
-}
-console.log(`.env file loaded from: ${result.parsed ? result.parsed.PATH : '.env'}`);
-console.log('Using environment:', process.env.NODE_ENV);
-console.log('REACT_APP_API_URL:', process.env.REACT_APP_API_URL);
+// Load environment variables from .env file
+dotenv.config();
 
+// Check if PORT is defined in .env
+const PORT = process.env.PORT || 5000;
+const REACT_APP_API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
+// Create Express app
 const app = express();
 
-// Configure CORS
+// CORS configuration
 const allowedOrigins = [
-  'http://localhost:3000',  // Your frontend URL
-  'https://file-chat-client.vercel.app/', // Replace with your production URL
-  'http://localhost:5000'   // Another allowed origin if needed
+  'http://localhost:3000', // Your frontend URL
+  'http://localhost:5000', // If your backend needs to accept requests from itself
+  'https://file-chat-server.vercel.app/' // Your production URL
 ];
 
-// Use the hardcoded allowed origins in CORS middleware
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin.trim())) { // Trim to avoid whitespace issues
+    if (!origin || allowedOrigins.includes(origin.trim())) {
       callback(null, true);
     } else {
       callback(new Error('Not Allowed by CORS'));
@@ -43,45 +41,35 @@ app.use(cors({
 // Middleware setup
 app.use(morgan('dev'));
 app.use(express.json());
-app.use(helmet()); // Adds security headers
+app.use(helmet());
 
-// Connect to MongoDB (ensuring only one message on successful connection)
-let dbConnectionInitialized = false;
-connectDB()
-  .then(() => {
-    if (!dbConnectionInitialized) {
-      console.log('MongoDB connected');
-      dbConnectionInitialized = true; // Prevent duplicate logs
-    }
-  })
-  .catch((error) => {
+// Connect to MongoDB
+(async () => {
+  try {
+    await connectDB();
+    console.log('MongoDB connected');
+  } catch (error) {
     console.error('MongoDB connection error:', error);
-    process.exit(1); // Exit on database connection failure
-  });
+    process.exit(1);
+  }
+})();
 
 // Mount routes
-app.use('/api/guest', guestChannelRoutes); // For channels accessible by anonymous users
-app.use('/api/users', userRouter); // User-related routes
-app.use('/api/channels', channelRouter); // Channel-related routes
-app.use('/api/messages', messageRouter); // Message-related routes
+app.use('/api/guest', guestChannelRoutes);
+app.use('/api/users', userRouter);
+app.use('/api/channels', channelRouter);
+app.use('/api/messages', messageRouter);
 
 // Error handling middleware
-app.use((req, res, next) => {
+app.use((req, res) => {
   res.status(404).json({ error: 'Not Found', message: `The route ${req.originalUrl} does not exist` });
 });
 
 // Global error handling middleware
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   console.error('Global error handler:', err.stack || err);
   res.status(err.status || 500).json({ error: 'Internal Server Error', message: err.message || 'Something went wrong' });
 });
 
-// Check if PORT is defined in .env
-if (!process.env.PORT) {
-  console.error('Error: PORT is not defined in the .env file');
-  process.exit(1); // Exit the application if PORT is not specified
-}
-
-// Start the server using the port from .env
-const port = process.env.PORT;
-app.listen(port, () => console.log(`Server running on port ${port}`));
+// Start the server
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

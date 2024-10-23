@@ -54,7 +54,7 @@ const Login = () => {
         navigate('/dashboard');
       } catch (error) {
         console.error('Login error:', error);
-        setError(`Error logging in. Details: ${error.response?.data.message || error.message}`);
+        setError(`Error logging in. ${error.response?.data.message || 'Please try again.'}`);
       } finally {
         setLoading(false);
       }

@@ -1,14 +1,24 @@
 import React, { useEffect, useState, createContext, useContext } from 'react';
-import axiosInstance from '../API/axiosInstance'; // Adjust path based on your structure
+import axiosInstance from '../API/axiosInstance';
 import Cookies from 'js-cookie';
+import { generateGuestID } from '../utils'; // Make sure this utility is correctly implemented
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState(null); // For authenticated users
+    const [guestId, setGuestId] = useState(null); // For guests
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
+    // Function to log out the user
+    const logout = () => {
+        setUser(null); // Clear the user state
+        localStorage.removeItem('accessToken'); // Remove token from localStorage
+        Cookies.remove('accessToken'); // Remove token from cookies
+    };
+
+    // Function to fetch current user based on token
     const fetchCurrentUser = async (token) => {
         try {
             const response = await axiosInstance.get('/api/users/me', {
@@ -18,67 +28,42 @@ export const AuthProvider = ({ children }) => {
             });
 
             if (response.status === 200) {
-                setUser(response.data);
-                setError('');
+                setUser(response.data); // Set user details if response is successful
             } else {
                 setError(`Failed to fetch user details: ${response.statusText}`);
             }
         } catch (error) {
             setError('Failed to fetch user. Please try again later.');
         } finally {
-            setLoading(false);
+            setLoading(false); // Stop loading when done
         }
     };
 
+    // Function to validate token and load user or guest
     const validateToken = async () => {
         const storedToken = localStorage.getItem('accessToken') || Cookies.get('accessToken');
+
         if (storedToken) {
-            setLoading(true);
-            await fetchCurrentUser(storedToken);
+            await fetchCurrentUser(storedToken); // Fetch current user if token is available
         } else {
-            setLoading(false);
+            setGuestId(generateGuestID()); // Generate guest ID if no token
+            setLoading(false); // Stop loading for guests
         }
     };
 
+    // Load user or guest when component mounts
     useEffect(() => {
         validateToken();
     }, []);
 
-    const login = async (credentials) => {
-        setLoading(true);
-        try {
-            const response = await axiosInstance.post('/api/users/login', credentials);
-            const data = response.data;
-            if (response.status === 200 && data.token) {
-                localStorage.setItem('accessToken', data.token);
-                Cookies.set('accessToken', data.token, { expires: 7 });
-                await fetchCurrentUser(data.token);
-                setError('');
-            } else {
-                setError('Login failed: ' + data.message || 'Unknown error');
-            }
-        } catch (error) {
-            setError('Login error: ' + error.message);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const logout = () => {
-        localStorage.removeItem('accessToken');
-        Cookies.remove('accessToken');
-        setUser(null);
-    };
-
     return (
-        <AuthContext.Provider value={{ user, setUser, login, logout, loading, error }}>
+        <AuthContext.Provider value={{ user, guestId, loading, error, setUser, logout }}>
             {children}
         </AuthContext.Provider>
     );
 };
 
+// Custom hook to use the AuthContext
 export const useAuth = () => {
     return useContext(AuthContext);
 };
-
-export default AuthContext;

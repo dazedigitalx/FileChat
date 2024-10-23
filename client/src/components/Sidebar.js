@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import useChannelsAnonymous from '../hooks/useChannelsAnonymous'; // Import the custom hook for anonymous channels
-import useChannels from '../hooks/useChannels'; // Import the custom hook for authenticated channels
+import useChannelsGuest from '../hooks/useChannelsGuest'; // Change hook import from anonymous to guest
+import useChannels from '../hooks/useChannels'; // Keep this as is for authenticated channels
 import { useAuth } from '../contexts/AuthContext'; // Import the authentication context
 import axiosInstance from '../API/axiosInstance'; // Ensure correct import path for axios instance
 import './Sidebar.css'; // Ensure correct import path for CSS
@@ -13,13 +13,13 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar, onChannelSelect }) => {
     const [description, setDescription] = useState('');
 
     // Fetch channels based on user authentication status
-    const { channels: anonymousChannels, error: anonymousError, setChannels: setAnonymousChannels, setError: setAnonymousError } = useChannelsAnonymous();
+    const { channels: guestChannels, error: guestError, setChannels: setGuestChannels, setError: setGuestError } = useChannelsGuest();
     const { channels: authChannels, error: authError, setChannels: setAuthChannels, setError: setAuthError } = useChannels();
 
-    const channels = user ? authChannels : anonymousChannels;
-    const setChannels = user ? setAuthChannels : setAnonymousChannels;
-    const setError = user ? setAuthError : setAnonymousError;
-    const error = user ? authError : anonymousError;
+    const channels = user ? authChannels : guestChannels; // Updated variable name from anonymousChannels to guestChannels
+    const setChannels = user ? setAuthChannels : setGuestChannels; // Updated variable name from setAnonymousChannels to setGuestChannels
+    const setError = user ? setAuthError : setGuestError; // Updated variable name from setAnonymousError to setGuestError
+    const error = user ? authError : guestError; // Updated variable name from anonymousError to guestError
 
     const handleChannelSelect = (channel) => {
         setActiveChannel(channel);
@@ -28,10 +28,10 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar, onChannelSelect }) => {
 
     const createChannel = async () => {
         try {
-            const endpoint = user ? '/api/channels' : '/api/anonymous';
+            const endpoint = user ? '/api/channels' : '/api/guest'; // Updated endpoint for guest
             const payload = { name, description };
             if (!user) {
-                payload.anonymousId = localStorage.getItem('anonymousId');
+                payload.guestId = localStorage.getItem('guestId'); // Update key from anonymousId to guestId
             }
             const response = await axiosInstance.post(endpoint, payload);
             setChannels(prevChannels => [...prevChannels, response.data]);

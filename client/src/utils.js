@@ -1,6 +1,5 @@
-// src/utils/index.js
+// src/utils.js
 
-import { v4 as uuidv4 } from 'uuid';
-
-// Utility function to generate a UUID
-export const generateAnonymousId = () => uuidv4();
+export const generateGuestID = () => {
+    return `guest_${Math.random().toString(36).substr(2, 9)}`; // Generate a simple unique guest ID
+};
