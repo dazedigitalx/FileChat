@@ -12,7 +12,6 @@ const messageRouter = require('./routes/messageRouter');
 // Load environment variables from .env file
 dotenv.config();
 
-// Check if PORT is defined in .env
 const PORT = process.env.PORT || 5000;
 const REACT_APP_API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
@@ -21,21 +20,22 @@ const app = express();
 
 // CORS configuration
 const allowedOrigins = [
-  'http://localhost:3000', // Your frontend URL
-  'http://localhost:5000', // If your backend needs to accept requests from itself
+  'http://localhost:3000', // Your frontend URL for development
+  'http://localhost:5000', // Backend URL for local development if needed
   'https://file-chat-server.vercel.app/' // Your production URL
 ];
 
 app.use(cors({
   origin: (origin, callback) => {
+    // Allow requests with no origin (e.g., server-to-server or Postman requests)
     if (!origin || allowedOrigins.includes(origin.trim())) {
-      callback(null, true);
+      callback(null, true); // Allow the request
     } else {
-      callback(new Error('Not Allowed by CORS'));
+      callback(new Error('Not Allowed by CORS')); // Deny the request
     }
   },
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed methods
+  credentials: true, // Allow credentials (cookies, headers)
 }));
 
 // Middleware setup
@@ -47,7 +47,7 @@ app.use(helmet());
 (async () => {
   try {
     await connectDB();
-    console.log('MongoDB connected');
+    // console.log('MongoDB connected');
   } catch (error) {
     console.error('MongoDB connection error:', error);
     process.exit(1);
