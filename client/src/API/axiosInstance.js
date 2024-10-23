@@ -1,14 +1,14 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-// Directly specify the API URL
-const API_URL = process.env.REACT_APP_API_URL; // Use environment variable
+// Directly specify the API URL using environment variable
+const API_URL = process.env.REACT_APP_API_URL; 
 
 // Debugging line to ensure API_URL is set
-console.log('API URL:', API_URL); 
+console.log('REACT_APP_API_URL:', API_URL); // Corrected variable
 
 const axiosInstance = axios.create({
-  baseURL: API_URL,
+  baseURL: API_URL, // Ensure this is properly set
 });
 
 axiosInstance.interceptors.request.use(
