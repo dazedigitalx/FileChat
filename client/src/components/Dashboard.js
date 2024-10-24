@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import Header from './Header';
-import Sidebar from './Sidebar';
-import Chat from './Chat';
+import Header from './Header'; // Header component
+import Sidebar from './Sidebar'; // Sidebar component
+import Chat from './Chat'; // Chat component
 import './Dashboard.css'; // Import the CSS file for styling
 
 const Dashboard = () => {
@@ -15,18 +15,18 @@ const Dashboard = () => {
     };
 
     const handleChannelSelect = (channel) => {
-        setActiveChannel(channel);
+        setActiveChannel(channel); // Update the active channel state
     };
 
     return (
         <div className="dashboard">
+            <Header /> {/* Ensure header is outside the sidebar */}
             <Sidebar
                 isSidebarOpen={isSidebarOpen}
                 toggleSidebar={toggleSidebar}
                 onChannelSelect={handleChannelSelect} // Pass handleChannelSelect to Sidebar
             />
-            <div className={`dashboard-content ${isSidebarOpen ? 'expanded' : ''}`}>
-                <Header />
+            <div className={`content ${isSidebarOpen ? 'expanded' : 'contracted'}`}>
                 {activeChannel && <Chat channel={activeChannel} />}
             </div>
         </div>

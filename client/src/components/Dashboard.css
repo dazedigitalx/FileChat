@@ -28,53 +28,53 @@
 /* Content area that adjusts with the sidebar */
 .dashboard-content {
   flex: 1; /* Fill available space */
-  padding: 0;
-  transition: margin-left 0.3s ease; /* Smooth transition for margin changes */
+  padding: 0; /* No default padding */
+  transition: margin-left 0.3s ease, padding 0.3s ease; /* Smooth transition for margin changes */
   border: 10px solid rgb(236, 236, 236);
   overflow-y: auto; /* Allow vertical scrolling if content overflows */
   overflow: -moz-scrollbars-none;
   -ms-overflow-style: none; /* IE and Edge */
 }
 
-.dashboard-content::-webkit-scrollbar {
-  display: none;
-}
-
 /* State when the sidebar is expanded */
-.dashboard-content.expanded {
+.content.expanded {
   margin-left: 300px; /* Adjust based on the sidebar width */
+  padding-left: 0; /* No padding when the sidebar is expanded */
 }
 
 /* State when the sidebar is contracted */
-.dashboard-content.contracted {
+.content.contracted {
   margin-left: 200px; /* Adjust based on the sidebar width */
+  padding-left: 20px; /* Add padding when the sidebar is contracted */
 }
+
 @media (max-width: 768px) {
   .dashboard {
     flex-direction: column;
   }
 
-  .dashboard-header {
+  .header {
     font-size: 1.2em;
   }
 
-  .dashboard-main {
+  .main {
     margin-top: 10px;
     padding: 10px;
   }
 
-  .dashboard-content {
+  .content {
     margin-left: 0; /* No sidebar on smaller screens */
     padding: 10px;
   }
 
-  .dashboard-content.expanded, .dashboard-content.contracted {
+  .content.expanded, .content.contracted {
     margin-left: 0; /* No sidebar on smaller screens */
+    padding-left: 0; /* Reset padding for mobile */
   }
 }
 
 @media (max-width: 480px) {
-  .dashboard-header {
+  .header {
     font-size: 1em;
     padding: 8px;
   }
@@ -85,7 +85,7 @@
   }
 
   .dashboard-content {
-    padding: 8px;
+    padding-left: 80px;
   }
 
   h1 {

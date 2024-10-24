@@ -5,26 +5,21 @@ import Nav from './Nav'; // Assuming Nav is in the same directory or adjust the 
 
 import './Header.css'; // Import the CSS file for styling
 
-const Header = () => {
+const Header = ({ isSidebarOpen }) => {
     const { user } = useAuth(); // Access user and other auth-related methods from AuthContext
 
     return (
-        <header className='header'>
+        <header className={`header ${isSidebarOpen ? 'expanded' : 'contracted'}`}>
             {/* Conditional rendering based on user authentication */}
             {user ? (
                 <div className='UserProfile'>
                     {/* Render UserProfile component if user is logged in */}
                     <UserProfile />
                 </div>
-            ) : (
-                <div className='LoginButton'>
-                    {/* Render login button or other authentication prompts if user is not logged in */}
-                    <button>Login</button>
-                </div>
-            )}
+            ) : null}
 
             <nav className='navbar'>
-            <Nav />   {/* Add other header links as needed */}
+                <Nav /> {/* Add other header links as needed */}
             </nav>
         </header>
     );

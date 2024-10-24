@@ -1,92 +1,147 @@
 /* General styling for input fields */
-
-
-.sidebar {
-  width: 250px;
-  flex-shrink: 0;
+body {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Full viewport height */
+  font-family: 'Arial', sans-serif; /* Use a clean sans-serif font */
+  background-color: #f5f5f5; /* Light background for the whole page */
 }
 
+/* Header styling */
+header {
+  flex-shrink: 0; /* Prevent header from shrinking */
+  position: relative; /* Allow positioning relative to the sidebar */
+  width: 75%; /* Full width by default */
+  left: 300px; /* Start aligned with left */
+  transition: width 0.3s ease, left 0.3s ease; /* Smooth transition for width adjustment */
+  background-color: #0084ff; /* Header background color */
+  color: #fff; /* Header text color */
+  padding: 15px 20px; /* Padding for header */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  border-bottom-left-radius: 10px; /* Rounded corners */
+  border-bottom-right-radius: 10px; /* Rounded corners */
+}
 
+/* Footer styling */
+footer {
+  flex-shrink: 0; /* Prevent footer from shrinking */
+  background-color: #0084ff; /* Footer background color */
+  color: #fff; /* Footer text color */
+  padding: 10px;
+  text-align: center;
+}
+
+/* Main content styling */
+main {
+  flex-grow: 1; /* Allow main content to grow and take available space */
+  padding: 20px;
+  margin-left: var(--sidebar-width-open, 250px); /* Adjust the margin based on sidebar */
+  transition: margin-left 0.3s ease; /* Smooth transition for margin adjustment */
+  background-color: #fff; /* Main content background color */
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+/* Sidebar styles */
 .sidebar {
   height: 100%;
   position: fixed;
   top: 0;
   left: 0;
   bottom: 0;
-  background-color: var(--sidebar-bg-color, #ffffff);
-  color: var(--sidebar-text-color, #000000);
+  background-color: #ffffff; /* Sidebar background color */
+  color: #000000; /* Sidebar text color */
   overflow-y: auto;
-  transition: width 0.3s ease;
+  transition: width 0.3s ease; /* Smooth transition for width adjustment */
   padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Shadow to separate sidebar from main content */
+  border-radius: 0 10px 10px 0; /* Rounded corners */
 }
 
+/* Open and closed sidebar widths */
 .sidebar.open {
   width: var(--sidebar-width-open, 250px);
 }
 
 .sidebar.closed {
-  width: var(--sidebar-width-closed, 60px);
+  width: var(--sidebar-width-closed, 40px);
 }
 
+/* Adjust main content margin when sidebar is collapsed */
+.sidebar.closed + main {
+  margin-left: var(--sidebar-width-closed, 60px); /* Adjust margin when sidebar is closed */
+}
+
+/* Toggle button styles */
 .sidebar .toggle-button {
   width: 100%;
   padding: 10px;
-  background-color: var(--button-bg-color, #555);
+  background-color: var(--button-bg-color, #0084ff); /* Match sidebar toggle color with header */
   color: var(--button-text-color, #fff);
   border: none;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  border-radius: var(--field-border-radius, 0);
-  font-size: var(--font-size);
+  transition: background-color 0.3s ease; /* Smooth hover effect */
+  border-radius: 5px; /* Rounded corners */
+  font-size: 14px;
+  margin-bottom: 15px; /* Space below the button */
 }
 
 .sidebar .toggle-button:hover {
-  background-color: var(--button-hover-bg-color, #777);
+  background-color: #0056b3; /* Darker blue on hover */
 }
 
+/* Menu styles */
 .sidebar .menu {
   list-style: none;
   padding: 0;
   margin: 10px 0;
 }
 
-.sidebar .active {
-  padding-left: 20px;
-}
-
 .sidebar .menu li {
-  padding: 0;
-
-  padding: 8px;
+  padding: 8px 15px; /* More padding for better spacing */
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  border-radius: var(--button-border-radius);
-  
+  transition: background-color 0.3s ease; /* Smooth hover effect */
+  border-radius: 5px; /* Rounded corners */
 }
 
+/* Active menu item */
+.sidebar .active {
+  background-color: #e0f7ff; /* Highlight active item */
+  padding-left: 20px; /* Indent active item */
+}
+
+/* Menu item hover effect */
 .sidebar .menu li:hover {
-  background-color: var(--menu-item-hover-bg-color, #555);
-  color: var(--menu-item-hover-text-color, #fff);
+  background-color: #e0e0e0; /* Light gray on hover */
+  color: #333; /* Dark text on hover */
 }
 
 /* Mobile Styles */
 @media (max-width: 768px) {
-
-
   .sidebar {
-    width: 100%;
-    height: auto;
+    width: 100%; /* Full width on mobile */
+    height: auto; /* Auto height for mobile */
   }
 
+  main {
+    margin-left: 0; /* Reset margin for mobile */
+  }
 
-  .sidebar-open, .sidebar-closed {
-    width: 10%;
+  .sidebar-open,
+  .sidebar-closed {
+    width: 10%; /* Width for open and closed sidebar in mobile view */
   }
 
   .sidebar-closed {
     transform: translateY(-50%);
-    background-color: rgba(0, 0, 0, 0.5);
-    padding: 1rem;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background for closed state */
+    padding: 1rem; /* Padding for closed sidebar */
   }
 }
 
+/* Adjust header width when sidebar is closed */
+.sidebar.closed + header {
+  width: calc(100% - var(--sidebar-width-closed, 40px)); /* Adjust width based on closed sidebar */
+  left: var(--sidebar-width-closed, 40px); /* Position header to the right of the closed sidebar */
+}
