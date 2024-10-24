@@ -13,7 +13,8 @@ const messageRouter = require('./routes/messageRouter');
 dotenv.config();
 
 const PORT = process.env.PORT || 5000;
-const REACT_APP_API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+// Hardcoded client URL for production
+const CLIENT_URL = 'https://file-chat-client.vercel.app'; // Your production URL
 
 // Create Express app
 const app = express();
@@ -21,8 +22,7 @@ const app = express();
 // CORS configuration
 const allowedOrigins = [
   'http://localhost:3000', // Your frontend URL for development
-  'http://localhost:5000', // Backend URL for local development if needed
-  'https://file-chat-server.vercel.app/' // Your production URL
+  CLIENT_URL // Your production URL
 ];
 
 app.use(cors({
