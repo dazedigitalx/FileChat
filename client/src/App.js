@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { GuestUserProvider } from './contexts/GuestUserContext';
 import Dashboard from './components/Dashboard';
@@ -16,11 +16,12 @@ const App = () => {
                 <Router>
                     <div className="App">
                         <Routes>
-                            <Route path="/" element={<Guest />} />
+                            <Route path="/" element={<Navigate to="/dashboard" />} /> {/* Redirect to Dashboard */}
                             <Route path="/login" element={<Login />} />
                             <Route path="/signup" element={<Signup />} />
                             <Route path="/dashboard" element={<PrivateRoute element={<Dashboard />} />} />
                             <Route path="/profile" element={<PrivateRoute element={<Profile />} />} />
+                            <Route path="/guest" element={<Guest />} /> {/* Include Guest route if needed */}
                         </Routes>
                     </div>
                 </Router>

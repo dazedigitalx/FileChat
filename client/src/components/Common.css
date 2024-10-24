@@ -1,0 +1,150 @@
+/* Common.css */
+
+/* Layout Flexbox utilities */
+.flex {
+    display: flex;
+}
+
+.flex-column {
+    flex-direction: column;
+}
+
+.flex-row {
+    flex-direction: row;
+}
+
+.flex-center {
+    justify-content: center;
+    align-items: center;
+}
+
+.flex-space-between {
+    justify-content: space-between;
+}
+
+.full-height {
+    height: 100vh; /* Full viewport height */
+}
+
+.full-width {
+    width: 100%;
+}
+
+/* Spacing utilities */
+.padding-20 {
+    padding: 20px;
+}
+
+.margin-auto {
+    margin: auto;
+}
+
+/* Transitions */
+.transition {
+    transition: all 0.3s ease;
+}
+
+/* Backgrounds */
+.bg-light {
+    background-color: #f9f9f9;
+}
+
+.bg-dark {
+    background-color: #333;
+}
+
+.text-light {
+    color: #fff;
+}
+
+/* Shadows and borders */
+.shadow {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Header and Content Styling (shared across different components) */
+/* .header {
+    padding: 10px;
+    background-color: #f0f0f0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
+    width: 100%;
+} */
+
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .flex-column-mobile {
+        flex-direction: column;
+    }
+}
+
+
+/* Common styles for the main layout */
+.main-layout {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 40px); /* Adjust to allow room for the footer */
+}
+
+/* Outline styles */
+.header {
+    outline: 10px solid #ff33d6; /* Red outline */
+    padding: 10px; /* Add padding */
+    margin: 10px; /* Change margin to 10px */
+}
+
+.content-area {
+    display: flex; /* Makes sidebar and content sit side by side */
+    flex: 1; /* Allow content area to take up remaining space */
+    outline: 10px solid #33c3ff; /* Blue outline */
+    padding: 10px; /* Add padding */
+    margin: 10px; /* Change margin to 10px */
+}
+
+.content {
+    flex: 1; /* Allow content to take up remaining space */
+    background-color: #f9f9f9;
+    overflow-y: auto; /* Enable scrolling if content overflows */
+    outline: 10px solid #ffc107; /* Yellow outline */
+    padding: 10px; /* Add padding */
+    margin: 10px; /* Change margin to 10px */
+
+}
+
+/* Expanded and contracted states for content */
+.content.expanded {
+    margin-left: 10px; /* Leave space for sidebar */
+}
+
+.content.contracted {
+    margin-left: 10px; /* Leave space for contracted sidebar */
+}
+
+/* Expanded and contracted states for aside */
+.aside {
+    padding: 10px; /* Add padding */
+    background-color: #e0e0e0; /* Optional background color */
+    outline: 10px solid #6f42c1; /* Purple outline */
+    margin: 10px; /* Change margin to 10px */
+    transition: margin-left 0.3s ease; /* Smooth transition for margin changes */
+}
+
+/* States for aside */
+.aside.expanded {
+    margin-left: 10px; /* Margin when the sidebar is expanded */
+}
+
+.aside.contracted {
+    margin-left: 10px; /* Margin when the sidebar is expanded */
+}
+
+/* Footer styling */
+.footer {
+    text-align: center;
+    padding: 10px 0; /* Add padding */
+    background-color: #f0f0f0; /* Optional background color */
+    outline: 10px solid #dc3545; /* Danger red outline */
+    margin: 10px; /* Change margin to 10px */
+}
+

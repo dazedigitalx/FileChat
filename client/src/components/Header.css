@@ -1,19 +1,17 @@
-/* Global styles */
+@import './Common.css'; /* Import reusable common styles */
 
-/* target all buttons */
-
-/* Header styling */
+/* Header specific styles */
 .header {
-    background-color: #0084ff; /* Header background color */
-    color: #fff; /* Header text color */
-    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+}
+
+.navbar {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Box shadow for header */
-    border-radius: 10px;
-    height: 90px;
+    padding: 10px 20px;
 }
+
 
 
 .UserProfile {
@@ -23,7 +21,6 @@
     font-size: 10px;
     line-height: 1px; /* Set line spacing to 5px (font-size + 5px) */
 }
-
 
 
   
@@ -60,4 +57,3 @@
 .nav-link.auth-active {
     background-color: #28a745;
 }
-
