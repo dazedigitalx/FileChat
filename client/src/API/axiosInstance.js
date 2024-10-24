@@ -1,16 +1,17 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-// Directly specify the API URL using environment variable
-const API_URL = process.env.REACT_APP_API_URL; 
+// Hardcode the API URL
+const API_URL = 'https://file-chat-server.vercel.app'; 
 
 // Debugging line to ensure API_URL is set
 console.log('REACT_APP_API_URL:', API_URL); // Corrected variable
 
 const axiosInstance = axios.create({
-  baseURL: API_URL, // Ensure this is properly set
+  baseURL: API_URL, // Now using the hardcoded URL
 });
 
+// Interceptor to add authorization token to request headers
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('accessToken') || Cookies.get('accessToken');
